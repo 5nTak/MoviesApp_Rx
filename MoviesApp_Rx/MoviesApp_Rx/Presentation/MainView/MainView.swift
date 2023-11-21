@@ -13,7 +13,7 @@ class MainView: UIViewController {
         let label = UILabel()
         label.textColor = UIColor.black
         label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.text = "네이버 영화 검색"
+        label.text = "영화 검색"
         return label
     }()
     
@@ -94,7 +94,7 @@ class MainView: UIViewController {
         collectionView.delegate = self
         collectionView.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom)
-            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview()
         }
     }
@@ -103,12 +103,12 @@ class MainView: UIViewController {
 // CollectionView FlowLayout
 extension MainView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width
-        let height: CGFloat = 100
+        let width = collectionView.frame.width / 3.5
+        let height = collectionView.frame.height / 4.5
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 10)
+        return UIEdgeInsets(top: 5, left: 3, bottom: 10, right: 3)
     }
 }
