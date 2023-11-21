@@ -12,7 +12,8 @@ class MainViewCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star")
+        imageView.image = UIImage(systemName: "person")
+        imageView.tintColor = .darkGray
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -27,47 +28,11 @@ class MainViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let directorLabel: UILabel = {
-        let label = UILabel()
-        label.text = "감독"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 13)
-        label.sizeToFit()
-        label.numberOfLines = 1
-        return label
-    }()
-    
-    private let starringLabel: UILabel = {
-        let label = UILabel()
-        label.text = "출연"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 13)
-        label.sizeToFit()
-        label.numberOfLines = 1
-        return label
-    }()
-    
-    private let ratingLabel: UILabel = {
-        let label = UILabel()
-        label.text = "평점"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 13)
-        label.sizeToFit()
-        label.numberOfLines = 1
-        return label
-    }()
-    
     private let starButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        button.tintColor = .systemYellow
         return button
-    }()
-    
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
-        return stackView
     }()
     
     override init(frame: CGRect) {
@@ -86,26 +51,17 @@ class MainViewCell: UICollectionViewCell {
     private func setupLayout() {
         [
             imageView,
-            stackView,
+            titleLabel,
             starButton
         ].forEach { contentView.addSubview($0) }
         
         imageView.snp.makeConstraints {
-            $0.verticalEdges.equalTo(contentView)
-            $0.leading.equalToSuperview()
-            $0.width.equalTo(100)
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(titleLabel.snp.top)
         }
         
-        [
-            titleLabel,
-            directorLabel,
-            starringLabel,
-            ratingLabel
-        ].forEach { stackView.addArrangedSubview($0) }
-        
-        stackView.snp.makeConstraints {
-            $0.leading.equalTo(imageView.snp.trailing)
-            $0.top.bottom.trailing.equalToSuperview().inset(10)
+        titleLabel.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
         }
         
         starButton.snp.makeConstraints {
