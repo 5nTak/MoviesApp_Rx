@@ -50,13 +50,13 @@ class MainView: UIViewController {
         return textField
     }()
     
-    private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 1
-        layout.minimumInteritemSpacing = 0
         
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(MainViewCell.self, forCellWithReuseIdentifier: "MainViewCell")
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.setCollectionViewLayout())
+        collectionView.register(
+            MainViewCell.self,
+            forCellWithReuseIdentifier: "MainViewCell"
+        )
         return collectionView
     }()
     
@@ -66,7 +66,7 @@ class MainView: UIViewController {
         super.viewDidLoad()
         setNavigationBar()
         setSearchBarLayout()
-        setCollectionViewLayout()
+        setCollectionViewConstraints()
     }
     
     func setNavigationBar() {
@@ -91,7 +91,7 @@ class MainView: UIViewController {
     func setCollectionViewLayout() {
         view.addSubview(collectionView)
         collectionView.dataSource = dataSource
-        collectionView.delegate = self
+//        collectionView.delegate = self
         collectionView.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(10)
@@ -100,15 +100,54 @@ class MainView: UIViewController {
     }
 }
 
-// CollectionView FlowLayout
-extension MainView: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width / 3.5
-        let height = collectionView.frame.height / 4.5
-        return CGSize(width: width, height: height)
+// MARK: - CompositionalLayout
+extension MainView {
+    private func setCollectionViewLayout() -> UICollectionViewLayout {
+        return UICollectionViewCompositionalLayout(section: self.createSection())
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 3, bottom: 10, right: 3)
+    private func createSection() -> NSCollectionLayoutSection {
+        let itemFrationalWidthFraction = 1.0 / 3.5
+        let groupFractionalHeightFraction = 1.0 / 4.5
+        let itemInset: CGFloat = 2.5
+        
+        // MARK: - CompositionalLayout Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(
+            top: itemInset,
+            leading: itemInset,
+            bottom: itemInset,
+            trailing: itemInset
+        )
+        
+        // MARK: - CompositionalLayout Group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(itemFrationalWidthFraction),
+            heightDimension: .fractionalHeight(groupFractionalHeightFraction)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: item,
+            count: 5
+        )
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: itemInset,
+            leading: itemInset,
+            bottom: itemInset,
+            trailing: itemInset
+        )
+        
+        let sectionHeader = createSectionHeader()
+        
+        return section
+    }
+
     }
 }
