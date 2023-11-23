@@ -8,8 +8,12 @@
 import UIKit
 
 final class MainCollectionViewDataSource: NSObject, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 50
+        return 10
     }
     
     // MARK: - Cell
@@ -27,15 +31,17 @@ final class MainCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     
     // MARK: - HeaderView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let headerView = collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "MainCollectionHeaderView",
-            for: indexPath
-        ) as? MainCollectionHeaderView else {
+        guard let section = SectionLayoutKind(rawValue: indexPath.section),
+              let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: "MainCollectionHeaderView",
+                for: indexPath
+              ) as? MainCollectionHeaderView else {
             return UICollectionReusableView()
         }
-        headerView.setTitle(title: "인기 순위")
         
+        headerView.setTitle(title: section.description)
+
         return headerView
     }
 }
