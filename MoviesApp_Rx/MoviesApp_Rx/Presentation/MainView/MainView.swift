@@ -107,17 +107,20 @@ class MainView: UIViewController {
 // MARK: - CompositionalLayout
 extension MainView {
     private func setCollectionViewLayout() -> UICollectionViewLayout {
+        // UICollectionViewCompositionalLayout.sectionProvider 공부
         return UICollectionViewCompositionalLayout(section: self.createSection())
     }
     
     private func createSection() -> NSCollectionLayoutSection {
-        let itemFrationalWidthFraction = 1.0 / 3.5
-        let groupFractionalHeightFraction = 1.0 / 4.5
+        let itemWidth: CGFloat = UIScreen.main.bounds.width / 5
+        let ratio: CGFloat = 7 / 9
+        let itemHeight: CGFloat = itemWidth / ratio
+        
         let itemInset: CGFloat = 2.5
         
         // MARK: - CompositionalLayout Item
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .absolute(itemWidth),
             heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -130,13 +133,12 @@ extension MainView {
         
         // MARK: - CompositionalLayout Group
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(itemFrationalWidthFraction),
-            heightDimension: .fractionalHeight(groupFractionalHeightFraction)
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(itemHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            subitem: item,
-            count: 5
+            subitems: [item]
         )
         
         // Section
@@ -147,6 +149,7 @@ extension MainView {
             bottom: itemInset,
             trailing: itemInset
         )
+        section.orthogonalScrollingBehavior = .continuous
         
         let sectionHeader = createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
