@@ -95,11 +95,9 @@ class MainView: UIViewController {
     func setCollectionViewConstraints() {
         view.addSubview(collectionView)
         collectionView.dataSource = dataSource
-//        collectionView.delegate = self
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().inset(10)
-            $0.bottom.equalToSuperview()
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
 }
@@ -112,11 +110,10 @@ extension MainView {
     }
     
     private func createSection() -> NSCollectionLayoutSection {
-        let itemWidth: CGFloat = UIScreen.main.bounds.width / 5
+        let itemInset: CGFloat = 2.5
+        let itemWidth: CGFloat = (UIScreen.main.bounds.width) / 3
         let ratio: CGFloat = 7 / 9
         let itemHeight: CGFloat = itemWidth / ratio
-        
-        let itemInset: CGFloat = 2.5
         
         // MARK: - CompositionalLayout Item
         let itemSize = NSCollectionLayoutSize(
