@@ -57,10 +57,12 @@ class MainViewCell: UICollectionViewCell {
         
         imageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
+            $0.height.equalToSuperview().multipliedBy(0.9)
             $0.bottom.equalTo(titleLabel.snp.top)
         }
         
         titleLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
         
