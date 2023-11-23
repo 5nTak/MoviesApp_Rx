@@ -37,10 +37,14 @@ final class MainTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "person.fill")
         )
         
+        let mainTabNavigation = UINavigationController(rootViewController: mainViewController)
+        let searchTabNavigation = UINavigationController(rootViewController: searchViewController)
+        let accountTabNavigation = UINavigationController(rootViewController: accountViewController)
+        
         viewControllers = [
-            mainViewController,
-            searchViewController,
-            accountViewController
+            mainTabNavigation,
+            searchTabNavigation,
+            accountTabNavigation
         ]
     }
     
