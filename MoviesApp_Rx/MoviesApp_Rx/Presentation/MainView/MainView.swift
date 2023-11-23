@@ -57,6 +57,11 @@ class MainView: UIViewController {
             MainViewCell.self,
             forCellWithReuseIdentifier: "MainViewCell"
         )
+        collectionView.register(
+            MainCollectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "MainCollectionHeaderView"
+        )
         return collectionView
     }()
     
@@ -145,9 +150,23 @@ extension MainView {
         )
         
         let sectionHeader = createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
         
         return section
     }
 
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let layoutSectionHeaderSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(60)
+        )
+        
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: layoutSectionHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        
+        return sectionHeader
     }
 }
