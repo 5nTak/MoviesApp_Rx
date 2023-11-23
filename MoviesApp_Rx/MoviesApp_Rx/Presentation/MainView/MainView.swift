@@ -169,3 +169,18 @@ extension MainView {
         return sectionHeader
     }
 }
+
+enum SectionLayoutKind: Int, CaseIterable {
+    case popularList, trendingMovies, latest
+    
+    var description: String {
+        switch self {
+        case .popularList:
+            return "인기 순위"
+        case .trendingMovies:
+            return "지금 뜨는"
+        case .latest:
+            return "최신 개봉"
+        }
+    }
+}
