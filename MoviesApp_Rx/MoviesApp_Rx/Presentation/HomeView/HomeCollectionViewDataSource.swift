@@ -1,5 +1,5 @@
 //
-//  MainCollectionViewDataSource.swift
+//  HomeCollectionViewDataSource.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/11/21.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MainCollectionViewDataSource: NSObject, UICollectionViewDataSource {
+final class HomeCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 3
     }
@@ -19,9 +19,9 @@ final class MainCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     // MARK: - Cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "MainViewCell",
+            withReuseIdentifier: HomeCollectionViewCell.identifier,
             for: indexPath
-        ) as? MainViewCell else {
+        ) as? HomeCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.setup(index: indexPath.row)
@@ -34,9 +34,9 @@ final class MainCollectionViewDataSource: NSObject, UICollectionViewDataSource {
         guard let section = SectionLayoutKind(rawValue: indexPath.section),
               let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: "MainCollectionHeaderView",
+                withReuseIdentifier: HomeCollectionHeaderView.identifier,
                 for: indexPath
-              ) as? MainCollectionHeaderView else {
+              ) as? HomeCollectionHeaderView else {
             return UICollectionReusableView()
         }
         

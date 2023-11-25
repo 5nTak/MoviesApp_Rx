@@ -1,5 +1,5 @@
 //
-//  MainViewCell.swift
+//  HomeCollectionViewCell.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/11/20.
@@ -8,7 +8,8 @@
 import UIKit
 import SnapKit
 
-class MainViewCell: UICollectionViewCell {
+class HomeCollectionViewCell: UICollectionViewCell {
+    static let identifier = "HomeCollectionViewCell"
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()

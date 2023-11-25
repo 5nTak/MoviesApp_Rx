@@ -1,5 +1,5 @@
 //
-//  MainView.swift
+//  HomeViewController.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/11/20.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MainView: UIViewController {
+class HomeViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.black
@@ -53,18 +53,18 @@ class MainView: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.setCollectionViewLayout())
         collectionView.register(
-            MainViewCell.self,
-            forCellWithReuseIdentifier: "MainViewCell"
+            HomeCollectionViewCell.self,
+            forCellWithReuseIdentifier: HomeCollectionViewCell.identifier
         )
         collectionView.register(
-            MainCollectionHeaderView.self,
+            HomeCollectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "MainCollectionHeaderView"
+            withReuseIdentifier: HomeCollectionHeaderView.identifier
         )
         return collectionView
     }()
     
-    private var dataSource = MainCollectionViewDataSource()
+    private var dataSource = HomeCollectionViewDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,7 +103,7 @@ class MainView: UIViewController {
 }
 
 // MARK: - CompositionalLayout
-extension MainView {
+extension HomeViewController {
     private func setCollectionViewLayout() -> UICollectionViewLayout {
         // UICollectionViewCompositionalLayout.sectionProvider 공부
         return UICollectionViewCompositionalLayout(section: self.createSection())

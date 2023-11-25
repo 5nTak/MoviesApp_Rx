@@ -16,7 +16,7 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func setupTabBarItem() {
-        let mainViewController = MainView()
+        let mainViewController = HomeViewController()
         mainViewController.tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(systemName: "house"),

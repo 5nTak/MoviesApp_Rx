@@ -1,5 +1,5 @@
 //
-//  MainCollectionHeaderView.swift
+//  HomeCollectionHeaderView.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/11/22.
@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-final class MainCollectionHeaderView: UICollectionReusableView {
+final class HomeCollectionHeaderView: UICollectionReusableView {
+    static let identifier = "HomeCollectionHeaderView"
+    
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
