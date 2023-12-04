@@ -7,17 +7,21 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class HomeCollectionViewCell: UICollectionViewCell {
     var viewModel = HomeViewModel()
     
     static let identifier = "HomeCollectionViewCell"
     
+    let cornerImageProcessor = RoundCornerImageProcessor(cornerRadius: 20)
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .darkGray
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     
@@ -77,5 +81,21 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     func setup(title: String) {
         titleLabel.text = title
+    }
+    
+    func loadImage(urlString: String) {
+        guard let url = URL(string: imageView.imageBaseUrl + imageView.imageSize + urlString) else { return }
+        imageView.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .transition(.fade(1.0)),
+                .forceTransition,
+                .processor(self.cornerImageProcessor)
+            ],
+            progressBlock: { receivedSize, totalSize in
+                let percentage = (Float(receivedSize) / Float(totalSize) * 100.0)
+            }
+        )
     }
 }

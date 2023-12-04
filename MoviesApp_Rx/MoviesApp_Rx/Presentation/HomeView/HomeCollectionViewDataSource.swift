@@ -27,6 +27,7 @@ final class HomeCollectionViewDataSource: NSObject, UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.setup(title: movies[indexPath.row].title ?? "failed")
+        cell.loadImage(urlString: movies[indexPath.row].posterPath ?? "")
         
         return cell
     }
