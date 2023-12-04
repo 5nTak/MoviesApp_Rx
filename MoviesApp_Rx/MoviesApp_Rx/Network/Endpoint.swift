@@ -11,9 +11,10 @@ protocol APIEndpoint {
     associatedtype APIResponse: Decodable
 
     var method: HTTPMethod { get }
-    var baseURL: URL? { get }
+    var baseUrl: URL? { get }
     var path: String { get }
     var url: URL? { get }
+    var headers: [String: String]? { get }
     var queries: [String: String] { get }
 }
 
@@ -23,7 +24,7 @@ extension APIEndpoint {
     }
     
     var url: URL? {
-        guard let url = self.baseURL?.appendingPathComponent(self.path) else {
+        guard let url = self.baseUrl?.appendingPathComponent(self.path) else {
             return nil
         }
         var urlComponents = URLComponents(string: url.absoluteString)
@@ -42,6 +43,7 @@ extension APIEndpoint {
         }
         var request = URLRequest(url: url)
         request.httpMethod = self.method.rawValue
+        request.allHTTPHeaderFields = headers
 
         return request
     }
