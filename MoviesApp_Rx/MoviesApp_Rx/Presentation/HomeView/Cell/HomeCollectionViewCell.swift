@@ -14,8 +14,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HomeCollectionViewCell"
     
-    let cornerImageProcessor = RoundCornerImageProcessor(cornerRadius: 20)
-    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
@@ -83,19 +81,19 @@ class HomeCollectionViewCell: UICollectionViewCell {
         titleLabel.text = title
     }
     
-    func loadImage(urlString: String) {
-        guard let url = URL(string: imageView.imageBaseUrl + imageView.imageSize + urlString) else { return }
+    func loadImage(url: String) {
+        let urlString = imageView.imageBaseUrl + imageView.imageSize + url
+        
+        guard let url = URL(string: urlString) else { return }
         imageView.kf.setImage(
             with: url,
             placeholder: nil,
             options: [
                 .transition(.fade(1.0)),
                 .forceTransition,
-                .processor(self.cornerImageProcessor)
-            ],
-            progressBlock: { receivedSize, totalSize in
-                let percentage = (Float(receivedSize) / Float(totalSize) * 100.0)
-            }
+                .processor(imageView.cornerImageProcessor)
+            ]
         )
+        imageView.setImageCache(with: urlString)
     }
 }
