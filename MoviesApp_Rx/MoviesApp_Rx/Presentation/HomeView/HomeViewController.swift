@@ -71,14 +71,15 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setNavigationBar()
 //        setSearchBarLayout()
-        viewModel.showMovies()
         bind()
         setCollectionViewConstraints()
+        viewModel.showMovies()
     }
     
     func bind() {
         viewModel.bindMovies { [weak self] movies in
             self?.dataSource.movies = movies
+            self?.updateCollectionView()
         }
     }
     
@@ -101,12 +102,18 @@ class HomeViewController: UIViewController {
 //        }
 //    }
     
-    func setCollectionViewConstraints() {
+    private func setCollectionViewConstraints() {
         view.addSubview(collectionView)
         collectionView.dataSource = dataSource
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.bottom.equalToSuperview()
+        }
+    }
+    
+    private func updateCollectionView() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
         }
     }
 }
