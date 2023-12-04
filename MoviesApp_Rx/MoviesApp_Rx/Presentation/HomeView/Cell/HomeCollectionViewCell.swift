@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class HomeCollectionViewCell: UICollectionViewCell {
+    var viewModel = HomeViewModel()
+    
     static let identifier = "HomeCollectionViewCell"
     
     private let imageView: UIImageView = {
@@ -21,7 +23,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "영화 제목"
         label.textColor = .black
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.sizeToFit()
@@ -47,6 +48,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.image = UIImage(systemName: "person")
+        titleLabel.text = nil
     }
     
     private func setupLayout() {
@@ -72,7 +75,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setup(index: Int) {
-        titleLabel.text = "영화제목 \(index + 1)번째 셀"
+    func setup(title: String) {
+        titleLabel.text = title
     }
 }

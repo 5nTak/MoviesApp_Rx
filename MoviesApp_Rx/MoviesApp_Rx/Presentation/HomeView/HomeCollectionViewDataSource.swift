@@ -8,12 +8,14 @@
 import UIKit
 
 final class HomeCollectionViewDataSource: NSObject, UICollectionViewDataSource {
+    var movies: [Movie] = []
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return movies.count
     }
     
     // MARK: - Cell
@@ -24,7 +26,7 @@ final class HomeCollectionViewDataSource: NSObject, UICollectionViewDataSource {
         ) as? HomeCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.setup(index: indexPath.row)
+        cell.setup(title: movies[indexPath.row].title ?? "failed")
         
         return cell
     }

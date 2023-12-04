@@ -65,12 +65,21 @@ class HomeViewController: UIViewController {
     }()
     
     private var dataSource = HomeCollectionViewDataSource()
+    private var viewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
 //        setSearchBarLayout()
+        viewModel.showMovies()
+        bind()
         setCollectionViewConstraints()
+    }
+    
+    func bind() {
+        viewModel.bindMovies { [weak self] movies in
+            self?.dataSource.movies = movies
+        }
     }
     
     func setNavigationBar() {
@@ -176,9 +185,9 @@ enum SectionLayoutKind: Int, CaseIterable {
     var description: String {
         switch self {
         case .popularList:
-            return "인기 순위"
+            return "둘러보기"
         case .trendingMovies:
-            return "지금 뜨는"
+            return "인기 영화"
         case .latest:
             return "최신 개봉"
         }
