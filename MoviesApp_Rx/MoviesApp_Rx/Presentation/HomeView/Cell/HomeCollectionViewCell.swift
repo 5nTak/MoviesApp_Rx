@@ -50,7 +50,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = UIImage(systemName: "person")
+        imageView.kf.cancelDownloadTask()
+        imageView.image = nil
         titleLabel.text = nil
     }
     
@@ -84,16 +85,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     func loadImage(url: String) {
         let urlString = imageView.imageBaseUrl + imageView.imageSize + url
         
-        guard let url = URL(string: urlString) else { return }
-        imageView.kf.setImage(
-            with: url,
-            placeholder: nil,
-            options: [
-                .transition(.fade(1.0)),
-                .forceTransition,
-                .processor(imageView.cornerImageProcessor)
-            ]
-        )
         imageView.setImageCache(with: urlString)
     }
 }

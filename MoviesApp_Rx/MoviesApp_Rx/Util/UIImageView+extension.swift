@@ -10,19 +10,25 @@ import Kingfisher
 
 extension UIImageView {
     var cornerImageProcessor: RoundCornerImageProcessor {
-        return RoundCornerImageProcessor(cornerRadius: 20)
+        return RoundCornerImageProcessor(cornerRadius: 10)
     }
     var imageSize: String {
-        return "/w500"
+        return "/w92"
     }
     var imageBaseUrl: String {
         return "https://image.tmdb.org/t/p"
     }
     
     func setImageCache(with urlString: String) {
+        self.kf.indicatorType = .activity
         ImageCache.default.retrieveImage(
             forKey: urlString,
-            options: nil) { result in
+            options: [
+                .transition(.fade(1.0)),
+                .processor(self.cornerImageProcessor),
+                .forceTransition
+            ]
+        ) { result in
                 switch result {
                 case .success(let value):
                     if let image = value.image {
