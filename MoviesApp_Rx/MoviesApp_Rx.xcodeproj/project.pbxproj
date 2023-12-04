@@ -22,6 +22,7 @@
 		457A6A9E2B0CB99D003FF1AE /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A9D2B0CB99D003FF1AE /* MainTabBarController.swift */; };
 		457A6AA02B0DF330003FF1AE /* HomeCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A9F2B0DF330003FF1AE /* HomeCollectionHeaderView.swift */; };
 		457A6AA32B11EE2B003FF1AE /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6AA22B11EE2B003FF1AE /* Movie.swift */; };
+		457A6AB72B1208DB003FF1AE /* TmdbAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6AB62B1208DB003FF1AE /* TmdbAPIEndpoint.swift */; };
 		457A6AC02B1DCD23003FF1AE /* MovieList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6ABF2B1DCD23003FF1AE /* MovieList.swift */; };
 		BB6AA1CEFE638FC7DE354937 /* Pods_MoviesApp_Rx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB87F5A7209EE41FB99BAE84 /* Pods_MoviesApp_Rx.framework */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 		457A6A9D2B0CB99D003FF1AE /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		457A6A9F2B0DF330003FF1AE /* HomeCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionHeaderView.swift; sourceTree = "<group>"; };
 		457A6AA22B11EE2B003FF1AE /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		457A6AB62B1208DB003FF1AE /* TmdbAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbAPIEndpoint.swift; sourceTree = "<group>"; };
 		457A6ABF2B1DCD23003FF1AE /* MovieList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieList.swift; sourceTree = "<group>"; };
 		BFBB55C55497685AD3808D01 /* Pods-MoviesApp_Rx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesApp_Rx.release.xcconfig"; path = "Target Support Files/Pods-MoviesApp_Rx/Pods-MoviesApp_Rx.release.xcconfig"; sourceTree = "<group>"; };
 		CB87F5A7209EE41FB99BAE84 /* Pods_MoviesApp_Rx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesApp_Rx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 				457A6A732B0B3F29003FF1AE /* SceneDelegate.swift */,
 				457A6A912B0B505A003FF1AE /* Presentation */,
 				457A6AA12B11EE17003FF1AE /* Domain */,
+				457A6AAD2B120792003FF1AE /* Data */,
 				457A6A862B0B4733003FF1AE /* Network */,
 				457A6A852B0B4493003FF1AE /* Resource */,
 			);
@@ -166,6 +169,38 @@
 				457A6ABF2B1DCD23003FF1AE /* MovieList.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		457A6AAD2B120792003FF1AE /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				457A6AAE2B1207B5003FF1AE /* Network */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		457A6AAE2B1207B5003FF1AE /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				457A6AB42B1208A9003FF1AE /* Endpoint */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		457A6AB42B1208A9003FF1AE /* Endpoint */ = {
+			isa = PBXGroup;
+			children = (
+				457A6AB52B1208B1003FF1AE /* Protocol */,
+			);
+			path = Endpoint;
+			sourceTree = "<group>";
+		};
+		457A6AB52B1208B1003FF1AE /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				457A6AB62B1208DB003FF1AE /* TmdbAPIEndpoint.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		813A3345DB1657548D019D7A /* Pods */ = {
@@ -299,6 +334,7 @@
 				457A6A882B0B4755003FF1AE /* HTTPMethod.swift in Sources */,
 				457A6A762B0B3F29003FF1AE /* HomeViewController.swift in Sources */,
 				457A6A992B0B6F05003FF1AE /* HomeCollectionViewCell.swift in Sources */,
+				457A6AB72B1208DB003FF1AE /* TmdbAPIEndpoint.swift in Sources */,
 				457A6A722B0B3F29003FF1AE /* AppDelegate.swift in Sources */,
 				457A6AA32B11EE2B003FF1AE /* Movie.swift in Sources */,
 				457A6A8C2B0B479C003FF1AE /* NetworkError.swift in Sources */,
