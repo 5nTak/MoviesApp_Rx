@@ -1,5 +1,5 @@
 //
-//  MovieListEndpoint.swift
+//  MovieDiscoveryEndpoint.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/11/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieListEndpoint: TmdbAPIEndpoint {
+struct MovieDiscoveryEndpoint: TmdbAPIEndpoint {
     typealias APIResponse = MovieListResponse
 
     var path: String = "/discover/movie"

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol MovieRepository {
-    func fetchMovieList(
+    func fetchMovieDiscovery(
         page: Int,
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask?

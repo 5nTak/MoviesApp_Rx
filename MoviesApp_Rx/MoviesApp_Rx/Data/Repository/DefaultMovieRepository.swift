@@ -14,8 +14,8 @@ final class DefaultMovieRepository: MovieRepository {
         self.networkProvider = networkProvider
     }
     
-    func fetchMovieList(page: Int, completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
-        let request = MovieListEndpoint(page: page)
+    func fetchMovieDiscovery(page: Int, completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
+        let request = MovieDiscoveryEndpoint(page: page)
         return self.networkProvider.request(request) { result in
             switch result {
             case .success(let movieListResponses):

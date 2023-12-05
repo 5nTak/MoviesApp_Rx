@@ -14,8 +14,11 @@ final class MovieUseCase {
         self.movieRepository = movieRepository
     }
     
-    func fetchMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
-        self.fetchMovieList(page: page) { result in
+    func fetchMovieDiscovery(
+        page: Int,
+        completion: @escaping (Result<[Movie], Error>) -> Void
+    ) {
+        self.fetchMovieDiscoveryPage(page: page) { result in
             switch result {
             case .success(let movieList):
                 completion(.success(movieList.results))
@@ -25,10 +28,10 @@ final class MovieUseCase {
         }
     }
     
-    private func fetchMovieList(
+    private func fetchMovieDiscoveryPage(
         page: Int,
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask? {
-        return movieRepository.fetchMovieList(page: page, completion: completion)
+        return movieRepository.fetchMovieDiscovery(page: page, completion: completion)
     }
 }

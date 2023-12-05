@@ -8,14 +8,14 @@
 import UIKit
 
 final class HomeViewModel {
-    var movies: [Movie] = [] {
+    var discoveredMovies: [Movie] = [] {
         didSet {
-            moviesHandler?(movies)
+            discoveredMoviesHandler?(discoveredMovies)
         }
     }
     var page: Int = 1
     private let movieUseCase: MovieUseCase
-    var moviesHandler: (([Movie]) -> Void)?
+    var discoveredMoviesHandler: (([Movie]) -> Void)?
     
     init(movieUseCase: MovieUseCase = MovieUseCase()) {
         self.movieUseCase = movieUseCase
@@ -23,13 +23,13 @@ final class HomeViewModel {
     
     func bindMovies(closure: @escaping ([Movie]) -> Void) {
         self.moviesHandler = closure
+    private func showMovieDiscovery() {
+        movieUseCase.fetchMovieDiscovery(page: page) { result in
+                self.discoveredMovies.append(contentsOf: movies)
     }
     
-    func showMovies() {
-        movieUseCase.fetchMovies(page: page) { result in
             switch result {
             case .success(let movies):
-                self.movies.append(contentsOf: movies)
             case .failure(let error):
                 print(error)
             }
