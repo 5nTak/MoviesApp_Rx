@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+struct PopularMovieEndpoint: TmdbAPIEndpoint {
+    typealias APIResponse = MovieListResponse
+
+    var path: String = "/movie/popular"
+    var queries: [String: String]
+    
+    init(page: Int) {
+        self.queries = [
+            "page": "\(page)"
+        ]
+    }
+}
