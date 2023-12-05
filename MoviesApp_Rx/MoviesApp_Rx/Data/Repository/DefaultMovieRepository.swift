@@ -37,4 +37,16 @@ final class DefaultMovieRepository: MovieRepository {
             }
         }
     }
+    
+    func fetchTrendingMovies(completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
+        let request = TrendingMovieEndpoint()
+        return self.networkProvider.request(request) { result in
+            switch result {
+            case .success(let movieListResponses):
+                completion(.success(movieListResponses.toMovieList()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
