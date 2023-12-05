@@ -73,7 +73,7 @@ class HomeViewController: UIViewController {
 //        setSearchBarLayout()
         bind()
         setCollectionViewConstraints()
-        viewModel.showMovies()
+        viewModel.showContents()
     }
     
     func bind() {
