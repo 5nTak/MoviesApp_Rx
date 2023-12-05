@@ -187,7 +187,7 @@ extension HomeViewController {
 }
 
 enum SectionLayoutKind: Int, CaseIterable {
-    case popularList, trendingMovies, latest
+    case popularList, trendingMovies, latest, trending
     
     var description: String {
         switch self {
@@ -197,6 +197,8 @@ enum SectionLayoutKind: Int, CaseIterable {
             return "인기 영화"
         case .latest:
             return "최신 개봉"
+        case .trending:
+            return "지금 뜨는"
         }
     }
 }

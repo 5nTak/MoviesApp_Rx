@@ -11,7 +11,7 @@ final class HomeCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     var movies: [Movie] = []
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
