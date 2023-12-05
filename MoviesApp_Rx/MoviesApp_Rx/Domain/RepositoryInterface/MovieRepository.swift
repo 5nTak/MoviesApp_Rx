@@ -17,4 +17,8 @@ protocol MovieRepository {
         page: Int,
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask?
+    
+    func fetchTrendingMovies(
+        completion: @escaping (Result<MovieList, Error>) -> Void
+    ) -> URLSessionTask?
 }
