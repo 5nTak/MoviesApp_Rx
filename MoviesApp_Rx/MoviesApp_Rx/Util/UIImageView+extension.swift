@@ -13,7 +13,7 @@ extension UIImageView {
         return RoundCornerImageProcessor(cornerRadius: 10)
     }
     var imageSize: String {
-        return "/w92"
+        return "/w500"
     }
     var imageBaseUrl: String {
         return "https://image.tmdb.org/t/p"

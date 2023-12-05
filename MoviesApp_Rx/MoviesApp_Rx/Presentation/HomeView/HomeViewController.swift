@@ -128,7 +128,7 @@ extension HomeViewController {
     private func createSection() -> NSCollectionLayoutSection {
         let itemInset: CGFloat = 2.5
         let itemWidth: CGFloat = (UIScreen.main.bounds.width) / 3
-        let ratio: CGFloat = 7 / 9
+        let ratio: CGFloat = 11 / 18
         let itemHeight: CGFloat = itemWidth / ratio
         
         // MARK: - CompositionalLayout Item
