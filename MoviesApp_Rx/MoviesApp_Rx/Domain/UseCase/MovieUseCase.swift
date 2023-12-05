@@ -34,4 +34,25 @@ final class MovieUseCase {
     ) -> URLSessionTask? {
         return movieRepository.fetchMovieDiscovery(page: page, completion: completion)
     }
+    
+    func fetchPopularMoviesPage(
+        page: Int,
+        completion: @escaping (Result<[Movie], Error>) -> Void
+    ) {
+        self.fetchPopularMovies(page: page) { result in
+            switch result {
+            case .success(let movieList):
+                completion(.success(movieList.results))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func fetchPopularMovies(
+        page: Int,
+        completion: @escaping (Result<MovieList, Error>) -> Void
+    ) -> URLSessionTask? {
+        return movieRepository.fetchPopularMovies(page: page, completion: completion)
+    }
 }
