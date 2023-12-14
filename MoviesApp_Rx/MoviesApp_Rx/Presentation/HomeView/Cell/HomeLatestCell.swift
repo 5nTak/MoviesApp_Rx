@@ -1,18 +1,16 @@
 //
-//  HomeCollectionViewCell.swift
+//  HomeLatestCell.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/20.
+//  Created by Tak on 2023/12/10.
 //
 
 import UIKit
 import SnapKit
 import Kingfisher
 
-class HomeCollectionViewCell: UICollectionViewCell {
-    var viewModel = HomeViewModel()
-    
-    static let identifier = "HomeCollectionViewCell"
+class HomeLatestCell: UICollectionViewCell {
+    static let identifier = "HomeLatestCell"
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -28,6 +26,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
         label.textColor = .black
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.sizeToFit()
+        label.textAlignment = .center
         label.numberOfLines = 1
         return label
     }()
