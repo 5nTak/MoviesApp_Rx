@@ -18,6 +18,10 @@ protocol MovieRepository {
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask?
     
+    func fetchLatestMovie(
+        completion: @escaping (Result<Movie, Error>) -> Void
+    ) -> URLSessionTask?
+    
     func fetchTrendingMovies(
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask?
