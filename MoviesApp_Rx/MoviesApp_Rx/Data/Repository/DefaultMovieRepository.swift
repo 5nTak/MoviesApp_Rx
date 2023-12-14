@@ -38,6 +38,18 @@ final class DefaultMovieRepository: MovieRepository {
         }
     }
     
+    func fetchLatestMovie(completion: @escaping (Result<Movie, Error>) -> Void) -> URLSessionTask? {
+        let request = LatestMovieEndpoint()
+        return self.networkProvider.request(request) { result in
+            switch result {
+            case .success(let movieResponse):
+                completion(.success(movieResponse.toMovie()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     func fetchTrendingMovies(completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
         let request = TrendingMovieEndpoint()
         return self.networkProvider.request(request) { result in
