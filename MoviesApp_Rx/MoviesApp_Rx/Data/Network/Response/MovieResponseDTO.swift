@@ -34,3 +34,23 @@ struct MovieResponse: Decodable {
         case voteCount = "vote_count"
     }
 }
+
+extension MovieResponse {
+    func toMovie() -> Movie {
+        return Movie(
+            id: self.id,
+            title: self.title,
+            originalTitle: self.originalTitle,
+            originalLanguage: self.originalLanguage,
+            genres: self.genres,
+            adult: self.adult,
+            overview: self.overview,
+            posterPath: self.posterPath,
+            backdropPath: self.backdropPath,
+            releaseData: self.releaseDate,
+            video: self.video,
+            voteAverage: self.voteAverage,
+            voteCount: self.voteCount
+        )
+    }
+}
