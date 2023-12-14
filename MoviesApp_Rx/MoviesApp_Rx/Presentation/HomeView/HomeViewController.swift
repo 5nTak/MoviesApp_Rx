@@ -17,143 +17,93 @@ class HomeViewController: UIViewController {
         return label
     }()
     
-    // 즐겨찾기 text 앞에 switching 가능한 starbutton
-//    private let starButton: UIButton = {
-//        let button = UIButton()
-//        button.setTitle("즐겨찾기", for: .normal)
-//        button.setTitleColor(.black, for: .normal)
-//        button.titleLabel?.font = .systemFont(ofSize: 14)
-//
-//        button.layer.borderColor = UIColor.systemGray2.cgColor
-//        button.layer.borderWidth = 0.5
-//        button.layer.cornerRadius = 10
-//
-//        // 좀 더 깔끔한 방법 고민해보기
-//        let margin: CGFloat = 10.0
-//
-//        button.snp.makeConstraints {
-//            $0.width.equalTo(button.titleLabel!.intrinsicContentSize.width + margin * 2.0)
-//            $0.height.equalTo(button.titleLabel!.intrinsicContentSize.height + margin * 1.2)
-//        }
-//        return button
-//    }()
-    
-//    private let searchBar: UIView = {
-//        let view = UIView()
-//
-//        return view
-//    }()
-//
-//    private let searchBarTextField: UITextField = {
-//        let textField = UITextField()
-//        textField.placeholder = "검색어를 입력하세요."
-//        return textField
-//    }()
-    
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.setCollectionViewLayout())
-        collectionView.register(
-            HomeCollectionViewCell.self,
-            forCellWithReuseIdentifier: HomeCollectionViewCell.identifier
-        )
-        collectionView.register(
-            HomeCollectionHeaderView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: HomeCollectionHeaderView.identifier
-        )
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         return collectionView
     }()
     
-    private var dataSource = HomeCollectionViewDataSource()
+    private var dataSource: UICollectionViewDiffableDataSource<MovieListSection, Movie>?
+    private var viewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-//        setSearchBarLayout()
         setCollectionViewConstraints()
+        bind()
+        viewModel.showContents()
     }
     
     func setNavigationBar() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: starButton)
+        //        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: starButton)
     }
     
-//    func setSearchBarLayout() {
-//        view.addSubview(searchBar)
-//        searchBar.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide)
-//            $0.leading.trailing.equalToSuperview()
-//            $0.height.equalTo(50)
-//        }
-//        searchBar.addSubview(searchBarTextField)
-//        searchBarTextField.snp.makeConstraints {
-//            $0.horizontalEdges.equalToSuperview().inset(10)
-//            $0.verticalEdges.equalToSuperview().inset(7)
-//        }
-//    }
-    
-    func setCollectionViewConstraints() {
-        view.addSubview(collectionView)
-        collectionView.dataSource = dataSource
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.bottom.equalToSuperview()
+    func bind() {
+        viewModel.discoveredMoviesHandler = { movies in
+            self.applySnapshot(movies: movies, section: .discover)
         }
+        viewModel.popularMoviesHandler = { movies in
+            self.applySnapshot(movies: movies, section: .popular)
+        }
+        viewModel.latestMovieHandler = { movies in
+            self.applySnapshot(movies: movies, section: .latest)
+        }
+        viewModel.trendingMoviesHandler = { movies in
+            self.applySnapshot(movies: movies, section: .trending)
+        }
+    }
+    
+    private func setCollectionViewConstraints() {
+        configureHierarchy()
+        configureDataSource()
+        createSections()
     }
 }
 
 // MARK: - CompositionalLayout
 extension HomeViewController {
-    private func setCollectionViewLayout() -> UICollectionViewLayout {
-        // UICollectionViewCompositionalLayout.sectionProvider 공부
-        return UICollectionViewCompositionalLayout(section: self.createSection())
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+            guard let layoutSectionKind = MovieListSection(rawValue: sectionIndex) else { return nil }
+            
+            
+            let itemWidthSize = (layoutSectionKind == .discover) || (layoutSectionKind == .latest) ? NSCollectionLayoutDimension.fractionalWidth(1.0) : NSCollectionLayoutDimension.fractionalWidth(0.5)
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: itemWidthSize,
+                heightDimension: .fractionalHeight(1.0)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            let groupHeight = (layoutSectionKind == .discover) || (layoutSectionKind == .latest) ? NSCollectionLayoutDimension.fractionalWidth(1.0) : NSCollectionLayoutDimension.fractionalHeight(0.35)
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: groupHeight
+            )
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [item]
+            )
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 5, bottom: 20, trailing: 5)
+            
+            switch layoutSectionKind {
+            case .discover:
+                section.orthogonalScrollingBehavior = .paging
+            case .popular, .latest, .trending:
+                section.orthogonalScrollingBehavior = .continuous
+            }
+            
+            let sectionHeader = self.createSectionHeader()
+            section.boundarySupplementaryItems = [sectionHeader]
+            
+            return section
+        }
+        
+        return layout
     }
     
-    private func createSection() -> NSCollectionLayoutSection {
-        let itemInset: CGFloat = 2.5
-        let itemWidth: CGFloat = (UIScreen.main.bounds.width) / 3
-        let ratio: CGFloat = 7 / 9
-        let itemHeight: CGFloat = itemWidth / ratio
-        
-        // MARK: - CompositionalLayout Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(itemWidth),
-            heightDimension: .fractionalHeight(1)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(
-            top: itemInset,
-            leading: itemInset,
-            bottom: itemInset,
-            trailing: itemInset
-        )
-        
-        // MARK: - CompositionalLayout Group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(itemHeight)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
-        
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: itemInset,
-            leading: itemInset,
-            bottom: itemInset,
-            trailing: itemInset
-        )
-        section.orthogonalScrollingBehavior = .continuous
-        
-        let sectionHeader = createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-        
-        return section
-    }
-
+    // MARK: - SectionHeader
     private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -170,17 +120,100 @@ extension HomeViewController {
     }
 }
 
-enum SectionLayoutKind: Int, CaseIterable {
-    case popularList, trendingMovies, latest
+// MARK: - DiffableDataSource
+extension HomeViewController {
+    func configureHierarchy() {
+        collectionView.backgroundColor = .systemBackground
+        view.addSubview(collectionView)
+    }
+    
+    func configureDataSource() {
+        // cell 합치기 고려
+        // MARK: - Cell Registration
+        let discoveryCell = UICollectionView.CellRegistration<HomeDiscoveryCell, Movie> { cell, indexPath, movie in
+            cell.setup(title: self.viewModel.discoveredMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel.discoveredMovies[indexPath.row].posterPath ?? "")
+        }
+        let popularCell = UICollectionView.CellRegistration<HomePopularCell, Movie> { cell, indexPath, movie in
+            cell.setup(title: self.viewModel.popularMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel.popularMovies[indexPath.row].posterPath ?? "")
+        }
+        let latestCell = UICollectionView.CellRegistration<HomeLatestCell, Movie> { cell, indexPath, movie in
+            cell.setup(title: self.viewModel.latestMovie[0].title ?? "")
+            cell.loadImage(url: self.viewModel.latestMovie[0].posterPath ?? "")
+        }
+        let trendingCell = UICollectionView.CellRegistration<HomeTrendingCell, Movie> { cell, indexPath, movie in
+            cell.setup(title: self.viewModel.trendingMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel.trendingMovies[indexPath.row].posterPath ?? "")
+        }
+        dataSource = UICollectionViewDiffableDataSource<MovieListSection, Movie>(collectionView: collectionView) {
+            (collectionView, indexPath, movie) -> UICollectionViewCell? in
+            switch MovieListSection(rawValue: indexPath.section) {
+            case .discover:
+                return collectionView.dequeueConfiguredReusableCell(using: discoveryCell, for: indexPath, item: movie)
+            case .popular:
+                return collectionView.dequeueConfiguredReusableCell(using: popularCell, for: indexPath, item: movie)
+            case .latest:
+                return collectionView.dequeueConfiguredReusableCell(using: latestCell, for: indexPath, item: movie)
+            case .trending:
+                return collectionView.dequeueConfiguredReusableCell(using: trendingCell, for: indexPath, item: movie)
+            case .none:
+                return UICollectionViewCell()
+            }
+        }
+        
+        // MARK: - HeaderView Registration
+        let headerViewRegistration = UICollectionView.SupplementaryRegistration<HomeCollectionHeaderView>(
+            elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
+                guard let section = MovieListSection(rawValue: indexPath.section) else { return }
+                supplementaryView.setTitle(title: section.description)
+            }
+        dataSource?.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            return collectionView.dequeueConfiguredReusableSupplementary(using: headerViewRegistration, for: indexPath)
+        }
+    }
+    // MARK: - Snapshot Apply
+    private func applySnapshot(movies: [Movie], section: MovieListSection) {
+        DispatchQueue.main.async {
+            guard var snapshot = self.dataSource?.snapshot() else { return }
+            
+            switch section {
+            case .discover:
+                snapshot.appendItems(movies, toSection: section)
+            case .popular:
+                snapshot.appendItems(movies, toSection: section)
+            case .latest:
+                snapshot.appendItems(movies, toSection: section)
+            case .trending:
+                snapshot.appendItems(movies, toSection: section)
+            }
+            self.dataSource?.apply(snapshot)
+        }
+    }
+    
+    private func createSections() {
+        var snapshot = NSDiffableDataSourceSnapshot<MovieListSection, Movie>()
+        MovieListSection.allCases.forEach {
+            snapshot.appendSections([$0])
+        }
+        dataSource?.apply(snapshot)
+    }
+}
+
+// MARK: - Section
+enum MovieListSection: Int, CaseIterable {
+    case discover, popular, latest, trending
     
     var description: String {
         switch self {
-        case .popularList:
-            return "인기 순위"
-        case .trendingMovies:
-            return "지금 뜨는"
+        case .discover:
+            return "둘러보기"
+        case .popular:
+            return "인기 영화"
         case .latest:
             return "최신 개봉"
+        case .trending:
+            return "지금 뜨는"
         }
     }
 }

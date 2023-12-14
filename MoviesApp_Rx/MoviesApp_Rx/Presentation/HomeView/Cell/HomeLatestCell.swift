@@ -1,30 +1,32 @@
 //
-//  HomeCollectionViewCell.swift
+//  HomeLatestCell.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/20.
+//  Created by Tak on 2023/12/10.
 //
 
 import UIKit
 import SnapKit
+import Kingfisher
 
-class HomeCollectionViewCell: UICollectionViewCell {
-    static let identifier = "HomeCollectionViewCell"
+class HomeLatestCell: UICollectionViewCell {
+    static let identifier = "HomeLatestCell"
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .darkGray
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "영화 제목"
         label.textColor = .black
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.sizeToFit()
+        label.textAlignment = .center
         label.numberOfLines = 1
         return label
     }()
@@ -47,6 +49,9 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.kf.cancelDownloadTask()
+        imageView.image = nil
+        titleLabel.text = nil
     }
     
     private func setupLayout() {
@@ -72,7 +77,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setup(index: Int) {
-        titleLabel.text = "영화제목 \(index + 1)번째 셀"
+    func setup(title: String) {
+        titleLabel.text = title
+    }
+    
+    func loadImage(url: String) {
+        let urlString = imageView.imageBaseUrl + imageView.imageSize + url
+        
+        imageView.setImageCache(with: urlString)
     }
 }
