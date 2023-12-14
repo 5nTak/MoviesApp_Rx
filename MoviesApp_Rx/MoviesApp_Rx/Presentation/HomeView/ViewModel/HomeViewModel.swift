@@ -18,6 +18,11 @@ final class HomeViewModel {
             popularMoviesHandler?(popularMovies)
         }
     }
+    var latestMovie: [Movie] = [] {
+        didSet {
+            latestMovieHandler?(latestMovie)
+        }
+    }
     var trendingMovies: [Movie] = [] {
         didSet {
             trendingMoviesHandler?(trendingMovies)
@@ -27,21 +32,17 @@ final class HomeViewModel {
     private let movieUseCase: MovieUseCase
     var discoveredMoviesHandler: (([Movie]) -> Void)?
     var popularMoviesHandler: (([Movie]) -> Void)?
+    var latestMovieHandler: (([Movie]) -> Void)?
     var trendingMoviesHandler: (([Movie]) -> Void)?
     
     init(movieUseCase: MovieUseCase = MovieUseCase()) {
         self.movieUseCase = movieUseCase
     }
     
-    func bindMovies(closure: @escaping ([Movie]) -> Void) {
-        self.discoveredMoviesHandler = closure
-        self.popularMoviesHandler = closure
-        self.trendingMoviesHandler = closure
-    }
-    
     func showContents() {
         showMovieDiscovery()
         showPopularMovies()
+        showLatestMovie()
         showTrendingMovies()
     }
     
@@ -61,6 +62,17 @@ final class HomeViewModel {
             switch result {
             case .success(let movies):
                 self.popularMovies.append(contentsOf: movies)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    private func showLatestMovie() {
+        movieUseCase.fetchLatestMovie { result in
+            switch result {
+            case .success(let movie):
+                self.latestMovie.append(movie)
             case .failure(let error):
                 print(error)
             }
