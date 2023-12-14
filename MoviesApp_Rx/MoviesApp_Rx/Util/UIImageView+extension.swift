@@ -36,7 +36,7 @@ extension UIImageView {
                     } else {
                         guard let url = URL(string: urlString) else { return }
                         let resource = ImageResource(downloadURL: url, cacheKey: urlString)
-                        self.kf.setImage(with: resource)
+                        self.kf.setImage(with: resource, placeholder: UIImage(systemName: "xmark.icloud"))
                     }
                 case .failure(let error):
                     print(error)
