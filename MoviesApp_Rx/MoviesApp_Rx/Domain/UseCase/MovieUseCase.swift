@@ -27,7 +27,6 @@ final class MovieUseCase {
             }
         }
     }
-    
     private func fetchMovieDiscoveryPage(
         page: Int,
         completion: @escaping (Result<MovieList, Error>) -> Void
@@ -48,12 +47,17 @@ final class MovieUseCase {
             }
         }
     }
-    
     private func fetchPopularMovies(
         page: Int,
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask? {
         return movieRepository.fetchPopularMovies(page: page, completion: completion)
+    }
+    
+    func fetchLatestMovie(
+        completion: @escaping (Result<Movie, Error>) -> Void
+    ) -> URLSessionTask? {
+        return movieRepository.fetchLatestMovie(completion: completion)
     }
     
     func fetchTrendingMoviesPage(
@@ -68,7 +72,6 @@ final class MovieUseCase {
             }
         }
     }
-    
     private func fetchTrendingMovies(
         completion: @escaping (Result<MovieList, Error>) -> Void
     ) -> URLSessionTask? {
