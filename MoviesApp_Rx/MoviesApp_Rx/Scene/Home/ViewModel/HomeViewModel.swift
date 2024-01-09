@@ -35,7 +35,7 @@ final class HomeViewModel {
     var latestMovieHandler: (([Movie]) -> Void)?
     var trendingMoviesHandler: (([Movie]) -> Void)?
     
-    init(movieUseCase: MovieUseCase = MovieUseCase()) {
+    init(movieUseCase: MovieUseCase) {
         self.movieUseCase = movieUseCase
     }
     

@@ -23,14 +23,14 @@ class HomeViewController: UIViewController {
     }()
     
     private var dataSource: UICollectionViewDiffableDataSource<MovieListSection, Movie>?
-    private var viewModel = HomeViewModel()
+    var viewModel: HomeViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setCollectionViewConstraints()
         bind()
-        viewModel.showContents()
+        viewModel?.showContents()
     }
     
     func setNavigationBar() {
@@ -39,16 +39,16 @@ class HomeViewController: UIViewController {
     }
     
     func bind() {
-        viewModel.discoveredMoviesHandler = { movies in
+        viewModel?.discoveredMoviesHandler = { movies in
             self.applySnapshot(movies: movies, section: .discover)
         }
-        viewModel.popularMoviesHandler = { movies in
+        viewModel?.popularMoviesHandler = { movies in
             self.applySnapshot(movies: movies, section: .popular)
         }
-        viewModel.latestMovieHandler = { movies in
+        viewModel?.latestMovieHandler = { movies in
             self.applySnapshot(movies: movies, section: .latest)
         }
-        viewModel.trendingMoviesHandler = { movies in
+        viewModel?.trendingMoviesHandler = { movies in
             self.applySnapshot(movies: movies, section: .trending)
         }
     }
@@ -131,20 +131,20 @@ extension HomeViewController {
         // cell 합치기 고려
         // MARK: - Cell Registration
         let discoveryCell = UICollectionView.CellRegistration<HomeDiscoveryCell, Movie> { cell, indexPath, movie in
-            cell.setup(title: self.viewModel.discoveredMovies[indexPath.row].title ?? "")
-            cell.loadImage(url: self.viewModel.discoveredMovies[indexPath.row].posterPath ?? "")
+            cell.setup(title: self.viewModel?.discoveredMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel?.discoveredMovies[indexPath.row].posterPath ?? "")
         }
         let popularCell = UICollectionView.CellRegistration<HomePopularCell, Movie> { cell, indexPath, movie in
-            cell.setup(title: self.viewModel.popularMovies[indexPath.row].title ?? "")
-            cell.loadImage(url: self.viewModel.popularMovies[indexPath.row].posterPath ?? "")
+            cell.setup(title: self.viewModel?.popularMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel?.popularMovies[indexPath.row].posterPath ?? "")
         }
         let latestCell = UICollectionView.CellRegistration<HomeLatestCell, Movie> { cell, indexPath, movie in
-            cell.setup(title: self.viewModel.latestMovie[0].title ?? "")
-            cell.loadImage(url: self.viewModel.latestMovie[0].posterPath ?? "")
+            cell.setup(title: self.viewModel?.latestMovie[0].title ?? "")
+            cell.loadImage(url: self.viewModel?.latestMovie[0].posterPath ?? "")
         }
         let trendingCell = UICollectionView.CellRegistration<HomeTrendingCell, Movie> { cell, indexPath, movie in
-            cell.setup(title: self.viewModel.trendingMovies[indexPath.row].title ?? "")
-            cell.loadImage(url: self.viewModel.trendingMovies[indexPath.row].posterPath ?? "")
+            cell.setup(title: self.viewModel?.trendingMovies[indexPath.row].title ?? "")
+            cell.loadImage(url: self.viewModel?.trendingMovies[indexPath.row].posterPath ?? "")
         }
         dataSource = UICollectionViewDiffableDataSource<MovieListSection, Movie>(collectionView: collectionView) {
             (collectionView, indexPath, movie) -> UICollectionViewCell? in
