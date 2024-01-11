@@ -9,7 +9,15 @@ import Foundation
 import UIKit
 
 final class DetailViewModel {
+    weak var coordinator: DetailCoordinator?
+    
     var updateUI: (() -> Void)?
+    
+    var movie: Movie
+    
+    init(movie: Movie) {
+        self.movie = movie
+    }
     
     var title: String?
     var posterView: UIImage?
@@ -18,7 +26,8 @@ final class DetailViewModel {
     var voteAverage: Double?
     var voteCount: Int?
     
-    func fetchData() {
+    func fetchData(for movie: Movie?) {
+        guard let movie = movie else { return }
         
     }
     

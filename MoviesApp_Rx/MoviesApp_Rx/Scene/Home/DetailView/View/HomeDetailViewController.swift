@@ -44,6 +44,7 @@ final class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .darkGray
     }
     
     private func setupUI() {
