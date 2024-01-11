@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setCollectionViewConstraints()
+        setCollectionView()
         bind()
         viewModel?.showContents()
     }
@@ -53,7 +53,8 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func setCollectionViewConstraints() {
+    private func setCollectionView() {
+        collectionView.delegate = self
         configureHierarchy()
         configureDataSource()
         createSections()
@@ -197,6 +198,16 @@ extension HomeViewController {
             snapshot.appendSections([$0])
         }
         dataSource?.apply(snapshot)
+    }
+}
+
+// MARK: - Delegate
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let movie = dataSource?.itemIdentifier(for: indexPath) else { return }
+        
+        viewModel?.coordinator?.detailFlow(with: movie)
+        // 이 곳에 movie 넘겨서 따로 네트워킹 하지 않고 넘긴 정보들 가지고 UI Component 채우기
     }
 }
 

@@ -8,6 +8,8 @@
 import UIKit
 
 final class HomeViewModel {
+    weak var coordinator: HomeCoordinator?
+    
     var discoveredMovies: [Movie] = [] {
         didSet {
             discoveredMoviesHandler?(discoveredMovies)

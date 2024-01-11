@@ -9,22 +9,33 @@ import UIKit
 
 final class DetailCoordinator: Coordinator {
     var childCoordinator: [Coordinator] = []
-    var finishDelegate: CoordinationFinishDelegate?
+    weak var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()
     
-    private let navigationController: UINavigationController
+    private weak var navigationController: UINavigationController?
     private var detailViewController: DetailViewController?
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
+    private var movie: Movie
+    
+    init(
+        movie: Movie,
+        navigationController: UINavigationController?,
+        finishDelegate: CoordinationFinishDelegate) {
+            self.movie = movie
+            self.navigationController = navigationController
+            self.finishDelegate = finishDelegate
+        }
     
     func start() {
         let detailViewController = DetailViewController()
-        let detailViewModel = DetailViewModel()
+        let detailViewModel = DetailViewModel(movie: movie)
+        detailViewModel.coordinator = self
         detailViewController.viewModel = detailViewModel
-        self.detailViewController = detailViewController
-        
-        navigationController.pushViewController(detailViewController, animated: true)
+        self.navigationController?.pushViewController(detailViewController, animated: true)
+    }
+    
+    func dismissDetailVC() {
+        self.navigationController?.popViewController(animated: true)
+        finish()
     }
 }
