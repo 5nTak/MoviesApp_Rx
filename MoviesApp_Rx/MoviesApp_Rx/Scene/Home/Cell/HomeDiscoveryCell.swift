@@ -31,13 +31,6 @@ class HomeDiscoveryCell: UICollectionViewCell {
         return label
     }()
     
-    private let starButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        button.tintColor = .systemYellow
-        return button
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -57,8 +50,7 @@ class HomeDiscoveryCell: UICollectionViewCell {
     private func setupLayout() {
         [
             imageView,
-            titleLabel,
-            starButton
+            titleLabel
         ].forEach { contentView.addSubview($0) }
         
         imageView.snp.makeConstraints {
@@ -71,10 +63,6 @@ class HomeDiscoveryCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-        
-        starButton.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview().inset(10)
         }
     }
     
