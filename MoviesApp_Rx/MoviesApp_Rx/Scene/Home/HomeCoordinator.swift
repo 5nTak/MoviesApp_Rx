@@ -40,5 +40,3 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
         detailCoordinator.start()
     }
 }
-
-// coordination 패턴 flow 다시 천천히 확인 (스팸 코드보면서 중복되게 작성된 부분 없는지 확인)

@@ -27,10 +27,9 @@ final class DetailCoordinator: Coordinator {
         }
     
     func start() {
-        let detailViewController = DetailViewController()
         let detailViewModel = DetailViewModel(movie: movie)
         detailViewModel.coordinator = self
-        detailViewController.viewModel = detailViewModel
+        let detailViewController = DetailViewController(viewModel: detailViewModel)
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
