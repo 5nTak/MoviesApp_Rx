@@ -19,12 +19,12 @@ final class DetailViewModel {
         self.movie = movie
     }
     
-    var title: String?
-    var posterView: UIImage?
-    var overView: String?
-    var releaseDate: String?
-    var voteAverage: Double?
-    var voteCount: Int?
+    var title: String = ""
+    var posterPath: String?
+    var overView: String = ""
+    var releaseDate: String = ""
+    var voteAverage: Double = 0.0
+    var voteCount: Int = 0
     
     func fetchData(for movie: Movie?) {
         guard let movie = movie else { return }
