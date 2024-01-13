@@ -9,18 +9,18 @@ import Foundation
 
 struct MovieResponse: Decodable {
     let id: Int
-    let title: String?
+    let title: String
     let originalTitle: String?
     let originalLanguage: String?
     let genres: [Int]?
     let adult: Bool?
-    let overview: String?
+    let overview: String
     let posterPath: String?
     let backdropPath: String?
-    let releaseDate: String?
+    let releaseDate: String
     let video: Bool?
-    let voteAverage: Double?
-    let voteCount: Int?
+    let voteAverage: Double
+    let voteCount: Int
     
     enum CodingKeys: String, CodingKey {
         case id, title, overview, video, adult

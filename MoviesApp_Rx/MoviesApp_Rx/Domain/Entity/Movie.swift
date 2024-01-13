@@ -10,16 +10,16 @@ import Foundation
 struct Movie: Hashable {
     let uuid = UUID()
     let id: Int
-    let title: String?
+    let title: String
     let originalTitle: String?
     let originalLanguage: String?
     let genres: [Int]?
     let adult: Bool?
-    let overview: String?
+    let overview: String
     let posterPath: String?
     let backdropPath: String?
-    let releaseData: String?
+    let releaseData: String
     let video: Bool?
-    let voteAverage: Double?
-    let voteCount: Int?
+    let voteAverage: Double
+    let voteCount: Int
 }
