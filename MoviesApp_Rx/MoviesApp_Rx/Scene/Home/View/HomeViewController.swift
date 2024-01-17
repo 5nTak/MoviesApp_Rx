@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class HomeViewController: UIViewController {
     private let titleLabel: UILabel = {
@@ -24,21 +26,23 @@ class HomeViewController: UIViewController {
     
     private var dataSource: UICollectionViewDiffableDataSource<MovieListSection, Movie>?
     var viewModel: HomeViewModel?
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setCollectionView()
-        bind()
-        viewModel?.showContents()
+//        bind()
+//        viewModel?.showContents()
+        bindRx()
+        viewModel?.showMoviesRx()
     }
     
-    func setNavigationBar() {
+    private func setNavigationBar() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
-        //        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: starButton)
     }
     
-    func bind() {
+    private func bind() {
         viewModel?.discoveredMoviesHandler = { movies in
             self.applySnapshot(movies: movies, section: .discover)
         }
@@ -51,6 +55,51 @@ class HomeViewController: UIViewController {
         viewModel?.trendingMoviesHandler = { movies in
             self.applySnapshot(movies: movies, section: .trending)
         }
+    }
+    
+    private func bindRx() {
+        viewModel?.discoveryMovie
+            .asObservable()
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: HomeDiscoveryCell.identifier,
+                cellType: HomeDiscoveryCell.self)
+            ) { _, movie, cell in
+                cell.setup(title: movie.title)
+                cell.loadImage(url: movie.posterPath ?? "")
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel?.popularMovie
+            .asObservable()
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: HomePopularCell.identifier,
+                cellType: HomePopularCell.self)
+            ) { _, movie, cell in
+                cell.setup(title: movie.title)
+                cell.loadImage(url: movie.posterPath ?? "")
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel?.lateMovie
+            .map { [$0] }
+            .asObservable()
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: HomeLatestCell.identifier,
+                cellType: HomeLatestCell.self)
+            ) { _, movie, cell in
+                cell.setup(title: movie.title)
+                cell.loadImage(url: movie.posterPath ?? "")
+            }
+        
+        viewModel?.trendingMovie
+            .asObservable()
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: HomeTrendingCell.identifier,
+                cellType: HomeTrendingCell.self)
+            ) { _, movie, cell in
+                cell.setup(title: movie.title)
+                cell.loadImage(url: movie.posterPath ?? "")
+            }
     }
     
     private func setCollectionView() {
@@ -203,11 +252,18 @@ extension HomeViewController {
 
 // MARK: - Delegate
 extension HomeViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let movie = dataSource?.itemIdentifier(for: indexPath) else { return }
-        
-        viewModel?.coordinator?.detailFlow(with: movie)
-        // 이 곳에 movie 넘겨서 따로 네트워킹 하지 않고 넘긴 정보들 가지고 UI Component 채우기
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        guard let movie = dataSource?.itemIdentifier(for: indexPath) else { return }
+//
+//        viewModel?.coordinator?.detailFlow(with: movie)
+//    }
+    func didSelectMovie() {
+        collectionView.rx.itemSelected
+                    .subscribe(onNext: { [weak self] indexPath in
+                        guard let movie = self?.viewModel?.movie(at: indexPath) else { return }
+                        self?.viewModel?.coordinator?.detailFlow(with: movie)
+                    })
+                    .disposed(by: disposeBag)
     }
 }
 
