@@ -42,20 +42,20 @@ class HomeViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleLabel)
     }
     
-    private func bind() {
-        viewModel?.discoveredMoviesHandler = { movies in
-            self.applySnapshot(movies: movies, section: .discover)
-        }
-        viewModel?.popularMoviesHandler = { movies in
-            self.applySnapshot(movies: movies, section: .popular)
-        }
-        viewModel?.latestMovieHandler = { movies in
-            self.applySnapshot(movies: movies, section: .latest)
-        }
-        viewModel?.trendingMoviesHandler = { movies in
-            self.applySnapshot(movies: movies, section: .trending)
-        }
-    }
+//    private func bind() {
+//        viewModel?.discoveredMoviesHandler = { movies in
+//            self.applySnapshot(movies: movies, section: .discover)
+//        }
+//        viewModel?.popularMoviesHandler = { movies in
+//            self.applySnapshot(movies: movies, section: .popular)
+//        }
+//        viewModel?.latestMovieHandler = { movies in
+//            self.applySnapshot(movies: movies, section: .latest)
+//        }
+//        viewModel?.trendingMoviesHandler = { movies in
+//            self.applySnapshot(movies: movies, section: .trending)
+//        }
+//    }
     
     private func bindRx() {
         viewModel?.discoveryMovie

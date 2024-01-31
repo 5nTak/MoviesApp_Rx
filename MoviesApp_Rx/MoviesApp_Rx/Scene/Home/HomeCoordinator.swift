@@ -21,7 +21,8 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     func start() {
         let homeViewController = HomeViewController()
         let homeViewModel = HomeViewModel(
-            movieUseCase: MovieUseCase(movieRepository: DefaultMovieRepository()), movieUseCaseRx: MovieUseCaseRx(movieRepositoryRx: DefaultMovieRepositoryRx())
+            movieUseCaseRx: MovieUseCaseRx(movieRepositoryRx: DefaultMovieRepositoryRx()
+            )
         )
         homeViewModel.coordinator = self
         homeViewController.viewModel = homeViewModel
