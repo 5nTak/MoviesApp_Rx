@@ -9,6 +9,7 @@ target 'MoviesApp_Rx' do
 	pod 'RxCocoa'
 	pod 'SnapKit'
 	pod 'Kingfisher'
+	pod 'RxDataSources'
   # Pods for MoviesApp_Rx
 
 end
