@@ -50,6 +50,18 @@ final class HomeViewModel {
         showPopularMovieRx()
         showLatestMovieRx()
         showTrendingMovieRx()
+        
+        Observable.combineLatest(discoveryMovie, popularMovie, lateMovie, trendingMovie)
+            .map { discovery, popular, latest, trending in
+                return [
+                    MovieSectionModel(title: MovieListSection.discover.description, items: discovery.first?.items ?? []),
+                    MovieSectionModel(title: MovieListSection.popular.description, items: popular.first?.items ?? []),
+                    MovieSectionModel(title: MovieListSection.latest.description, items: latest.first?.items ?? []),
+                    MovieSectionModel(title: MovieListSection.trending.description, items: trending.first?.items ?? [])
+                ]
+            }
+            .bind(to: sections)
+            .disposed(by: disposebag)
     }
     
     private func showMovieDiscoveryRx() {
