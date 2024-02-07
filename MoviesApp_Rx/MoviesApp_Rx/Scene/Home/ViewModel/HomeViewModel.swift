@@ -8,9 +8,28 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
+
+struct MovieSectionModel {
+    var title: String
+    var items: [Item]
+}
+
+extension MovieSectionModel: SectionModelType {
+    typealias Item = Movie
+    
+    init(original: MovieSectionModel, items: [Item]) {
+        self = original
+        self.items = items
+    }
+}
 
 final class HomeViewModel {
     weak var coordinator: HomeCoordinator?
+    
+    typealias MovieSection = SectionModel<String, Movie>
+    
+    let sections = BehaviorRelay<[MovieSectionModel]>(value: [])
     
     private let movieUseCaseRx: MovieUseCaseRx
     let discoveryMovie = BehaviorRelay<[MovieSection]>(value: [])
@@ -36,27 +55,31 @@ final class HomeViewModel {
     private func showMovieDiscoveryRx() {
         movieUseCaseRx.fetchDiscoveryMovieRx(page: page)
             .asObservable()
+            .map { [MovieSection(model: MovieListSection.discover.description, items: $0)] }
             .bind(to: discoveryMovie)
             .disposed(by: disposebag)
     }
-    
+
     private func showPopularMovieRx() {
         movieUseCaseRx.fetchPopularMovieRx(page: page)
             .asObservable()
+            .map { [MovieSection(model: MovieListSection.popular.description, items: $0)]}
             .bind(to: popularMovie)
             .disposed(by: disposebag)
     }
-    
+
     private func showLatestMovieRx() {
         movieUseCaseRx.fetchLatestMovieRx()
             .asObservable()
+            .map { [MovieSection(model: MovieListSection.latest.description, items: $0)]}
             .bind(to: lateMovie)
             .disposed(by: disposebag)
     }
-    
+
     private func showTrendingMovieRx() {
         movieUseCaseRx.fetchTrendingMovieRx()
             .asObservable()
+            .map { [MovieSection(model: MovieListSection.trending.description, items: $0)]}
             .bind(to: trendingMovie)
             .disposed(by: disposebag)
     }
