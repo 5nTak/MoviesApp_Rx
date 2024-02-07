@@ -21,6 +21,8 @@ class HomeViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
+        collectionView.register(HomeCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeCollectionHeaderView.identifier)
         return collectionView
     }()
     
