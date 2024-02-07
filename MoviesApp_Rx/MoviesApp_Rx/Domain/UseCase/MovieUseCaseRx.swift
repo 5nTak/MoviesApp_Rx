@@ -31,8 +31,13 @@ final class MovieUseCaseRx {
             }
     }
     
-    func fetchLatestMovieRx() -> Single<Movie> {
+    func fetchLatestMovieRx() -> Single<[Movie]> {
         return movieRepositoryRx.fetchLatestMovieRx()
+            .map { movie in
+                var movies: [Movie] = []
+                movies.append(movie)
+                return movies
+            }
     }
     
     func fetchTrendingMovieRx() -> Single<[Movie]> {
