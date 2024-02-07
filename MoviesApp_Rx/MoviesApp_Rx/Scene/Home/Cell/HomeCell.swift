@@ -1,5 +1,5 @@
 //
-//  HomeTrendingCell.swift
+//  HomeDiscoveryCell.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2023/12/10.
@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class HomeTrendingCell: UICollectionViewCell {
-    static let identifier = "HomeTrendingCell"
+class HomeCell: UICollectionViewCell {
+    static let identifier = "HomeCell"
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -55,6 +55,7 @@ class HomeTrendingCell: UICollectionViewCell {
         
         imageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
+            $0.centerX.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.9)
             $0.bottom.equalTo(titleLabel.snp.top)
         }
@@ -75,4 +76,3 @@ class HomeTrendingCell: UICollectionViewCell {
         imageView.setImageCache(with: urlString)
     }
 }
-
