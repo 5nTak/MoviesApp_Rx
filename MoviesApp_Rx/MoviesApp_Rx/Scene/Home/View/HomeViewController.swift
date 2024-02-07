@@ -39,7 +39,7 @@ class HomeViewController: UIViewController {
         configureDataSource()
         viewModel?.showMoviesRx()
         bind()
-        
+        didSelectMovies()
     }
     
     private func setNavigationBar() {
@@ -52,6 +52,13 @@ class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
+    private func didSelectMovies() {
+        collectionView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let movie = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
+                self?.viewModel?.coordinator?.detailFlow(with: movie)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
