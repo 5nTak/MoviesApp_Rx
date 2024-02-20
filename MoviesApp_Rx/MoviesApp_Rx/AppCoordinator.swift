@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 
 final class AppCoordinator: Coordinator {
-    var finishDelegate: CoordinationFinishDelegate? = nil
+    var navigationController: UINavigationController?
+    
+    var finishDelegate: CoordinationFinishDelegate?
     
     let identifier = UUID()
     
@@ -20,20 +22,25 @@ final class AppCoordinator: Coordinator {
         self.window = window
     }
     
+    func setupTabs(for tabBar: MainTabBarController) {
+        let homeCoordinator = HomeCoordinator(navigationController: navigationController, finishDelegate: self)
+        let searchCoordinator = HomeCoordinator(navigationController: navigationController, finishDelegate: self) // 실제 검색 코디네이터로 교체
+        let accountCoordinator = AccountCoordinator(navigationController: navigationController)
+        
+        homeCoordinator.start()
+        searchCoordinator.start()
+        accountCoordinator.start()
+        
+        tabBar.setupTabs(with: [homeCoordinator, searchCoordinator, accountCoordinator])
+    }
+    
     func start() {
         let rootViewController = MainTabBarController()
+        window.rootViewController = rootViewController
+        window.makeKeyAndVisible()
         
-        let homeCoordinator = HomeCoordinator(navigationController: rootViewController.viewControllers?[0] as? UINavigationController ?? UINavigationController())
-//        let searchCoordinator = searchCoordinator(navigationController: rootViewController.viewControllers[1] as? UINavigationController ?? UINavigationController())
-//        let accountCoordinator = accountCoordinator(navigationController: rootViewController.viewControllers[2] as? UINavigationController ?? UINavigationController())
-//
-        homeCoordinator.start()
-//        searchCoordinator.start()
-//        accountCoordinator.start()
-//
-        childCoordinator.append(contentsOf: [homeCoordinator])
-        
-        self.window.rootViewController = rootViewController
-        self.window.makeKeyAndVisible()
+        self.setupTabs(for: rootViewController)
     }
 }
+
+extension AppCoordinator: CoordinationFinishDelegate { }
