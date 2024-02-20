@@ -5,7 +5,7 @@
 //  Created by Tak on 2023/11/26.
 //
 
-import UIKit
+import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
@@ -25,7 +25,7 @@ extension MovieSectionModel: SectionModelType {
 }
 
 final class HomeViewModel {
-    weak var coordinator: HomeCoordinator?
+    var coordinator: HomeCoordinator?
     
     typealias MovieSection = SectionModel<String, Movie>
     
