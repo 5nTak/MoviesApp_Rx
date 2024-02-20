@@ -228,7 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				45535DAA2B4D013D00549DAF /* Common */,
-				457A6A9D2B0CB99D003FF1AE /* MainTabBarController.swift */,
+				45CB14182B73734200FF9A86 /* TabBar */,
 				457A6A932B0B6E95003FF1AE /* Home */,
 			);
 			path = Scene;
@@ -363,6 +363,14 @@
 				457A6ABB2B13348F003FF1AE /* HomeViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		45CB14182B73734200FF9A86 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				457A6A9D2B0CB99D003FF1AE /* MainTabBarController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		813A3345DB1657548D019D7A /* Pods */ = {
