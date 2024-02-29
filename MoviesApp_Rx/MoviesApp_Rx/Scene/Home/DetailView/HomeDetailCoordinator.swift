@@ -12,7 +12,7 @@ final class DetailCoordinator: Coordinator {
     weak var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()
     
-    private weak var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
     private var detailViewController: DetailViewController?
     
     private var movie: Movie
