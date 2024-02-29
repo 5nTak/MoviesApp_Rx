@@ -132,7 +132,10 @@ extension HomeViewController {
     func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<MovieSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell else { return UICollectionViewCell() }
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: HomeCell.identifier,
+                    for: indexPath
+                ) as? HomeCell else { return UICollectionViewCell() }
                 cell.setup(title: item.title)
                 cell.loadImage(url: item.posterPath ?? "")
                 return cell

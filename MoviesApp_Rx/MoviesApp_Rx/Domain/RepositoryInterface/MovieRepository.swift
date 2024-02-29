@@ -2,27 +2,18 @@
 //  MovieRepository.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/25.
+//  Created by Tak on 2024/01/17.
 //
 
 import Foundation
+import RxSwift
 
 protocol MovieRepository {
-    func fetchMovieDiscovery(
-        page: Int,
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask?
+    func fetchDiscoveredMovies(page: Int) -> Single<MovieList>
     
-    func fetchPopularMovies(
-        page: Int,
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask?
+    func fetchPopularMovies(page: Int) -> Single<MovieList>
     
-    func fetchLatestMovie(
-        completion: @escaping (Result<Movie, Error>) -> Void
-    ) -> URLSessionTask?
+    func fetchLatestMovie() -> Single<Movie>
     
-    func fetchTrendingMovies(
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask?
+    func fetchTrendingMovies() -> Single<MovieList>
 }

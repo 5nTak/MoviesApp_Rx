@@ -1,11 +1,12 @@
 //
-//  DefaultMovieRepository.swift
+//  DefaultMovieRepositoryRx.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/25.
+//  Created by Tak on 2024/01/17.
 //
 
 import Foundation
+import RxSwift
 
 final class DefaultMovieRepository: MovieRepository {
     let networkProvider: DefaultNetworkProvider
@@ -14,51 +15,39 @@ final class DefaultMovieRepository: MovieRepository {
         self.networkProvider = networkProvider
     }
     
-    func fetchMovieDiscovery(page: Int, completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
+    func fetchDiscoveredMovies(page: Int) -> Single<MovieList> {
         let request = MovieDiscoveryEndpoint(page: page)
-        return self.networkProvider.request(request) { result in
-            switch result {
-            case .success(let movieListResponses):
-                completion(.success(movieListResponses.toMovieList()))
-            case .failure(let error):
-                completion(.failure(error))
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movieList = response.toMovieList()
+                return movieList
             }
-        }
     }
     
-    func fetchPopularMovies(page: Int, completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
+    func fetchPopularMovies(page: Int) -> Single<MovieList> {
         let request = PopularMovieEndpoint(page: page)
-        return self.networkProvider.request(request) { result in
-            switch result {
-            case .success(let movieListResponses):
-                completion(.success(movieListResponses.toMovieList()))
-            case .failure(let error):
-                completion(.failure(error))
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movieList = response.toMovieList()
+                return movieList
             }
-        }
     }
     
-    func fetchLatestMovie(completion: @escaping (Result<Movie, Error>) -> Void) -> URLSessionTask? {
+    func fetchLatestMovie() -> Single<Movie> {
         let request = LatestMovieEndpoint()
-        return self.networkProvider.request(request) { result in
-            switch result {
-            case .success(let movieResponse):
-                completion(.success(movieResponse.toMovie()))
-            case .failure(let error):
-                completion(.failure(error))
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movie = response.toMovie()
+                return movie
             }
-        }
     }
     
-    func fetchTrendingMovies(completion: @escaping (Result<MovieList, Error>) -> Void) -> URLSessionTask? {
+    func fetchTrendingMovies() -> Single<MovieList> {
         let request = TrendingMovieEndpoint()
-        return self.networkProvider.request(request) { result in
-            switch result {
-            case .success(let movieListResponses):
-                completion(.success(movieListResponses.toMovieList()))
-            case .failure(let error):
-                completion(.failure(error))
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movieList = response.toMovieList()
+                return movieList
             }
-        }
     }
 }

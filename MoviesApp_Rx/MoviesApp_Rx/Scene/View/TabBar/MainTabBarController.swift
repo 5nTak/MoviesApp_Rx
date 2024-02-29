@@ -21,8 +21,6 @@ final class MainTabBarController: UITabBarController {
                 guard let navigationController = coordinator.navigationController else {
                     continue
                 }
-
-                let viewController = navigationController.viewControllers.first
                 viewControllers.append(navigationController)
             }
 

@@ -22,8 +22,9 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
     
     var navigationController: UINavigationController?
     
-    init(navigationController: UINavigationController?) {
+    init(navigationController: UINavigationController?, finishDelegate: CoordinationFinishDelegate) {
         self.navigationController = navigationController
+        self.finishDelegate = finishDelegate
     }
     
     func start() {

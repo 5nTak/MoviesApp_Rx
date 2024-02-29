@@ -31,7 +31,9 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
         let homeViewController = HomeViewController()
         self.navigationController = UINavigationController(rootViewController: homeViewController)
         let homeViewModel = HomeViewModel(
-            movieUseCaseRx: MovieUseCaseRx(movieRepositoryRx: DefaultMovieRepositoryRx())
+            movieUseCase: MovieUseCase(
+                movieRepository: DefaultMovieRepository()
+            )
         )
         homeViewModel.coordinator = self
         homeViewController.viewModel = homeViewModel
@@ -40,7 +42,7 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func detailFlow(with movie: Movie) {
         let detailCoordinator = DetailCoordinator(
-            movie: movie,
+            item: movie,
             navigationController: self.navigationController,
             finishDelegate: self)
         self.childCoordinator.append(detailCoordinator)
