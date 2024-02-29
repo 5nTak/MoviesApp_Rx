@@ -2,10 +2,11 @@
 //  MovieUseCase.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/25.
+//  Created by Tak on 2024/01/17.
 //
 
 import Foundation
+import RxSwift
 
 final class MovieUseCase {
     private let movieRepository: MovieRepository
@@ -14,67 +15,36 @@ final class MovieUseCase {
         self.movieRepository = movieRepository
     }
     
-    func fetchMovieDiscovery(
-        page: Int,
-        completion: @escaping (Result<[Movie], Error>) -> Void
-    ) {
-        self.fetchMovieDiscoveryPage(page: page) { result in
-            switch result {
-            case .success(let movieList):
-                completion(.success(movieList.results))
-            case .failure(let error):
-                completion(.failure(error))
+    func fetchDiscoveryMovie(page: Int) -> Single<[Movie]> {
+        return movieRepository.fetchDiscoveredMovies(page: page)
+            .map { movieList in
+                let movies = movieList.results
+                return movies
             }
-        }
-    }
-    private func fetchMovieDiscoveryPage(
-        page: Int,
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask? {
-        return movieRepository.fetchMovieDiscovery(page: page, completion: completion)
     }
     
-    func fetchPopularMoviesPage(
-        page: Int,
-        completion: @escaping (Result<[Movie], Error>) -> Void
-    ) {
-        self.fetchPopularMovies(page: page) { result in
-            switch result {
-            case .success(let movieList):
-                completion(.success(movieList.results))
-            case .failure(let error):
-                completion(.failure(error))
+    func fetchPopularMovie(page: Int) -> Single<[Movie]> {
+        return movieRepository.fetchPopularMovies(page: page)
+            .map { movieList in
+                let movies = movieList.results
+                return movies
             }
-        }
-    }
-    private func fetchPopularMovies(
-        page: Int,
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask? {
-        return movieRepository.fetchPopularMovies(page: page, completion: completion)
     }
     
-    func fetchLatestMovie(
-        completion: @escaping (Result<Movie, Error>) -> Void
-    ) -> URLSessionTask? {
-        return movieRepository.fetchLatestMovie(completion: completion)
+    func fetchLatestMovie() -> Single<[Movie]> {
+        return movieRepository.fetchLatestMovie()
+            .map { movie in
+                var movies: [Movie] = []
+                movies.append(movie)
+                return movies
+            }
     }
     
-    func fetchTrendingMoviesPage(
-        completion: @escaping (Result<[Movie], Error>) -> Void
-    ) {
-        self.fetchTrendingMovies { result in
-            switch result {
-            case .success(let movieList):
-                completion(.success(movieList.results))
-            case .failure(let error):
-                completion(.failure(error))
+    func fetchTrendingMovie() -> Single<[Movie]> {
+        return movieRepository.fetchTrendingMovies()
+            .map { movieList in
+                let movies = movieList.results
+                return movies
             }
-        }
-    }
-    private func fetchTrendingMovies(
-        completion: @escaping (Result<MovieList, Error>) -> Void
-    ) -> URLSessionTask? {
-        return movieRepository.fetchTrendingMovies(completion: completion)
     }
 }
