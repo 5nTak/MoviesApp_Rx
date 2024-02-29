@@ -43,6 +43,8 @@
 		457A6AC52B1DDAF0003FF1AE /* UIImageView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6AC42B1DDAF0003FF1AE /* UIImageView+extension.swift */; };
 		457A6AC72B1E0349003FF1AE /* PopularMovieEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6AC62B1E0349003FF1AE /* PopularMovieEndpoint.swift */; };
 		457A6ACD2B1E2C78003FF1AE /* TrendingMovieEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6ACC2B1E2C78003FF1AE /* TrendingMovieEndpoint.swift */; };
+		458A0BAC2B84BBFD00C889D5 /* SearchCollectionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458A0BAB2B84BBFD00C889D5 /* SearchCollectionEndpoint.swift */; };
+		458A0BAE2B84BC1100C889D5 /* SearchMovieEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458A0BAD2B84BC1100C889D5 /* SearchMovieEndpoint.swift */; };
 		45DD56F72B25D740005E5493 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DD56F62B25D740005E5493 /* HomeCell.swift */; };
 		45DD56F92B25E282005E5493 /* LatestMovieEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DD56F82B25E282005E5493 /* LatestMovieEndpoint.swift */; };
 		45EB9BAC2B73402D00CBFCA1 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EB9BAB2B73402D00CBFCA1 /* AccountViewController.swift */; };
@@ -92,6 +94,8 @@
 		457A6AC42B1DDAF0003FF1AE /* UIImageView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+extension.swift"; sourceTree = "<group>"; };
 		457A6AC62B1E0349003FF1AE /* PopularMovieEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularMovieEndpoint.swift; sourceTree = "<group>"; };
 		457A6ACC2B1E2C78003FF1AE /* TrendingMovieEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingMovieEndpoint.swift; sourceTree = "<group>"; };
+		458A0BAB2B84BBFD00C889D5 /* SearchCollectionEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionEndpoint.swift; sourceTree = "<group>"; };
+		458A0BAD2B84BC1100C889D5 /* SearchMovieEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMovieEndpoint.swift; sourceTree = "<group>"; };
 		45DD56F62B25D740005E5493 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		45DD56F82B25E282005E5493 /* LatestMovieEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestMovieEndpoint.swift; sourceTree = "<group>"; };
 		45EB9BAB2B73402D00CBFCA1 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -333,6 +337,8 @@
 				457A6AC62B1E0349003FF1AE /* PopularMovieEndpoint.swift */,
 				45DD56F82B25E282005E5493 /* LatestMovieEndpoint.swift */,
 				457A6ACC2B1E2C78003FF1AE /* TrendingMovieEndpoint.swift */,
+				458A0BAD2B84BC1100C889D5 /* SearchMovieEndpoint.swift */,
+				458A0BAB2B84BBFD00C889D5 /* SearchCollectionEndpoint.swift */,
 				457A6AB52B1208B1003FF1AE /* Protocol */,
 			);
 			path = Endpoint;
@@ -535,6 +541,7 @@
 				457A6AAC2B120625003FF1AE /* MovieUseCase.swift in Sources */,
 				45535DAD2B4D015700549DAF /* Coordinator.swift in Sources */,
 				45EB9BB32B73591C00CBFCA1 /* LoginTextField.swift in Sources */,
+				458A0BAC2B84BBFD00C889D5 /* SearchCollectionEndpoint.swift in Sources */,
 				45535DC12B56D81100549DAF /* MovieRepositoryRx.swift in Sources */,
 				45DD56F92B25E282005E5493 /* LatestMovieEndpoint.swift in Sources */,
 				457A6A902B0B47B6003FF1AE /* DefaultNetworkProvider.swift in Sources */,
@@ -567,6 +574,7 @@
 				457A6AB12B1207DC003FF1AE /* DefaultMovieRepository.swift in Sources */,
 				45535DB12B4D152000549DAF /* HomeCoordinator.swift in Sources */,
 				457A6A742B0B3F29003FF1AE /* SceneDelegate.swift in Sources */,
+				458A0BAE2B84BC1100C889D5 /* SearchMovieEndpoint.swift in Sources */,
 				45EB9BB12B7340B300CBFCA1 /* AccountViewModel.swift in Sources */,
 				457A6A8A2B0B476C003FF1AE /* Endpoint.swift in Sources */,
 			);
