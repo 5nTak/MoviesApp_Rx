@@ -24,8 +24,8 @@ final class AppCoordinator: Coordinator {
     
     func setupTabs(for tabBar: MainTabBarController) {
         let homeCoordinator = HomeCoordinator(navigationController: navigationController, finishDelegate: self)
-        let searchCoordinator = HomeCoordinator(navigationController: navigationController, finishDelegate: self) // 실제 검색 코디네이터로 교체
-        let accountCoordinator = AccountCoordinator(navigationController: navigationController)
+        let searchCoordinator = SearchCoordinator(navigationController: navigationController, finishDelegate: self)
+        let accountCoordinator = AccountCoordinator(navigationController: navigationController, finishDelegate: self)
         
         homeCoordinator.start()
         searchCoordinator.start()
