@@ -70,7 +70,7 @@ final class SearchViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(to: viewModel!.searchText)
             .disposed(by: disposeBag)
-
+        
         searchBarView.rx.textDidChange
             .skip(1)
             .filter { !$0.isEmpty }
@@ -127,16 +127,20 @@ extension SearchViewController {
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 5, bottom: 20, trailing: 5)
             section.orthogonalScrollingBehavior = .continuous
             
-            let sectionHeader = self.createSectionHeader()
-            section.boundarySupplementaryItems = [sectionHeader]
-            
+            if let sectionHeader = self.createSectionHeader() {
+                section.boundarySupplementaryItems = [sectionHeader]
+            }
             return section
         }
-
+        
         return layout
     }
     
-    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem? {
+        guard let searchText = searchBarView.searchTextField.text, !searchText.isEmpty else {
+            return nil
+        }
+        
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(60)
