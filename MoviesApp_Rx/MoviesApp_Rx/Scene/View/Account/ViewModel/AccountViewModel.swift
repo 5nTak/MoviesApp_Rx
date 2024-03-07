@@ -10,9 +10,12 @@ import Foundation
 enum AccountViewString: String {
     case id = "ID"
     case password = "Password"
-    case login = "로그인"
-    case loginResult = "로그인 결과"
-    case inputError = "입력 확인"
+    case login = "Login"
+    case loginResult = "Result"
+    case inputError = "Check input value"
+    case successLogin = "Success !!"
+    case join = "Join"
+    case findPassword = "Find password"
 }
 
 final class AccountViewModel {

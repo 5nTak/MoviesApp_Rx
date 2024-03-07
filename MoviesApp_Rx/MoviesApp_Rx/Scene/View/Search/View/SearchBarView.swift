@@ -68,7 +68,7 @@ final class SearchBarView: UIView {
         searchTextField.autocapitalizationType = .none
         searchTextField.clearButtonMode = .whileEditing
         searchTextField.clearsOnBeginEditing = false
-        searchTextField.returnKeyType = .continue
+        searchTextField.returnKeyType = .search
         searchTextField.keyboardType = .default
         searchTextField.becomeFirstResponder()
     }

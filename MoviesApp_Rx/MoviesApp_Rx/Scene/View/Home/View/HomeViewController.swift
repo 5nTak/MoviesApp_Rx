@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
         let label = UILabel()
         label.textColor = UIColor.black
         label.font = .systemFont(ofSize: 25, weight: .bold)
-        label.text = "맞춤 영화"
+        label.text = "Suggest"
         return label
     }()
     
@@ -160,13 +160,13 @@ enum MovieListSection: Int, CaseIterable {
     var description: String {
         switch self {
         case .discover:
-            return "둘러보기"
+            return "Discover"
         case .popular:
-            return "인기 영화"
+            return "Popular"
         case .latest:
-            return "최신 개봉"
+            return "Latest"
         case .trending:
-            return "지금 뜨는"
+            return "Trending"
         }
     }
 }

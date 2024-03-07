@@ -13,8 +13,8 @@ final class AccountViewController: UIViewController {
     private let idTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
-        textField.tintColor = .white
-        textField.textColor = .white
+        textField.tintColor = .black
+        textField.textColor = .black
         textField.keyboardType = .emailAddress
         return textField
     }()
@@ -22,8 +22,8 @@ final class AccountViewController: UIViewController {
     private let passwordTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
-        textField.tintColor = .white
-        textField.textColor = .white
+        textField.tintColor = .black
+        textField.textColor = .black
         textField.isSecureTextEntry = true
         return textField
     }()
@@ -31,8 +31,8 @@ final class AccountViewController: UIViewController {
     private lazy var loginButton: UIButton = {
         let button = UIButton()
         button.setTitle(AccountViewString.login.rawValue, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(executeLogin), for: .touchUpInside)
         
@@ -41,8 +41,11 @@ final class AccountViewController: UIViewController {
     
     private lazy var forgetPasswordButton: UIButton = {
         let button = UIButton()
-        button.setTitle("find_password", for: .normal)
+        button.setTitle(AccountViewString.findPassword.rawValue, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15)
+        button.backgroundColor = .systemGreen
+        button.layer.cornerRadius = 10
 //        button.addTarget(self, action: #selector(showResetPasswordVC), for: .touchUpInside)
         
         return button
@@ -50,11 +53,13 @@ final class AccountViewController: UIViewController {
     
     private lazy var joinButton: UIButton = {
         let button = UIButton()
-        button.setTitle("join", for: .normal)
-        button.setTitleColor(.lightGray, for: .highlighted)
+        button.setTitle(AccountViewString.join.rawValue, for: .normal)
+        button.setTitleColor(.black, for: .highlighted)
         button.titleLabel?.font = .systemFont(ofSize: 15)
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.titleLabel?.textAlignment = .center
+        button.backgroundColor = .systemGreen
+        button.layer.cornerRadius = 10
 //        button.addTarget(self, action: #selector(showJoinVC), for: .touchUpInside)
         
         return button
@@ -73,17 +78,17 @@ final class AccountViewController: UIViewController {
     @objc private func executeLogin() {
         view.endEditing(true)
         
-        let title = "login_result"
-        var message = "login_result_message"
+        let title = AccountViewString.loginResult.rawValue
+        var message = AccountViewString.successLogin.rawValue
         
         if idTextField.text?.isEmpty ?? true {
             idTextField.setError()
-            message = "input_error_message"
+            message = AccountViewString.inputError.rawValue
         }
         
         if passwordTextField.text?.isEmpty ?? true {
             passwordTextField.setError()
-            message = "input_error_message"
+            message = AccountViewString.inputError.rawValue
         }
         
         let loginResultAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -100,13 +105,13 @@ final class AccountViewController: UIViewController {
     }
     
     private func setupNavigatonBar() {
-        navigationItem.title = "Login"
+        navigationItem.title = AccountViewString.login.rawValue
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     }
     
     private func setupLayout() {
-        view.backgroundColor = .black
+        view.backgroundColor = .systemBackground
         
         [
             idTextField,
@@ -132,13 +137,13 @@ final class AccountViewController: UIViewController {
         }
         
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom).offset(spacing)
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(spacing * 2)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(50)
         }
         
         forgetPasswordButton.snp.makeConstraints {
-            $0.top.equalTo(loginButton.snp.bottom).offset(spacing)
+            $0.top.equalTo(loginButton.snp.bottom).offset(spacing * 2)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(40)
         }

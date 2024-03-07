@@ -88,10 +88,10 @@ final class DetailViewController: UIViewController {
         posterView.setImageCache(with: posterImageUrl)
         
         titleLabel.text = viewModel.title
-        overViewLabel.text = " 영화 소개 : \(viewModel.overView)"
-        releaseDateLabel.text = "개봉일 : \(viewModel.releaseDate.isEmpty ? "알 수 없음" : viewModel.releaseDate)"
-        voteAverageLabel.text = "평점 : \(viewModel.voteAverage)"
-        voteCountLabel.text = "평가에 참여한 수 : \(viewModel.voteCount)"
+        overViewLabel.text = " Introduce : \(viewModel.overView)"
+        releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
+        voteAverageLabel.text = "Vote : \(viewModel.voteAverage)"
+        voteCountLabel.text = "Vote Count : \(viewModel.voteCount)"
     }
     
     func loadImage(url: String) -> String {

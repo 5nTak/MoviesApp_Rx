@@ -58,8 +58,6 @@ final class SearchViewModel {
             self?.searchMovies(searchText: self?.searchText.value ?? "")
             self?.searchCollections(searchText: self?.searchText.value ?? "")
         }
-        //        searchMovies(searchText: searchText.value)
-        //        searchCollections(searchText: searchText.value)
         
         Observable.combineLatest(searchMovies, searchCollections)
             .map { movies, collections in
