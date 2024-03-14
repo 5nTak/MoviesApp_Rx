@@ -101,6 +101,6 @@ extension Reactive where Base: SearchBarView {
         return base.searchTextField.rx.text
             .changed
             .compactMap { $0 }
-            .asObservable()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
     }
 }
