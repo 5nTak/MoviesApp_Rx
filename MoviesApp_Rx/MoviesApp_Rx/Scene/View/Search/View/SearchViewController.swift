@@ -73,9 +73,7 @@ final class SearchViewController: UIViewController {
             .filter { !$0.isEmpty }
             .map { _ in () }
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] in
-                self?.viewModel?.cancelSearch()
-            })
+            .subscribe(onNext: { _ in })
             .disposed(by: disposeBag)
     }
     

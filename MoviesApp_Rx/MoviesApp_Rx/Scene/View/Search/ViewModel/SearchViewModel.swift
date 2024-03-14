@@ -85,9 +85,4 @@ final class SearchViewModel {
             .bind(to: searchCollections)
             .disposed(by: disposeBag)
     }
-    
-    func cancelSearch() {
-        self.searchMovies.accept([])
-        self.searchCollections.accept([])
-    }
 }
