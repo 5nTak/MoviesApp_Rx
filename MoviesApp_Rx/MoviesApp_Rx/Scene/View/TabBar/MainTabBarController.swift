@@ -28,6 +28,6 @@ final class MainTabBarController: UITabBarController {
         }
     
     private func setupTabBar() {
-        tabBar.backgroundColor = .systemGray
+        tabBar.backgroundColor = .systemGray5
     }
 }

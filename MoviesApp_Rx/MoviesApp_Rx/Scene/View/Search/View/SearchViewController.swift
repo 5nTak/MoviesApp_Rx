@@ -30,21 +30,17 @@ final class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         configureDataSource()
+        configureLayout()
         viewModel?.showSearchResult()
         bind()
         didSelectMovies()
         handleSearchText()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureLayout()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        searchBarView.searchTextField.delegate = self
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func bind() {
@@ -65,6 +61,7 @@ final class SearchViewController: UIViewController {
     }
     
     private func handleSearchText() {
+        searchBarView.searchTextField.delegate = self
         searchBarView.rx.textDidChange
             .map { $0 }
             .observe(on: MainScheduler.asyncInstance)
@@ -83,7 +80,7 @@ final class SearchViewController: UIViewController {
     }
     
     private func configureLayout() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        view.backgroundColor = .white
         
         view.addSubview(searchBarView)
         view.addSubview(collectionView)
@@ -106,7 +103,7 @@ final class SearchViewController: UIViewController {
 // MARK: - CompositionalLayout
 extension SearchViewController {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { _, _ -> NSCollectionLayoutSection? in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: NSCollectionLayoutDimension.fractionalWidth(0.5),
                 heightDimension: NSCollectionLayoutDimension.fractionalHeight(1.0)
