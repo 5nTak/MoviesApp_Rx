@@ -14,9 +14,9 @@ import RxDataSources
 class HomeViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.black
         label.font = .systemFont(ofSize: 25, weight: .bold)
         label.text = "Suggest"
+        label.textColor = .reversedBackgroundColorAsset
         return label
     }()
     
@@ -125,7 +125,7 @@ extension HomeViewController {
 // MARK: - DataSource
 extension HomeViewController {
     func configureHierarchy() {
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .secondarySystemBackground
         view.addSubview(collectionView)
     }
     

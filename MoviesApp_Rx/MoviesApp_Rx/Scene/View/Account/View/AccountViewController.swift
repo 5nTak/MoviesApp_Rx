@@ -13,8 +13,7 @@ final class AccountViewController: UIViewController {
     private let idTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
-        textField.tintColor = .black
-        textField.textColor = .black
+        textField.textColor = .reversedBackgroundColorAsset
         textField.keyboardType = .emailAddress
         return textField
     }()
@@ -22,8 +21,7 @@ final class AccountViewController: UIViewController {
     private let passwordTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
-        textField.tintColor = .black
-        textField.textColor = .black
+        textField.textColor = .reversedBackgroundColorAsset
         textField.isSecureTextEntry = true
         return textField
     }()
@@ -31,7 +29,7 @@ final class AccountViewController: UIViewController {
     private lazy var loginButton: UIButton = {
         let button = UIButton()
         button.setTitle(AccountViewString.login.rawValue, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(executeLogin), for: .touchUpInside)
@@ -42,7 +40,7 @@ final class AccountViewController: UIViewController {
     private lazy var forgetPasswordButton: UIButton = {
         let button = UIButton()
         button.setTitle(AccountViewString.findPassword.rawValue, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15)
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 10
@@ -54,7 +52,7 @@ final class AccountViewController: UIViewController {
     private lazy var joinButton: UIButton = {
         let button = UIButton()
         button.setTitle(AccountViewString.join.rawValue, for: .normal)
-        button.setTitleColor(.black, for: .highlighted)
+        button.setTitleColor(.systemBackground, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 15)
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.titleLabel?.textAlignment = .center
@@ -66,8 +64,8 @@ final class AccountViewController: UIViewController {
     }()
     
     init() {
-        idTextField.setupPlaceholder(placeholder: AccountViewString.id.rawValue, color: .lightGray)
-        passwordTextField.setupPlaceholder(placeholder: AccountViewString.password.rawValue, color: .lightGray)
+        idTextField.setupPlaceholder(placeholder: AccountViewString.id.rawValue, placeColor: .systemGray)
+        passwordTextField.setupPlaceholder(placeholder: AccountViewString.password.rawValue, placeColor: .systemGray)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -107,7 +105,7 @@ final class AccountViewController: UIViewController {
     private func setupNavigatonBar() {
         navigationItem.title = AccountViewString.login.rawValue
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.reversedBackgroundColorAsset]
     }
     
     private func setupLayout() {

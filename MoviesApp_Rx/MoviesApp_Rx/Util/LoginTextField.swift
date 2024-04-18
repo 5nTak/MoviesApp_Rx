@@ -13,7 +13,7 @@ final class LoginTextFiled: UITextField {
     
     private lazy var underLineView: UIView = {
         let lineView: UIView = UIView()
-        lineView.backgroundColor = .white
+        lineView.backgroundColor = .systemBackground
         
         return lineView
     }()
@@ -36,9 +36,9 @@ final class LoginTextFiled: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupPlaceholder(placeholder: String, color: UIColor) {
+    func setupPlaceholder(placeholder: String, placeColor: UIColor) {
         placeholderString = placeholder
-        placeholderColor = placeholderColor
+        placeholderColor = placeColor
         
         setupPlaceholder()
         underLineView.backgroundColor = placeholderColor
@@ -54,10 +54,10 @@ final class LoginTextFiled: UITextField {
     func setError() {
         self.attributedPlaceholder = NSAttributedString(
             string: placeholderString,
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.red]
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemRed]
         )
         
-        underLineView.backgroundColor = .red
+        underLineView.backgroundColor = .systemRed
     }
 }
 

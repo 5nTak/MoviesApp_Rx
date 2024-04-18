@@ -15,7 +15,7 @@ final class HomeCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
-        imageView.tintColor = .darkGray
+        imageView.tintColor = .systemGray
         imageView.contentMode = .scaleAspectFit
         imageView.kf.indicatorType = .activity
         return imageView
@@ -23,7 +23,7 @@ final class HomeCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .reversedBackgroundColorAsset
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.sizeToFit()
         label.textAlignment = .center

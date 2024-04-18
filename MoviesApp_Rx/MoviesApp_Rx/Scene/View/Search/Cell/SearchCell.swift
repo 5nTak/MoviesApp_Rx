@@ -15,7 +15,7 @@ final class SearchCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
-        imageView.tintColor = .darkGray
+        imageView.tintColor = .systemGray
         imageView.contentMode = .scaleAspectFit
         imageView.kf.indicatorType = .activity
         
@@ -24,7 +24,7 @@ final class SearchCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .reversedBackgroundColorAsset
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.sizeToFit()
         label.textAlignment = .center
@@ -50,6 +50,9 @@ final class SearchCell: UICollectionViewCell {
     }
     
     private func configureLayout() {
+        contentView.backgroundColor = .tertiarySystemBackground
+        contentView.layer.cornerRadius = 10
+        
         [
             imageView,
             titleLabel

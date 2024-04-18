@@ -78,7 +78,7 @@ final class SearchViewController: UIViewController {
     }
     
     private func configureLayout() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         view.addSubview(searchBarView)
         view.addSubview(collectionView)
@@ -95,6 +95,9 @@ final class SearchViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+        
+        collectionView.backgroundColor = .secondarySystemBackground
+        collectionView.layer.cornerRadius = 10
     }
 }
 
