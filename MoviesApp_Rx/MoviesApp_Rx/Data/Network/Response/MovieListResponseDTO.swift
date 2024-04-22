@@ -35,7 +35,8 @@ extension MovieListResponse {
             releaseData: movieResponse.releaseDate,
             video: movieResponse.video,
             voteAverage: movieResponse.voteAverage,
-            voteCount: movieResponse.voteCount
+            voteCount: movieResponse.voteCount,
+            popularity: movieResponse.popularity
         )
     }
     

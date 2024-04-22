@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class HomeCell: UICollectionViewCell {
-    static let identifier = "HomeCell"
+final class PosterCell: UICollectionViewCell {
+    static let identifier = "PosterCell"
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -24,7 +24,7 @@ final class HomeCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .reversedBackgroundColorAsset
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 18, weight: .bold)
         label.sizeToFit()
         label.textAlignment = .center
         label.numberOfLines = 1
@@ -48,6 +48,9 @@ final class HomeCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
+        contentView.backgroundColor = .secondarySystemBackground
+        contentView.layer.cornerRadius = 20
+        contentView.layer.masksToBounds = true
         [
             imageView,
             titleLabel
@@ -56,14 +59,17 @@ final class HomeCell: UICollectionViewCell {
         imageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.centerX.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.9)
-            $0.bottom.equalTo(titleLabel.snp.top)
+            $0.height.equalToSuperview().multipliedBy(0.95)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.top.equalTo(imageView.snp.bottom).offset(5)
+            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview().inset(5)
         }
+        
+        imageView.layer.cornerRadius = 20
+        imageView.layer.masksToBounds = true
     }
     
     func setup(title: String) {

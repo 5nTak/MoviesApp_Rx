@@ -16,13 +16,15 @@ class HomeViewController: UIViewController {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25, weight: .bold)
         label.text = "Suggest"
-        label.textColor = .reversedBackgroundColorAsset
+        label.textColor = .systemGray
         return label
     }()
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
+        collectionView.register(PreviewCell.self, forCellWithReuseIdentifier: PreviewCell.identifier)
+        collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
+        collectionView.register(TrendingCell.self, forCellWithReuseIdentifier: TrendingCell.identifier)
         collectionView.register(HomeCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeCollectionHeaderView.identifier)
         return collectionView
     }()
@@ -66,50 +68,94 @@ class HomeViewController: UIViewController {
 extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-            guard let layoutSectionKind = MovieListSection(rawValue: sectionIndex) else { return nil }
+            guard let section = MovieListSection(rawValue: sectionIndex) else { return nil }
             
-            
-            let itemWidthSize = (layoutSectionKind == .discover) || (layoutSectionKind == .latest) ? NSCollectionLayoutDimension.fractionalWidth(1.0) : NSCollectionLayoutDimension.fractionalWidth(0.5)
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: itemWidthSize,
-                heightDimension: .fractionalHeight(1.0)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            let groupHeight = (layoutSectionKind == .discover) || (layoutSectionKind == .latest) ? NSCollectionLayoutDimension.fractionalWidth(1.0) : NSCollectionLayoutDimension.fractionalHeight(0.35)
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: groupHeight
-            )
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                subitems: [item]
-            )
-            
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0)
-            
-            switch layoutSectionKind {
+            switch section {
             case .discover:
-                section.orthogonalScrollingBehavior = .paging
-            case .popular, .latest, .trending:
-                section.orthogonalScrollingBehavior = .continuous
+                return self.createDiscoverSection()
+            case .popular:
+                return self.createPopularSection()
+            case .trending:
+                return self.createTrendingSection()
+            case .latest:
+                return self.createPopularSection()
             }
-            
-            let sectionHeader = self.createSectionHeader()
-            section.boundarySupplementaryItems = [sectionHeader]
-            
-            return section
         }
         
         return layout
+    }
+    
+    private func createDiscoverSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.6),
+            heightDimension: .fractionalWidth(1/3)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
+        
+        section.orthogonalScrollingBehavior = .continuous
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+    }
+    
+    private func createPopularSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalWidth(1.5)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
+        
+        section.orthogonalScrollingBehavior = .paging
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+    }
+    
+    private func createTrendingSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1/3)
+        )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.85),
+            heightDimension: .fractionalWidth(0.8)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 3)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
+        
+        section.orthogonalScrollingBehavior = .groupPaging
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
     }
     
     // MARK: - SectionHeader
     private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(60)
+            heightDimension: .estimated(100)
         )
         
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
@@ -132,13 +178,42 @@ extension HomeViewController {
     func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<MovieSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: HomeCell.identifier,
-                    for: indexPath
-                ) as? HomeCell else { return UICollectionViewCell() }
-                cell.setup(title: item.title)
-                cell.loadImage(url: item.posterPath ?? "")
-                return cell
+                switch indexPath.section {
+                case 0:
+                    guard let discoverCell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: PreviewCell.identifier,
+                        for: indexPath
+                    ) as? PreviewCell else { return UICollectionViewCell() }
+                    discoverCell.setup(title: item.title)
+                    discoverCell.loadImage(url: item.backdropPath ?? "")
+                    return discoverCell
+                case 1:
+                    guard let popularCell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: PosterCell.identifier,
+                        for: indexPath
+                    ) as? PosterCell else { return UICollectionViewCell() }
+                    popularCell.setup(title: item.title)
+                    popularCell.loadImage(url: item.posterPath ?? "")
+                    return popularCell
+                case 2:
+                    guard let trendingCell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: TrendingCell.identifier,
+                        for: indexPath
+                    ) as? TrendingCell else { return UICollectionViewCell() }
+                    trendingCell.setup(title: item.title, popularity: item.popularity, date: item.releaseData)
+                    trendingCell.loadImage(url: item.posterPath ?? "")
+                    return trendingCell
+                case 3:
+                    guard let latestCell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: PosterCell.identifier,
+                        for: indexPath
+                    ) as? PosterCell else { return UICollectionViewCell() }
+                    latestCell.setup(title: item.title)
+                    latestCell.loadImage(url: item.posterPath ?? "")
+                    return latestCell
+                default:
+                    return UICollectionViewCell()
+                }
             },
             configureSupplementaryView: { rxDataSource, collectionView, kind, indexPath in
                 let sectionModel = rxDataSource.sectionModels[indexPath.section]
@@ -155,7 +230,7 @@ extension HomeViewController {
 
 // MARK: - Section
 enum MovieListSection: Int, CaseIterable {
-    case discover, popular, latest, trending
+    case discover, popular, trending, latest
 
     var description: String {
         switch self {
@@ -163,10 +238,10 @@ enum MovieListSection: Int, CaseIterable {
             return "Discover"
         case .popular:
             return "Popular"
-        case .latest:
-            return "Latest"
         case .trending:
             return "Trending"
+        case .latest:
+            return "Latest"
         }
     }
 }
