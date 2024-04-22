@@ -13,7 +13,8 @@ final class DetailViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.textColor = .reversedBackgroundColorAsset
         label.textAlignment = .center
         label.numberOfLines = 2
         
@@ -30,12 +31,14 @@ final class DetailViewController: UIViewController {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.textColor = .reversedBackgroundColorAsset
         return label
     }()
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .callout)
+        label.textColor = .reversedBackgroundColorAsset
         
         return label
     }()
@@ -43,6 +46,7 @@ final class DetailViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        label.textColor = .reversedBackgroundColorAsset
         
         return label
     }()
@@ -50,6 +54,7 @@ final class DetailViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        label.textColor = .reversedBackgroundColorAsset
         
         return label
     }()
@@ -81,6 +86,7 @@ final class DetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupLayout()
         bindViewModel()
+        spaceBetweenLines()
     }
     
     private func bindViewModel() {
@@ -88,7 +94,7 @@ final class DetailViewController: UIViewController {
         posterView.setImageCache(with: posterImageUrl)
         
         titleLabel.text = viewModel.title
-        overViewLabel.text = " Introduce : \(viewModel.overView)"
+        overViewLabel.text = "  Introduce : \n \(viewModel.overView)"
         releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
         voteAverageLabel.text = "Vote : \(viewModel.voteAverage)"
         voteCountLabel.text = "Vote Count : \(viewModel.voteCount)"
@@ -110,6 +116,9 @@ final class DetailViewController: UIViewController {
         contentView.addSubview(voteAverageLabel)
         contentView.addSubview(voteCountLabel)
         
+        contentView.backgroundColor = .secondarySystemBackground
+        contentView.layer.cornerRadius = 20
+        
         scrollView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.width.height.equalToSuperview()
         }
@@ -130,23 +139,31 @@ final class DetailViewController: UIViewController {
         }
 
         overViewLabel.snp.makeConstraints {
-            $0.top.equalTo(posterView.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(posterView.snp.bottom).offset(30)
+            $0.leading.trailing.equalToSuperview().inset(15)
         }
 
         releaseDateLabel.snp.makeConstraints {
             $0.top.equalTo(overViewLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(15)
         }
 
         voteAverageLabel.snp.makeConstraints {
             $0.top.equalTo(releaseDateLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(15)
         }
 
         voteCountLabel.snp.makeConstraints {
             $0.top.equalTo(voteAverageLabel.snp.bottom).offset(5)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview().inset(15)
         }
+    }
+    
+    private func spaceBetweenLines() {
+        let attrString = NSMutableAttributedString(string: overViewLabel.text ?? "")
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+        overViewLabel.attributedText = attrString
     }
 }

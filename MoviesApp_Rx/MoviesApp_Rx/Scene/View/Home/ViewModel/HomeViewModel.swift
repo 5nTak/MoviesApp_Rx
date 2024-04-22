@@ -34,8 +34,8 @@ final class HomeViewModel {
     private let movieUseCase: MovieUseCase
     let discoveryMovie = BehaviorRelay<[MovieSection]>(value: [])
     let popularMovie = BehaviorRelay<[MovieSection]>(value: [])
-    let lateMovie = BehaviorRelay<[MovieSection]>(value: [])
     let trendingMovie = BehaviorRelay<[MovieSection]>(value: [])
+    let lateMovie = BehaviorRelay<[MovieSection]>(value: [])
     
     let disposebag = DisposeBag()
     
@@ -48,16 +48,16 @@ final class HomeViewModel {
     func showMoviesRx() {
         showMovieDiscovery()
         showPopularMovie()
-        showLatestMovie()
         showTrendingMovie()
+        showLatestMovie()
         
-        Observable.combineLatest(discoveryMovie, popularMovie, lateMovie, trendingMovie)
-            .map { discovery, popular, latest, trending in
+        Observable.combineLatest(discoveryMovie, popularMovie, trendingMovie, lateMovie)
+            .map { discovery, popular, trending, latest in
                 return [
                     MovieSectionModel(title: MovieListSection.discover.description, items: discovery.first?.items ?? []),
                     MovieSectionModel(title: MovieListSection.popular.description, items: popular.first?.items ?? []),
-                    MovieSectionModel(title: MovieListSection.latest.description, items: latest.first?.items ?? []),
-                    MovieSectionModel(title: MovieListSection.trending.description, items: trending.first?.items ?? [])
+                    MovieSectionModel(title: MovieListSection.trending.description, items: trending.first?.items ?? []),
+                    MovieSectionModel(title: MovieListSection.latest.description, items: latest.first?.items ?? [])
                 ]
             }
             .bind(to: sections)
@@ -80,19 +80,19 @@ final class HomeViewModel {
             .disposed(by: disposebag)
     }
 
-    private func showLatestMovie() {
-        movieUseCase.fetchLatestMovie()
-            .asObservable()
-            .map { [MovieSection(model: MovieListSection.latest.description, items: $0)]}
-            .bind(to: lateMovie)
-            .disposed(by: disposebag)
-    }
-
     private func showTrendingMovie() {
         movieUseCase.fetchTrendingMovie()
             .asObservable()
             .map { [MovieSection(model: MovieListSection.trending.description, items: $0)]}
             .bind(to: trendingMovie)
+            .disposed(by: disposebag)
+    }
+    
+    private func showLatestMovie() {
+        movieUseCase.fetchLatestMovie()
+            .asObservable()
+            .map { [MovieSection(model: MovieListSection.latest.description, items: $0)]}
+            .bind(to: lateMovie)
             .disposed(by: disposebag)
     }
 }

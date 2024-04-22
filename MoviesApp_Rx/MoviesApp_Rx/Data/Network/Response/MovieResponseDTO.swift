@@ -21,9 +21,10 @@ struct MovieResponse: Decodable {
     let video: Bool?
     let voteAverage: Double
     let voteCount: Int
+    let popularity: Double
     
     enum CodingKeys: String, CodingKey {
-        case id, title, overview, video, adult
+        case id, title, overview, video, adult, popularity
         case genres = "genre_ids"
         case originalTitle = "original_title"
         case originalLanguage = "original_language"
@@ -50,7 +51,8 @@ extension MovieResponse {
             releaseData: self.releaseDate,
             video: self.video,
             voteAverage: self.voteAverage,
-            voteCount: self.voteCount
+            voteCount: self.voteCount,
+            popularity: self.popularity
         )
     }
 }

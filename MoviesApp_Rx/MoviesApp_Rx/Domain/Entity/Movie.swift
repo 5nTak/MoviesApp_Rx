@@ -22,4 +22,5 @@ struct Movie: Hashable {
     let video: Bool?
     let voteAverage: Double
     let voteCount: Int
+    let popularity: Double
 }

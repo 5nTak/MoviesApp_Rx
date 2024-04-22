@@ -11,7 +11,7 @@ struct LatestMovieEndpoint: TmdbAPIEndpoint {
     typealias APIResponse = MovieResponse
     
     var path: String = "/movie/latest"
-    var queries: [String : String]
+    var queries: [String: String]
     
     init() {
         self.queries = [:]
