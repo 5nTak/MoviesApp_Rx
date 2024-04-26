@@ -1,5 +1,5 @@
 //
-//  SearchMovieListResponseDTO.swift
+//  CollectionListResponseDTO.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 2024/02/24.

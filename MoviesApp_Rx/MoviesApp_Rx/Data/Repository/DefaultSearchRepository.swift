@@ -32,4 +32,13 @@ final class DefaultSearchRepository: SearchRepository {
                 return collectionList
             }
     }
+    
+    func fetchDetailCollection(id: Int) -> Single<DetailCollectionList> {
+        let request = DetailCollectionEndpoint(id: id)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let detailCollectionList = response.toDetailCollectionList()
+                return detailCollectionList
+            }
+    }
 }

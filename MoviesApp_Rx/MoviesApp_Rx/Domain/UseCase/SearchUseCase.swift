@@ -30,4 +30,12 @@ final class SearchUseCase {
                 return collections
             }
     }
+    
+    func fetchDetailCollection(id: Int) -> Single<[DetailCollection]> {
+        return self.searchRepository.fetchDetailCollection(id: id)
+            .map { detailCollectionList in
+                let detailCollections = detailCollectionList.parts
+                return detailCollections
+            }
+    }
 }

@@ -12,4 +12,6 @@ protocol SearchRepository {
     func fetchSearchMovie(searchText: String) -> Single<MovieList>
     
     func fetchSearchCollection(searchText: String) -> Single<CollectionList>
+    
+    func fetchDetailCollection(id: Int) -> Single<DetailCollectionList>
 }
