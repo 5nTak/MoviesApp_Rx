@@ -35,7 +35,7 @@ extension UIImageView {
                         self.image = image
                     } else {
                         guard let url = URL(string: urlString) else { return }
-                        self.kf.setImage(with: url, placeholder: UIImage(systemName: "xmark.circle"))
+                        self.kf.setImage(with: url, placeholder: UIImage(named: "noImageProvided"))
                     }
                 case .failure(let error):
                     print(error)
