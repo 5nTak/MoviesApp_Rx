@@ -10,16 +10,7 @@ import SnapKit
 
 final class DetailViewController: UIViewController {
     var viewModel: DetailViewModel
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.textColor = .reversedBackgroundColorAsset
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        
-        return label
-    }()
+   
     private let posterView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "xmark.icloud")
@@ -92,8 +83,7 @@ final class DetailViewController: UIViewController {
     private func bindViewModel() {
         let posterImageUrl = self.loadImage(url: viewModel.posterPath ?? "")
         posterView.setImageCache(with: posterImageUrl)
-        
-        titleLabel.text = viewModel.title
+
         overViewLabel.text = "  Introduce : \n \(viewModel.overView)"
         releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
         voteAverageLabel.text = "Vote : \(viewModel.voteAverage)"
@@ -107,9 +97,9 @@ final class DetailViewController: UIViewController {
     }
     
     private func setupLayout() {
+        self.title = viewModel.title
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(titleLabel)
         contentView.addSubview(posterView)
         contentView.addSubview(overViewLabel)
         contentView.addSubview(releaseDateLabel)
@@ -126,15 +116,9 @@ final class DetailViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.width.equalToSuperview().inset(10)
         }
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            $0.leading.equalToSuperview().inset(10)
-        }
 
         posterView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview().inset(10)
             $0.height.equalTo((UIScreen.main.bounds.height * 3) / 5)
         }
 

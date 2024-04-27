@@ -40,9 +40,10 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
         self.navigationController?.tabBarItem = tabBarItem
     }
     
-    func detailFlow(with movie: Movie) {
+    func detailFlow(with movie: Movie, title: String) {
         let detailCoordinator = DetailCoordinator(
-            item: movie,
+            movie: movie,
+            title: title,
             navigationController: self.navigationController,
             finishDelegate: self)
         self.childCoordinator.append(detailCoordinator)

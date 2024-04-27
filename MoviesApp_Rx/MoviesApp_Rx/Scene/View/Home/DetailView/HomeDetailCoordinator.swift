@@ -14,34 +14,26 @@ final class DetailCoordinator: Coordinator {
     
     weak var navigationController: UINavigationController?
     
-    private var item: ItemData
+    private var movie: Movie
+    private let title: String
     
     init(
-        item: ItemData,
+        movie: Movie,
+        title: String,
         navigationController: UINavigationController?,
         finishDelegate: CoordinationFinishDelegate) {
-            self.item = item
+            self.movie = movie
+            self.title = title
             self.navigationController = navigationController
             self.finishDelegate = finishDelegate
         }
     
     func start() {
-        if let movie = item as? Movie {
-            startFromHome(movie: movie)
-        } else if let collection = item as? Collection {
-            startFromSearch(collection: collection)
-        }
+        start(movie: movie)
     }
     
-    func startFromHome(movie: Movie) {
-        let detailViewModel = DetailViewModel(movie: movie)
-        detailViewModel.coordinator = self
-        let detailViewController = DetailViewController(viewModel: detailViewModel)
-        self.navigationController?.pushViewController(detailViewController, animated: true)
-    }
-    
-    func startFromSearch(collection: Collection) {
-        let detailViewModel = DetailViewModel(collection: collection)
+    func start(movie: Movie) {
+        let detailViewModel = DetailViewModel(movie: movie, title: self.title)
         detailViewModel.coordinator = self
         let detailViewController = DetailViewController(viewModel: detailViewModel)
         self.navigationController?.pushViewController(detailViewController, animated: true)
