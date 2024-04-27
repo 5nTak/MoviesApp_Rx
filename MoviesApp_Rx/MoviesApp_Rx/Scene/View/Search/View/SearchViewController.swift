@@ -18,7 +18,8 @@ final class SearchViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.register(SearchCell.self, forCellWithReuseIdentifier: SearchCell.identifier)
+        collectionView.register(SearchMovieCell.self, forCellWithReuseIdentifier: SearchMovieCell.identifier)
+        collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
         collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchHeaderView.identifier)
         
         return collectionView
@@ -53,15 +54,18 @@ final class SearchViewController: UIViewController {
     private func didSelectMovies() {
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] indexPath in
-                guard let movie = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
-                self?.viewModel?.coordinator?.detailFlow(with: movie)
+                guard let item = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
+                if let movie = item as? Movie {
+                    self?.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title)
+                } else if let collection = item as? Collection {
+                    self?.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
+                }
                 self?.navigationController?.setNavigationBarHidden(false, animated: false)
             })
             .disposed(by: disposeBag)
     }
     
     private func handleSearchText() {
-        searchBarView.searchTextField.delegate = self
         searchBarView.rx.textDidChange
             .map { $0 }
             .observe(on: MainScheduler.asyncInstance)
@@ -78,6 +82,7 @@ final class SearchViewController: UIViewController {
     }
     
     private func configureLayout() {
+        collectionView.delegate = self
         view.backgroundColor = .systemBackground
         
         view.addSubview(searchBarView)
@@ -104,34 +109,71 @@ final class SearchViewController: UIViewController {
 // MARK: - CompositionalLayout
 extension SearchViewController {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { _, _ -> NSCollectionLayoutSection? in
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: NSCollectionLayoutDimension.fractionalWidth(0.5),
-                heightDimension: NSCollectionLayoutDimension.fractionalHeight(1.0)
-            )
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8)
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
+            guard let section = SearchSectionKind(rawValue: sectionIndex) else { return nil }
             
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: NSCollectionLayoutDimension.fractionalWidth(1.0),
-                heightDimension: NSCollectionLayoutDimension.fractionalHeight(0.4)
-            )
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: groupSize,
-                subitems: [item]
-            )
-            
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 5, bottom: 20, trailing: 5)
-            section.orthogonalScrollingBehavior = .continuous
-            
-            if let sectionHeader = self.createSectionHeader() {
-                section.boundarySupplementaryItems = [sectionHeader]
+            switch section {
+            case .movie:
+                return self.createMovieSection()
+            case .collection:
+                return self.createCollectionSection()
             }
-            return section
         }
         
         return layout
+    }
+    
+    private func createMovieSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 30, trailing: 10)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.8),
+            heightDimension: .fractionalHeight(0.8)
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        section.orthogonalScrollingBehavior = .continuous
+        if let sectionHeader = self.createSectionHeader() {
+            section.boundarySupplementaryItems = [sectionHeader]
+        }
+        
+        return section
+    }
+    
+    private func createCollectionSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(0.2)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        if let sectionHeader = self.createSectionHeader() {
+            section.boundarySupplementaryItems = [sectionHeader]
+        }
+        
+        return section
     }
     
     private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem? {
@@ -159,18 +201,28 @@ extension SearchViewController {
     private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<SearchSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: SearchCell.identifier,
-                    for: indexPath
-                ) as? SearchCell else { return UICollectionViewCell() }
-                if let movie = item as? Movie {
-                    cell.configure(title: movie.title)
-                    cell.loadImage(url: movie.posterPath ?? "")
-                } else if let collection = item as? Collection {
-                    cell.configure(title: collection.name)
-                    cell.loadImage(url: collection.posterPath ?? "")
+                switch indexPath.section {
+                case 0:
+                    guard let movie = item as? Movie,
+                          let movieSectionCell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: SearchMovieCell.identifier,
+                            for: indexPath
+                          ) as? SearchMovieCell else { return UICollectionViewCell() }
+                    movieSectionCell.configure(title: movie.title)
+                    movieSectionCell.loadImage(url: movie.posterPath ?? "")
+                    return movieSectionCell
+                case 1:
+                    guard let collection = item as? Collection,
+                          let collectionSectionCell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: SearchCollectionCell.identifier,
+                            for: indexPath
+                          ) as? SearchCollectionCell else { return UICollectionViewCell() }
+                    collectionSectionCell.configure(name: collection.name, overview: collection.overview)
+                    collectionSectionCell.loadImage(url: collection.posterPath ?? "")
+                    return collectionSectionCell
+                default :
+                    return UICollectionViewCell()
                 }
-                return cell
             },
             configureSupplementaryView: { rxDataSource, collectionView, kind, indexPath in
                 let sectionModel = rxDataSource.sectionModels[indexPath.section]
@@ -186,6 +238,12 @@ extension SearchViewController {
     }
 }
 
+extension SearchViewController: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
+    }
+}
+
 enum SearchSectionKind: Int, CaseIterable {
     case movie, collection
     
@@ -196,16 +254,5 @@ enum SearchSectionKind: Int, CaseIterable {
         case .collection:
             return "Collection"
         }
-    }
-}
-
-extension SearchViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        viewModel?.showSearchResult()
     }
 }

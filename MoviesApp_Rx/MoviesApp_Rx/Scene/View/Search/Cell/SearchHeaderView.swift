@@ -13,7 +13,7 @@ final class SearchHeaderView: UICollectionReusableView {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.font = .systemFont(ofSize: 25, weight: .bold)
         label.textColor = .systemGray
         return label
     }()
