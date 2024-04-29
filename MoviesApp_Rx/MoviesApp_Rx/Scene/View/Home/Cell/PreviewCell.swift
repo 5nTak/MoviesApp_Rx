@@ -51,7 +51,7 @@ final class PreviewCell: UICollectionViewCell {
     private func setupBorderText() -> NSAttributedString {
         let strokeTextAttributes: [NSAttributedString.Key: Any] = [
             .strokeColor: UIColor.darkGray,
-            .foregroundColor: UIColor.systemGray6,
+            .foregroundColor: UIColor.white,
             .strokeWidth: -5.0
         ]
         let attributedText = NSAttributedString(string: titleLabel.text ?? "", attributes: strokeTextAttributes)
