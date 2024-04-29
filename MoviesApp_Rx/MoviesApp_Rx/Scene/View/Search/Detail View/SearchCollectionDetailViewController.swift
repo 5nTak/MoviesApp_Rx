@@ -57,7 +57,8 @@ final class SearchCollectionDetailViewController: UIViewController {
     private func didSelectMovies() {
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] indexPath in
-                guard let movie = self?.rxDataSource?.sectionModels[0].items[indexPath.item] as? Movie else { return }
+                guard let content = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
+                let movie = content.toMovie()
                 self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title)
             })
             .disposed(by: disposeBag)

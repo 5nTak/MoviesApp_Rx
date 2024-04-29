@@ -42,7 +42,7 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func detailFlow(with movie: Movie, title: String) {
         let detailCoordinator = DetailCoordinator(
-            movie: movie,
+            contents: movie,
             title: title,
             navigationController: self.navigationController,
             finishDelegate: self)

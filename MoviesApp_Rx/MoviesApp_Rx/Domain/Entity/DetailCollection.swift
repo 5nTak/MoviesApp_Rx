@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DetailCollection: Hashable {
+struct DetailCollection: Hashable, Contents {
     let uuid = UUID()
     let id: Int
     let title: String
@@ -19,4 +19,23 @@ struct DetailCollection: Hashable {
     let releaseDate: String
     let voteAverage: Double
     let voteCount: Int
+    
+    func toMovie() -> Movie {
+        return Movie(
+            id: self.id,
+            title: self.title,
+            originalTitle: nil,
+            originalLanguage: nil,
+            genres: nil,
+            adult: nil,
+            overview: self.overview,
+            posterPath: self.posterPath,
+            backdropPath: self.backdropPath,
+            releaseData: self.releaseDate,
+            video: nil,
+            voteAverage: self.voteAverage,
+            voteCount: self.voteCount,
+            popularity: self.popularity
+        )
+    }
 }

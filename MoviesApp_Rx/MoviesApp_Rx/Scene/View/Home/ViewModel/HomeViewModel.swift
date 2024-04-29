@@ -53,9 +53,10 @@ final class HomeViewModel {
         
         Observable.combineLatest(discoveryMovie, popularMovie, trendingMovie, lateMovie)
             .map { discovery, popular, trending, latest in
+                let limitedPopularItems = popular.first?.items.prefix(5) ?? []
                 return [
                     MovieSectionModel(title: MovieListSection.discover.description, items: discovery.first?.items ?? []),
-                    MovieSectionModel(title: MovieListSection.popular.description, items: popular.first?.items ?? []),
+                    MovieSectionModel(title: MovieListSection.popular.description, items: Array(limitedPopularItems)),
                     MovieSectionModel(title: MovieListSection.trending.description, items: trending.first?.items ?? []),
                     MovieSectionModel(title: MovieListSection.latest.description, items: latest.first?.items ?? [])
                 ]

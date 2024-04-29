@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Collection: Hashable {
+struct Collection: Hashable, Contents {
     let uuid = UUID()
     let id: Int
     let name: String

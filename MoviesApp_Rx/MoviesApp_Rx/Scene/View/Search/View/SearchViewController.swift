@@ -68,7 +68,6 @@ final class SearchViewController: UIViewController {
     private func handleSearchText() {
         searchBarView.rx.textDidChange
             .map { $0 }
-            .observe(on: MainScheduler.asyncInstance)
             .bind(to: viewModel!.searchText)
             .disposed(by: disposeBag)
         
@@ -76,7 +75,6 @@ final class SearchViewController: UIViewController {
             .skip(1)
             .filter { !$0.isEmpty }
             .map { _ in () }
-            .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { _ in })
             .disposed(by: disposeBag)
     }
@@ -89,14 +87,14 @@ final class SearchViewController: UIViewController {
         view.addSubview(collectionView)
         
         searchBarView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(15)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview().inset(10)
             $0.height.equalTo(45)
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchBarView.snp.bottom).inset(5)
+            $0.top.equalTo(searchBarView.snp.bottom).offset(5)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movie: Hashable {
+struct Movie: Hashable, Contents {
     let uuid = UUID()
     let id: Int
     let title: String

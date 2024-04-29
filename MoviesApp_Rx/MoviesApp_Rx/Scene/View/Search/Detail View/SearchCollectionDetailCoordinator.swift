@@ -33,7 +33,7 @@ final class SearchCollectionDetailCoordinator: Coordinator, CoordinationFinishDe
         start(id: id, title: title)
     }
     
-    func start(id: Int, title: String) {
+    private func start(id: Int, title: String) {
         let collectionDetailViewModel = SearchCollectionDetailViewModel(
             id: id,
             title: title,
@@ -48,9 +48,9 @@ final class SearchCollectionDetailCoordinator: Coordinator, CoordinationFinishDe
         self.navigationController?.pushViewController(collectionDetailViewController, animated: true)
     }
     
-    func detailFlow(with movie: Movie, title: String) {
+    func detailFlow(with contents: Contents, title: String) {
         let detailCoordinator = DetailCoordinator(
-            movie: movie,
+            contents: contents,
             title: title,
             navigationController: self.navigationController,
             finishDelegate: self)
