@@ -13,21 +13,17 @@ import RxDataSources
 
 final class SearchViewController: UIViewController {
     var viewModel: SearchViewModel?
-    
     private let searchBarView = SearchBarView()
+    private let disposeBag = DisposeBag()
+    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<SearchSectionModel>?
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(SearchMovieCell.self, forCellWithReuseIdentifier: SearchMovieCell.identifier)
         collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
         collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchHeaderView.identifier)
-        
         return collectionView
     }()
-    
-    private let disposeBag = DisposeBag()
-    
-    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<SearchSectionModel>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,21 +42,20 @@ final class SearchViewController: UIViewController {
     
     private func bind() {
         viewModel?.sections
-            .observe(on: MainScheduler.asyncInstance)
             .bind(to: collectionView.rx.items(dataSource: rxDataSource!))
             .disposed(by: disposeBag)
     }
     
     private func didSelectMovies() {
         collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
-                guard let item = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
+            .subscribe(onNext: { indexPath in
+                guard let item = self.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
                 if let movie = item as? Movie {
-                    self?.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title)
+                    self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title)
                 } else if let collection = item as? Collection {
-                    self?.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
+                    self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
                 }
-                self?.navigationController?.setNavigationBarHidden(false, animated: false)
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
             })
             .disposed(by: disposeBag)
     }
@@ -128,7 +123,6 @@ extension SearchViewController {
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 30, trailing: 10)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.8),
             heightDimension: .fractionalHeight(0.8)
@@ -137,14 +131,11 @@ extension SearchViewController {
             layoutSize: groupSize,
             subitems: [item]
         )
-        
         let section = NSCollectionLayoutSection(group: group)
-        
         section.orthogonalScrollingBehavior = .continuous
         if let sectionHeader = self.createSectionHeader() {
             section.boundarySupplementaryItems = [sectionHeader]
         }
-        
         return section
     }
     
@@ -155,7 +146,6 @@ extension SearchViewController {
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(0.2)
@@ -164,13 +154,10 @@ extension SearchViewController {
             layoutSize: groupSize,
             subitems: [item]
         )
-        
         let section = NSCollectionLayoutSection(group: group)
-        
         if let sectionHeader = self.createSectionHeader() {
             section.boundarySupplementaryItems = [sectionHeader]
         }
-        
         return section
     }
     
@@ -178,18 +165,15 @@ extension SearchViewController {
         guard let searchText = searchBarView.searchTextField.text, !searchText.isEmpty else {
             return nil
         }
-        
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(60)
         )
-        
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-        
         return sectionHeader
     }
 }
@@ -207,7 +191,11 @@ extension SearchViewController {
                             for: indexPath
                           ) as? SearchMovieCell else { return UICollectionViewCell() }
                     movieSectionCell.configure(title: movie.title)
-                    movieSectionCell.loadImage(url: movie.posterPath ?? "")
+                    if movie.posterPath == nil {
+                        movieSectionCell.setFailedLoadImage()
+                    } else {
+                        movieSectionCell.loadImage(url: movie.posterPath ?? "")
+                    }
                     return movieSectionCell
                 case 1:
                     guard let collection = item as? Collection,
@@ -216,7 +204,11 @@ extension SearchViewController {
                             for: indexPath
                           ) as? SearchCollectionCell else { return UICollectionViewCell() }
                     collectionSectionCell.configure(name: collection.name, overview: collection.overview)
-                    collectionSectionCell.loadImage(url: collection.posterPath ?? "")
+                    if collection.posterPath == nil {
+                        collectionSectionCell.setFailedLoadImage()
+                    } else {
+                        collectionSectionCell.loadImage(url: collection.posterPath ?? "")
+                    }
                     return collectionSectionCell
                 default :
                     return UICollectionViewCell()

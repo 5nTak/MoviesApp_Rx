@@ -30,16 +30,14 @@ final class HomeViewModel {
     typealias MovieSection = SectionModel<String, Movie>
     
     let sections = BehaviorRelay<[MovieSectionModel]>(value: [])
+    private let discoveryMovie = BehaviorRelay<[MovieSection]>(value: [])
+    private let popularMovie = BehaviorRelay<[MovieSection]>(value: [])
+    private let trendingMovie = BehaviorRelay<[MovieSection]>(value: [])
+    private let lateMovie = BehaviorRelay<[MovieSection]>(value: [])
     
+    private var page: Int = 1
     private let movieUseCase: MovieUseCase
-    let discoveryMovie = BehaviorRelay<[MovieSection]>(value: [])
-    let popularMovie = BehaviorRelay<[MovieSection]>(value: [])
-    let trendingMovie = BehaviorRelay<[MovieSection]>(value: [])
-    let lateMovie = BehaviorRelay<[MovieSection]>(value: [])
-    
-    let disposebag = DisposeBag()
-    
-    var page: Int = 1
+    private let disposebag = DisposeBag()
     
     init(movieUseCase: MovieUseCase) {
         self.movieUseCase = movieUseCase

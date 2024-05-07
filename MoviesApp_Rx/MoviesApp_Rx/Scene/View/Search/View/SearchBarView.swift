@@ -33,7 +33,7 @@ final class SearchBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setSearchTextFieldPlaceholder() {
+    private func setSearchTextFieldPlaceholder() {
         let placeholder = "Search Movies, Collections"
         searchTextField.attributedPlaceholder = NSMutableAttributedString(string: placeholder)
     }
@@ -43,7 +43,7 @@ final class SearchBarView: UIView {
         searchTextField.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
-    func configureSubviews() {
+    private func configureSubviews() {
         configureContainerView()
         configureSearchStackView()
         configureSearchTextField()

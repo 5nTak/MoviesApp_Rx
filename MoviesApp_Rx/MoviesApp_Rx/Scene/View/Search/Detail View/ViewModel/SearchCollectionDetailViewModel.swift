@@ -30,11 +30,10 @@ final class SearchCollectionDetailViewModel {
     typealias CollectionSection = SectionModel<String, DetailCollection>
     
     let sections = BehaviorRelay<[CollectionSectionModel]>(value: [])
-    
-    private var id: Int
     var title: String
+    private var id: Int
     private let searchUseCase: SearchUseCase
-    let searchCollection = BehaviorRelay<[CollectionSection]>(value: [])
+    private let searchCollection = BehaviorRelay<[CollectionSection]>(value: [])
     
     private let disposeBag = DisposeBag()
     
@@ -48,22 +47,17 @@ final class SearchCollectionDetailViewModel {
         showCollectionDetails(id: id)
         searchCollection
             .map { contents in
-                print(contents)
                 return [ CollectionSectionModel(title: "", items: contents.first?.items ?? []) ]
             }
             .bind(to: sections)
             .disposed(by: disposeBag)
-        print(sections)
-        print(sections.value)
     }
     
     private func showCollectionDetails(id: Int) {
         self.searchUseCase.fetchDetailCollection(id: id)
             .asObservable()
             .map { [CollectionSection(model: "", items: $0)] }
-            .debug()
             .bind(to: searchCollection)
             .disposed(by: disposeBag)
-        print(searchCollection.value)
     }
 }

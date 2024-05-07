@@ -9,13 +9,12 @@ import UIKit
 import SnapKit
 
 final class DetailViewController: UIViewController {
-    var viewModel: DetailViewModel
+    private let viewModel: DetailViewModel
    
     private let posterView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "xmark.icloud")
         imageView.contentMode = .scaleAspectFit
-        
         return imageView
     }()
     private let overViewLabel: UILabel = {
@@ -30,7 +29,6 @@ final class DetailViewController: UIViewController {
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .callout)
         label.textColor = .reversedBackgroundColorAsset
-        
         return label
     }()
     private let voteAverageLabel: UILabel = {
@@ -38,7 +36,6 @@ final class DetailViewController: UIViewController {
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
         label.textColor = .reversedBackgroundColorAsset
-        
         return label
     }()
     private let voteCountLabel: UILabel = {
@@ -46,19 +43,16 @@ final class DetailViewController: UIViewController {
         label.textAlignment = .right
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
         label.textColor = .reversedBackgroundColorAsset
-        
         return label
     }()
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        
         return scrollView
     }()
     
     private let contentView: UIView = {
         let contentView = UIView()
-        
         return contentView
     }()
     
@@ -81,8 +75,13 @@ final class DetailViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let posterImageUrl = self.loadImage(url: viewModel.posterPath ?? "")
-        posterView.setImageCache(with: posterImageUrl)
+        if viewModel.posterPath == nil {
+            setFailedLoadImage()
+        }
+        else {
+            let posterImageUrl = self.loadImage(url: viewModel.posterPath ?? "")
+            posterView.setImageCache(with: posterImageUrl)
+        }
 
         overViewLabel.text = "  Introduce : \n \(viewModel.overView)"
         releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
@@ -94,6 +93,11 @@ final class DetailViewController: UIViewController {
         let urlString = posterView.imageBaseUrl + posterView.imageSize + url
         
         return urlString
+    }
+    
+    func setFailedLoadImage() {
+        posterView.image = UIImage(named: "noImageProvided")
+        posterView.contentMode = .scaleAspectFit
     }
     
     private func setupLayout() {

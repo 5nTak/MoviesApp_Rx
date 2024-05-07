@@ -11,6 +11,7 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
     var identifier = UUID()
+    var navigationController: UINavigationController?
     let tabBarItem: UITabBarItem = {
         let tabBarItem = UITabBarItem(
             title: "Account",
@@ -19,8 +20,6 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
         )
         return tabBarItem
     }()
-    
-    var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController?, finishDelegate: CoordinationFinishDelegate) {
         self.navigationController = navigationController

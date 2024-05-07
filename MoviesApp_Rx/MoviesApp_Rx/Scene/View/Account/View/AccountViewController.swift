@@ -33,7 +33,6 @@ final class AccountViewController: UIViewController {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(executeLogin), for: .touchUpInside)
-        
         return button
     }()
     
@@ -45,7 +44,6 @@ final class AccountViewController: UIViewController {
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 10
 //        button.addTarget(self, action: #selector(showResetPasswordVC), for: .touchUpInside)
-        
         return button
     }()
     
@@ -59,7 +57,6 @@ final class AccountViewController: UIViewController {
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 10
 //        button.addTarget(self, action: #selector(showJoinVC), for: .touchUpInside)
-        
         return button
     }()
     
@@ -127,25 +124,21 @@ final class AccountViewController: UIViewController {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(40)
         }
-        
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(idTextField.snp.bottom).offset(spacing)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(40)
         }
-        
         loginButton.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(spacing * 2)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(50)
         }
-        
         forgetPasswordButton.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(spacing * 2)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(40)
         }
-        
         joinButton.snp.makeConstraints {
             $0.top.equalTo(forgetPasswordButton.snp.bottom).offset(spacing)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)

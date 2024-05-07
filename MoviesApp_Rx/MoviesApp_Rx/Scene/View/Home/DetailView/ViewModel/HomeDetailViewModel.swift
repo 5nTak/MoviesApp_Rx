@@ -14,6 +14,13 @@ final class DetailViewModel {
     
     private var item: ItemData
     
+    var title: String?
+    var posterPath: String?
+    var overView: String = ""
+    var releaseDate: String = ""
+    var voteAverage: Double = 0.0
+    var voteCount: Int = 0
+    
     init(movie: Movie, title: String) {
         self.item = movie
         self.title = title
@@ -24,13 +31,6 @@ final class DetailViewModel {
         self.item = collection
         self.fetchCollection(for: collection)
     }
-    
-    var title: String?
-    var posterPath: String?
-    var overView: String = ""
-    var releaseDate: String = ""
-    var voteAverage: Double = 0.0
-    var voteCount: Int = 0
     
     private func fetchMovie(for movie: Movie) {
         self.posterPath = movie.posterPath

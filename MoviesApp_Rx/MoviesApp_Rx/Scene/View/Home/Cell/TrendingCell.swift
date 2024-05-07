@@ -144,4 +144,9 @@ final class TrendingCell: UICollectionViewCell {
         
         imageView.setImageCache(with: urlString)
     }
+    
+    func setFailedLoadImage() {
+        imageView.image = UIImage(named: "noImageProvided")
+        imageView.contentMode = .scaleAspectFit
+    }
 }

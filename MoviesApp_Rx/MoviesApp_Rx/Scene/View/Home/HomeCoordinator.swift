@@ -11,7 +11,10 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()
-    let tabBarItem: UITabBarItem = {
+    
+    var navigationController: UINavigationController?
+    
+    private let tabBarItem: UITabBarItem = {
         let tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(systemName: "house"),
@@ -19,8 +22,6 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
         )
         return tabBarItem
     }()
-    
-    var navigationController: UINavigationController?
     
     init(navigationController: UINavigationController?, finishDelegate: CoordinationFinishDelegate) {
         self.navigationController = navigationController

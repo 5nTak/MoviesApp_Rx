@@ -28,7 +28,6 @@ final class PreviewCell: UICollectionViewCell {
         label.sizeToFit()
         label.textAlignment = .center
         label.numberOfLines = 2
-        
         return label
     }()
     
@@ -90,5 +89,10 @@ final class PreviewCell: UICollectionViewCell {
         let urlString = imageView.imageBaseUrl + imageView.imageSize + url
         
         imageView.setImageCache(with: urlString)
+    }
+    
+    func setFailedLoadImage() {
+        imageView.image = UIImage(named: "noImageProvided")
+        imageView.contentMode = .scaleAspectFit
     }
 }

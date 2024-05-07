@@ -39,8 +39,8 @@ final class SearchViewModel {
     private let searchMovieUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
     
-    let searchMovies = BehaviorRelay<[SearchSection]>(value: [])
-    let searchCollections = BehaviorRelay<[SearchSection]>(value: [])
+    private let searchMovies = BehaviorRelay<[SearchSection]>(value: [])
+    private let searchCollections = BehaviorRelay<[SearchSection]>(value: [])
     var searchText = BehaviorRelay<String>(value: "")
     
     init(searchMovieUseCase: SearchUseCase) {

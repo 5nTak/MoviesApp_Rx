@@ -17,10 +17,8 @@ final class SearchMovieCell: UICollectionViewCell {
         imageView.tintColor = .systemGray
         imageView.contentMode = .scaleToFill
         imageView.kf.indicatorType = .activity
-        
         return imageView
     }()
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .reversedBackgroundColorAsset
@@ -28,7 +26,6 @@ final class SearchMovieCell: UICollectionViewCell {
         label.sizeToFit()
         label.textAlignment = .center
         label.numberOfLines = 1
-        
         return label
     }()
     
@@ -81,5 +78,10 @@ final class SearchMovieCell: UICollectionViewCell {
         let urlString = imageView.imageBaseUrl + imageView.imageSize + url
         
         imageView.setImageCache(with: urlString)
+    }
+    
+    func setFailedLoadImage() {
+        imageView.image = UIImage(named: "noImageProvided")
+        imageView.contentMode = .scaleAspectFit
     }
 }

@@ -12,17 +12,15 @@ import RxDataSources
 import SnapKit
 
 final class SearchCollectionDetailViewController: UIViewController {
+    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<CollectionSectionModel>?
+    var viewModel: SearchCollectionDetailViewModel?
+    private let disposeBag = DisposeBag()
+    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(CollectionDetailCell.self, forCellWithReuseIdentifier: CollectionDetailCell.identifier)
-        
         return collectionView
     }()
-    
-    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<CollectionSectionModel>?
-    
-    var viewModel: SearchCollectionDetailViewModel?
-    private let disposeBag = DisposeBag()
     
     init(viewModel: SearchCollectionDetailViewModel) {
         self.viewModel = viewModel
@@ -66,7 +64,6 @@ final class SearchCollectionDetailViewController: UIViewController {
 }
 
 extension SearchCollectionDetailViewController {
-    // compositional layout
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { _, _ in
             let itemSize = NSCollectionLayoutSize(
@@ -97,7 +94,6 @@ extension SearchCollectionDetailViewController {
 }
 
 extension SearchCollectionDetailViewController {
-    // datasource
     private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<CollectionSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
@@ -108,7 +104,11 @@ extension SearchCollectionDetailViewController {
                     popularity: item.popularity,
                     releaseDate: item.releaseDate
                 )
-                cell.loadImage(url: item.posterPath ?? "")
+                if item.posterPath == nil {
+                    cell.setFailedLoadImage()
+                } else {
+                    cell.loadImage(url: item.posterPath ?? "")
+                }
                 return cell
         }, configureSupplementaryView: nil
         )

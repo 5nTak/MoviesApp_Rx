@@ -11,6 +11,10 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
     var identifier = UUID()
+    var navigationController: UINavigationController?
+    
+    private var searchText: String?
+    
     let tabBarItem: UITabBarItem = {
         let tabBarItem = UITabBarItem(
             title: "Search",
@@ -19,10 +23,6 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         )
         return tabBarItem
     }()
-    
-    var navigationController: UINavigationController?
-    
-    private var searchText: String?
     
     init(
         navigationController: UINavigationController?,
@@ -50,7 +50,8 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
             contents: movie,
             title: title,
             navigationController: self.navigationController,
-            finishDelegate: self)
+            finishDelegate: self
+        )
         self.childCoordinator.append(detailCoordinator)
         detailCoordinator.start()
     }

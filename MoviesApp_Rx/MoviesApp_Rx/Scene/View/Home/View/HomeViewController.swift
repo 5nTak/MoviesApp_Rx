@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25, weight: .bold)
@@ -29,9 +29,8 @@ class HomeViewController: UIViewController {
         return collectionView
     }()
     
-    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
-    
     var viewModel: HomeViewModel?
+    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -69,7 +68,6 @@ extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             guard let section = MovieListSection(rawValue: sectionIndex) else { return nil }
-            
             switch section {
             case .discover:
                 return self.createDiscoverSection()
@@ -81,7 +79,6 @@ extension HomeViewController {
                 return self.createPopularSection()
             }
         }
-        
         return layout
     }
     
@@ -98,7 +95,6 @@ extension HomeViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
-        
         section.orthogonalScrollingBehavior = .continuous
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -120,7 +116,6 @@ extension HomeViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
-        
         section.orthogonalScrollingBehavior = .paging
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -143,11 +138,9 @@ extension HomeViewController {
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
-        
         section.orthogonalScrollingBehavior = .groupPaging
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
-        
         return section
     }
     
@@ -157,25 +150,23 @@ extension HomeViewController {
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(100)
         )
-        
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-        
         return sectionHeader
     }
 }
 
 // MARK: - DataSource
 extension HomeViewController {
-    func configureHierarchy() {
+    private func configureHierarchy() {
         collectionView.backgroundColor = .secondarySystemBackground
         view.addSubview(collectionView)
     }
     
-    func configureDataSource() {
+    private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<MovieSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
                 switch indexPath.section {
@@ -185,7 +176,11 @@ extension HomeViewController {
                         for: indexPath
                     ) as? PreviewCell else { return UICollectionViewCell() }
                     discoverCell.setup(title: item.title)
-                    discoverCell.loadImage(url: item.backdropPath ?? "")
+                    if item.backdropPath == nil {
+                        discoverCell.setFailedLoadImage()
+                    } else {
+                        discoverCell.loadImage(url: item.backdropPath ?? "")
+                    }
                     return discoverCell
                 case 1:
                     guard let popularCell = collectionView.dequeueReusableCell(
@@ -193,7 +188,11 @@ extension HomeViewController {
                         for: indexPath
                     ) as? PosterCell else { return UICollectionViewCell() }
                     popularCell.setup(title: item.title)
-                    popularCell.loadImage(url: item.posterPath ?? "")
+                    if item.posterPath == nil {
+                        popularCell.setFailedLoadImage()
+                    } else {
+                        popularCell.loadImage(url: item.posterPath ?? "")
+                    }
                     return popularCell
                 case 2:
                     guard let trendingCell = collectionView.dequeueReusableCell(
@@ -201,7 +200,11 @@ extension HomeViewController {
                         for: indexPath
                     ) as? TrendingCell else { return UICollectionViewCell() }
                     trendingCell.setup(title: item.title, popularity: item.popularity, date: item.releaseData)
-                    trendingCell.loadImage(url: item.posterPath ?? "")
+                    if item.posterPath == nil {
+                        trendingCell.setFailedLoadImage()
+                    } else {
+                        trendingCell.loadImage(url: item.posterPath ?? "")
+                    }
                     return trendingCell
                 case 3:
                     guard let latestCell = collectionView.dequeueReusableCell(
@@ -209,7 +212,11 @@ extension HomeViewController {
                         for: indexPath
                     ) as? PosterCell else { return UICollectionViewCell() }
                     latestCell.setup(title: item.title)
-                    latestCell.loadImage(url: item.posterPath ?? "")
+                    if item.posterPath == nil {
+                        latestCell.setFailedLoadImage()
+                    } else {
+                        latestCell.loadImage(url: item.posterPath ?? "")
+                    }
                     return latestCell
                 default:
                     return UICollectionViewCell()

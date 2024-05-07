@@ -35,7 +35,7 @@ extension UIImageView {
                         self.image = image
                     } else {
                         guard let url = URL(string: urlString) else { return }
-                        self.kf.setImage(with: url, placeholder: UIImage(named: "noImageProvided"))
+                        self.kf.setImage(with: url, placeholder: UIImage(systemName: "ellipsis"))
                     }
                 case .failure(let error):
                     print(error)
