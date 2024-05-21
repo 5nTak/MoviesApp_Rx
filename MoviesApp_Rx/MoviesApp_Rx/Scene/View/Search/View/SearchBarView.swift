@@ -70,7 +70,6 @@ final class SearchBarView: UIView {
         searchTextField.clearsOnBeginEditing = false
         searchTextField.returnKeyType = .search
         searchTextField.keyboardType = .default
-        searchTextField.becomeFirstResponder()
     }
     
     private func configureHierarchy() {
