@@ -16,7 +16,7 @@ final class PosterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .systemGray
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .center
         imageView.kf.indicatorType = .activity
         return imageView
     }()

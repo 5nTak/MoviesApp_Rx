@@ -30,18 +30,17 @@ extension SearchSectionModel: SectionModelType {
 }
 
 final class SearchViewModel {
-    var coordinator: SearchCoordinator?
-    
     typealias SearchSection = SectionModel<String, ItemData>
     
     let sections = BehaviorRelay<[SearchSectionModel]>(value: [])
+    var searchText = BehaviorRelay<String>(value: "")
+    var coordinator: SearchCoordinator?
     
     private let searchMovieUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
     
     private let searchMovies = BehaviorRelay<[SearchSection]>(value: [])
     private let searchCollections = BehaviorRelay<[SearchSection]>(value: [])
-    var searchText = BehaviorRelay<String>(value: "")
     
     init(searchMovieUseCase: SearchUseCase) {
         self.searchMovieUseCase = searchMovieUseCase

@@ -15,8 +15,8 @@ final class SearchCollectionCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .systemGray
-        imageView.contentMode = .scaleToFill
         imageView.kf.indicatorType = .activity
+        imageView.contentMode = .center
         return imageView
     }()
     
@@ -53,6 +53,7 @@ final class SearchCollectionCell: UICollectionViewCell {
         imageView.image = nil
         nameLabel.text = nil
         overviewLabel.text = nil
+        imageView.contentMode = .scaleAspectFill
     }
     
     private func configureLayout() {
@@ -85,6 +86,7 @@ final class SearchCollectionCell: UICollectionViewCell {
             $0.trailing.bottom.equalToSuperview().inset(10)
         }
         
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
     }

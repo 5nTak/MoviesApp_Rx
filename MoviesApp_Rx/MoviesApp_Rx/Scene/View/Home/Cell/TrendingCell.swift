@@ -16,7 +16,7 @@ final class TrendingCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .systemGray
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .center
         imageView.kf.indicatorType = .activity
         return imageView
     }()
