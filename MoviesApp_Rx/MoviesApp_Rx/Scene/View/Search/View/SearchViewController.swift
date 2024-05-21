@@ -40,10 +40,17 @@ final class SearchViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchBarView.searchTextField.becomeFirstResponder()
+    }
+    
     private func bind() {
-        viewModel?.sections
-            .bind(to: collectionView.rx.items(dataSource: rxDataSource!))
-            .disposed(by: disposeBag)
+        if let dataSource = rxDataSource {
+            viewModel?.sections
+                .bind(to: collectionView.rx.items(dataSource: dataSource))
+                .disposed(by: disposeBag)
+        }
     }
     
     private func didSelectMovies() {
@@ -63,7 +70,7 @@ final class SearchViewController: UIViewController {
     private func handleSearchText() {
         searchBarView.rx.textDidChange
             .map { $0 }
-            .bind(to: viewModel!.searchText)
+            .bind(to: viewModel?.searchText ?? BehaviorRelay(value: ""))
             .disposed(by: disposeBag)
         
         searchBarView.rx.textDidChange

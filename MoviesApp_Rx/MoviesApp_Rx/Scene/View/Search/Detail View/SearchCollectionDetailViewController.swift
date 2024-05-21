@@ -41,9 +41,11 @@ final class SearchCollectionDetailViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel?.sections
-            .bind(to: collectionView.rx.items(dataSource: rxDataSource!))
-            .disposed(by: disposeBag)
+        if let dataSource = rxDataSource {
+            viewModel?.sections
+                .bind(to: collectionView.rx.items(dataSource: dataSource))
+                .disposed(by: disposeBag)
+        }
     }
     
     private func configureHierarchy() {
