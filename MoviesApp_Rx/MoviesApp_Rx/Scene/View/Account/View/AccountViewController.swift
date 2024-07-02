@@ -56,7 +56,7 @@ final class AccountViewController: UIViewController {
         button.titleLabel?.textAlignment = .center
         button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 10
-//        button.addTarget(self, action: #selector(showJoinVC), for: .touchUpInside)
+        button.addTarget(self, action: #selector(joinButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -73,23 +73,30 @@ final class AccountViewController: UIViewController {
     @objc private func executeLogin() {
         view.endEditing(true)
         
-        let title = AccountViewString.loginResult.rawValue
-        var message = AccountViewString.successLogin.rawValue
-        
-        if idTextField.text?.isEmpty ?? true {
-            idTextField.setError()
-            message = AccountViewString.inputError.rawValue
+        guard let email = idTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
+            showAlert(message: AccountViewString.inputError.rawValue)
+            return
         }
         
-        if passwordTextField.text?.isEmpty ?? true {
-            passwordTextField.setError()
-            message = AccountViewString.inputError.rawValue
+        viewModel?.login(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success:
+                self?.showAlert(message: AccountViewString.successLogin.rawValue) {
+                }
+            case .failure(let error):
+                self?.showAlert(message: "로그인 실패: \(error.localizedDescription)")
+            }
         }
-        
-        let loginResultAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let successAction = UIAlertAction(title: "ok", style: .default)
-        loginResultAlert.addAction(successAction)
-        present(loginResultAlert, animated: true)
+    }
+    
+    private func showAlert(message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let successAction = UIAlertAction(title: "ok", style: .default) { _ in
+            completion?()
+        }
+        alert.addAction(successAction)
+        present(alert, animated: true)
     }
     
     override func viewDidLoad() {
@@ -145,5 +152,8 @@ final class AccountViewController: UIViewController {
             $0.height.equalTo(40)
         }
     }
+    
+    @objc private func joinButtonTapped(_ sender: UIButton) {
+        viewModel?.join()
+    }
 }
-

@@ -57,13 +57,30 @@ final class LoginTextFiled: UITextField {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemRed]
         )
         
+        self.textColor = .systemRed
         underLineView.backgroundColor = .systemRed
+        
+        shakeTextField(textField: self)
+    }
+    
+    private func shakeTextField(textField: UITextField) -> Void{
+        UIView.animate(withDuration: 0.2, animations: {
+            textField.frame.origin.x -= 10
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2, animations: {
+                textField.frame.origin.x += 20
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.2, animations: {
+                    textField.frame.origin.x -= 10
+                })
+            })
+        })
     }
 }
 
 extension LoginTextFiled {
     @objc func beganEditing() {
-        setupPlaceholder()
+        self.textColor = .systemGray
         underLineView.backgroundColor = self.tintColor
     }
     

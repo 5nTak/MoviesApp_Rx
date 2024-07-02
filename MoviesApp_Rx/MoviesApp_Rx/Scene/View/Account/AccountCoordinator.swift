@@ -34,4 +34,12 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
         accountViewController.viewModel = accountViewModel
         self.navigationController?.tabBarItem = tabBarItem
     }
+    
+    func showSignUp() {
+        let signUpCoordinator = SignUpCoordinator(
+            navigationController: self.navigationController,
+            finishDelegate: self
+        )
+        signUpCoordinator.start()
+    }
 }
