@@ -55,6 +55,8 @@
 		4567A9B92C2EB6CC00860A6F /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 4567A9B82C2EB6CC00860A6F /* FirebaseVertexAI-Preview */; };
 		4567A9BB2C2EB74F00860A6F /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9BA2C2EB74F00860A6F /* SignUpViewController.swift */; };
 		4567A9BD2C2EB8D700860A6F /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9BC2C2EB8D700860A6F /* SignUpCoordinator.swift */; };
+		4567A9BF2C33C91C00860A6F /* MyInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */; };
+		4567A9C12C33C93F00860A6F /* MyInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */; };
 		457A6A722B0B3F29003FF1AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A712B0B3F29003FF1AE /* AppDelegate.swift */; };
 		457A6A742B0B3F29003FF1AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A732B0B3F29003FF1AE /* SceneDelegate.swift */; };
 		457A6A762B0B3F29003FF1AE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A752B0B3F29003FF1AE /* HomeViewController.swift */; };
@@ -132,6 +134,8 @@
 		4567A9802C2EB5FD00860A6F /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		4567A9BA2C2EB74F00860A6F /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		4567A9BC2C2EB8D700860A6F /* SignUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCoordinator.swift; sourceTree = "<group>"; };
+		4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewController.swift; sourceTree = "<group>"; };
+		4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewModel.swift; sourceTree = "<group>"; };
 		457A6A6E2B0B3F29003FF1AE /* MoviesApp_Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesApp_Rx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		457A6A712B0B3F29003FF1AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		457A6A732B0B3F29003FF1AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -613,6 +617,7 @@
 			children = (
 				45EB9BAB2B73402D00CBFCA1 /* AccountViewController.swift */,
 				4567A9BA2C2EB74F00860A6F /* SignUpViewController.swift */,
+				4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -622,6 +627,7 @@
 			children = (
 				45EB9BB02B7340B300CBFCA1 /* AccountViewModel.swift */,
 				4567A9802C2EB5FD00860A6F /* SignUpViewModel.swift */,
+				4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -801,6 +807,7 @@
 				45DD56F92B25E282005E5493 /* LatestMovieEndpoint.swift in Sources */,
 				457A6A902B0B47B6003FF1AE /* DefaultNetworkProvider.swift in Sources */,
 				45EB9BAE2B73407800CBFCA1 /* AccountCoordinator.swift in Sources */,
+				4567A9C12C33C93F00860A6F /* MyInfoViewModel.swift in Sources */,
 				45C184E12BDB7BC700C6A668 /* SearchCollectionDetailCoordinator.swift in Sources */,
 				457A6ABC2B13348F003FF1AE /* HomeViewModel.swift in Sources */,
 				457A6AA02B0DF330003FF1AE /* HomeCollectionHeaderView.swift in Sources */,
@@ -840,6 +847,7 @@
 				457A6ABA2B120927003FF1AE /* MovieResponseDTO.swift in Sources */,
 				45535DB52B4D199D00549DAF /* HomeDetailViewController.swift in Sources */,
 				45C184E32BDC93E300C6A668 /* Contents.swift in Sources */,
+				4567A9BF2C33C91C00860A6F /* MyInfoViewController.swift in Sources */,
 				45C184D22BDB75C100C6A668 /* DetailCollectionEndpoint.swift in Sources */,
 				458A0BA72B84AAB800C889D5 /* SearchCoordinator.swift in Sources */,
 				457A6A722B0B3F29003FF1AE /* AppDelegate.swift in Sources */,

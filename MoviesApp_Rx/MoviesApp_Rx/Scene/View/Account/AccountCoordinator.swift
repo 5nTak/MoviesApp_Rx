@@ -42,4 +42,9 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
         )
         signUpCoordinator.start()
     }
+    
+    func showMyInfo() {
+        let myInfoViewController = MyInfoViewController()
+        self.navigationController?.setViewControllers([myInfoViewController], animated: true)
+    }
 }
