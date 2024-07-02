@@ -45,6 +45,17 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func showMyInfo() {
         let myInfoViewController = MyInfoViewController()
+        let myInfoViewModel = MyInfoViewModel()
+        myInfoViewModel.coordinator = self
+        myInfoViewController.viewModel = myInfoViewModel
         self.navigationController?.setViewControllers([myInfoViewController], animated: true)
+    }
+    
+    func showLogin() {
+        let accountViewController = AccountViewController()
+        let accountViewModel = AccountViewModel()
+        accountViewModel.coordinator = self
+        accountViewController.viewModel = accountViewModel
+        self.navigationController?.setViewControllers([accountViewController], animated: true)
     }
 }

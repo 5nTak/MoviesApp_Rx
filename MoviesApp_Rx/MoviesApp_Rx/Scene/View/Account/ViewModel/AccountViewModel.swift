@@ -13,6 +13,7 @@ enum AccountViewString: String {
     case email = "Email"
     case password = "Password"
     case login = "Login"
+    case logout = "Logout"
     case loginResult = "Result"
     case inputError = "Check input value"
     case successLogin = "Success !!"
@@ -39,5 +40,9 @@ final class AccountViewModel {
                 completion(.success(()))
             }
         }
+    }
+    
+    func showMyInfo() {
+        coordinator?.showMyInfo()
     }
 }

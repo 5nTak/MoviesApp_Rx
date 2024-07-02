@@ -8,5 +8,9 @@
 import Foundation
 
 final class MyInfoViewModel {
+    var coordinator: AccountCoordinator?
     
+    func showLogin() {
+        coordinator?.showLogin()
+    }
 }
