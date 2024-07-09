@@ -35,9 +35,9 @@ final class AppCoordinator: Coordinator {
         
         tabBar.setupTabs(with: [homeCoordinator, searchCoordinator, accountCoordinator])
         
-        if isLoggedIn() {
-            accountCoordinator.showMyInfo()
-        }
+//        if isLoggedIn() {
+//            accountCoordinator.showMyInfo(email: <#T##String#>, nickname: <#T##String#>)
+//        }
     }
     
     func start() {
@@ -48,9 +48,9 @@ final class AppCoordinator: Coordinator {
         self.setupTabs(for: rootViewController)
     }
     
-    private func isLoggedIn() -> Bool {
-        return Auth.auth().currentUser == nil
-    }
+//    private func isLoggedIn() -> Bool {
+//        return Auth.auth().currentUser != nil
+//    }
 }
 
 extension AppCoordinator: CoordinationFinishDelegate { }

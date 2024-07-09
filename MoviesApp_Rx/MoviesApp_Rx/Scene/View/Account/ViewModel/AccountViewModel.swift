@@ -8,21 +8,10 @@
 import Foundation
 import FirebaseAuth
 
-enum AccountViewString: String {
-    case id = "ID"
-    case email = "Email"
-    case password = "Password"
-    case login = "Login"
-    case logout = "Logout"
-    case loginResult = "Result"
-    case inputError = "Check input value"
-    case successLogin = "Success !!"
-    case join = "Join"
-    case findPassword = "Find password"
-}
-
 final class AccountViewModel {
     var coordinator: AccountCoordinator?
+//    var email: String = ""
+//    var nickname: String = ""
     
     func join() {
         coordinator?.showSignUp()
@@ -41,8 +30,8 @@ final class AccountViewModel {
             }
         }
     }
-    
-    func showMyInfo() {
-        coordinator?.showMyInfo()
-    }
+//    
+//    func showMyInfo() {
+//        coordinator?.showMyInfo(email: email, nickname: nickname)
+//    }
 }

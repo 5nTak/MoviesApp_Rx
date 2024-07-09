@@ -83,7 +83,7 @@ final class AccountViewController: UIViewController {
             switch result {
             case .success:
                 self?.showAlert(message: AccountViewString.successLogin.rawValue) {
-                    self?.viewModel?.coordinator?.showMyInfo()
+                    self?.viewModel?.coordinator?.showMyInfo(email: email)
                 }
             case .failure(let error):
                 self?.showAlert(message: "로그인 실패: \(error.localizedDescription)")

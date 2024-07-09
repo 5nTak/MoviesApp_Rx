@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class SignUpViewController: UIViewController {
     var viewModel: SignUpViewModel?
@@ -71,6 +72,7 @@ final class SignUpViewController: UIViewController {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             $0.height.equalTo(40)
         }
+
         signUpButton.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(spacing * 2)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)

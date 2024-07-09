@@ -58,6 +58,11 @@
 		4567A9BF2C33C91C00860A6F /* MyInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */; };
 		4567A9C12C33C93F00860A6F /* MyInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */; };
 		4567A9C32C33CE4600860A6F /* UIViewController+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C22C33CE4600860A6F /* UIViewController+extension.swift */; };
+		4567A9C62C33DFDD00860A6F /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C52C33DFDD00860A6F /* ProfileCell.swift */; };
+		4567A9C82C33DFE700860A6F /* StarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C72C33DFE700860A6F /* StarCell.swift */; };
+		4567A9CA2C33E00A00860A6F /* AccountViewString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9C92C33E00A00860A6F /* AccountViewString.swift */; };
+		4567A9CC2C33E26800860A6F /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9CB2C33E26800860A6F /* SettingCell.swift */; };
+		4567A9CE2C33E27B00860A6F /* MyInfoCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567A9CD2C33E27B00860A6F /* MyInfoCollectionHeader.swift */; };
 		457A6A722B0B3F29003FF1AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A712B0B3F29003FF1AE /* AppDelegate.swift */; };
 		457A6A742B0B3F29003FF1AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A732B0B3F29003FF1AE /* SceneDelegate.swift */; };
 		457A6A762B0B3F29003FF1AE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457A6A752B0B3F29003FF1AE /* HomeViewController.swift */; };
@@ -138,6 +143,11 @@
 		4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewController.swift; sourceTree = "<group>"; };
 		4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoViewModel.swift; sourceTree = "<group>"; };
 		4567A9C22C33CE4600860A6F /* UIViewController+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+extension.swift"; sourceTree = "<group>"; };
+		4567A9C52C33DFDD00860A6F /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		4567A9C72C33DFE700860A6F /* StarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarCell.swift; sourceTree = "<group>"; };
+		4567A9C92C33E00A00860A6F /* AccountViewString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewString.swift; sourceTree = "<group>"; };
+		4567A9CB2C33E26800860A6F /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		4567A9CD2C33E27B00860A6F /* MyInfoCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCollectionHeader.swift; sourceTree = "<group>"; };
 		457A6A6E2B0B3F29003FF1AE /* MoviesApp_Rx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesApp_Rx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		457A6A712B0B3F29003FF1AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		457A6A732B0B3F29003FF1AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -303,6 +313,17 @@
 				45535DB82B4D19CE00549DAF /* HomeDetailViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		4567A9C42C33DFB800860A6F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				4567A9C52C33DFDD00860A6F /* ProfileCell.swift */,
+				4567A9C72C33DFE700860A6F /* StarCell.swift */,
+				4567A9CB2C33E26800860A6F /* SettingCell.swift */,
+				4567A9CD2C33E27B00860A6F /* MyInfoCollectionHeader.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		457A6A652B0B3F29003FF1AE = {
@@ -604,13 +625,34 @@
 			path = TabBar;
 			sourceTree = "<group>";
 		};
+		45DD6C0C2C368FE4006D831F /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				4567A9BA2C2EB74F00860A6F /* SignUpViewController.swift */,
+				4567A9802C2EB5FD00860A6F /* SignUpViewModel.swift */,
+				4567A9BC2C2EB8D700860A6F /* SignUpCoordinator.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		45DD6C0D2C368FEF006D831F /* MyInfoView */ = {
+			isa = PBXGroup;
+			children = (
+				4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */,
+				4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */,
+				4567A9C42C33DFB800860A6F /* Cell */,
+			);
+			path = MyInfoView;
+			sourceTree = "<group>";
+		};
 		45EB9BA92B733FF000CBFCA1 /* Account */ = {
 			isa = PBXGroup;
 			children = (
 				45EB9BAA2B73401900CBFCA1 /* View */,
 				45EB9BAF2B7340A800CBFCA1 /* ViewModel */,
 				45EB9BAD2B73407800CBFCA1 /* AccountCoordinator.swift */,
-				4567A9BC2C2EB8D700860A6F /* SignUpCoordinator.swift */,
+				45DD6C0D2C368FEF006D831F /* MyInfoView */,
+				45DD6C0C2C368FE4006D831F /* SignUp */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -619,8 +661,6 @@
 			isa = PBXGroup;
 			children = (
 				45EB9BAB2B73402D00CBFCA1 /* AccountViewController.swift */,
-				4567A9BA2C2EB74F00860A6F /* SignUpViewController.swift */,
-				4567A9BE2C33C91C00860A6F /* MyInfoViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -629,8 +669,7 @@
 			isa = PBXGroup;
 			children = (
 				45EB9BB02B7340B300CBFCA1 /* AccountViewModel.swift */,
-				4567A9802C2EB5FD00860A6F /* SignUpViewModel.swift */,
-				4567A9C02C33C93F00860A6F /* MyInfoViewModel.swift */,
+				4567A9C92C33E00A00860A6F /* AccountViewString.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -799,6 +838,7 @@
 			files = (
 				45EB9BAC2B73402D00CBFCA1 /* AccountViewController.swift in Sources */,
 				45C184D02BDB74C500C6A668 /* DetailCollectionResponseDTO.swift in Sources */,
+				4567A9CE2C33E27B00860A6F /* MyInfoCollectionHeader.swift in Sources */,
 				45535DBF2B56D80500549DAF /* MovieUseCase.swift in Sources */,
 				45E1DAB52BD130CC0039DFD7 /* TrendingCell.swift in Sources */,
 				457A6A8E2B0B47A9003FF1AE /* NetworkProvider.swift in Sources */,
@@ -854,12 +894,16 @@
 				45C184D22BDB75C100C6A668 /* DetailCollectionEndpoint.swift in Sources */,
 				458A0BA72B84AAB800C889D5 /* SearchCoordinator.swift in Sources */,
 				4567A9C32C33CE4600860A6F /* UIViewController+extension.swift in Sources */,
+				4567A9C62C33DFDD00860A6F /* ProfileCell.swift in Sources */,
 				457A6A722B0B3F29003FF1AE /* AppDelegate.swift in Sources */,
+				4567A9C82C33DFE700860A6F /* StarCell.swift in Sources */,
 				457A6AC72B1E0349003FF1AE /* PopularMovieEndpoint.swift in Sources */,
+				4567A9CA2C33E00A00860A6F /* AccountViewString.swift in Sources */,
 				457A6AA32B11EE2B003FF1AE /* Movie.swift in Sources */,
 				4567A9812C2EB5FD00860A6F /* SignUpViewModel.swift in Sources */,
 				457A6A8C2B0B479C003FF1AE /* NetworkError.swift in Sources */,
 				458A0BC42B874D4800C889D5 /* SearchBarView.swift in Sources */,
+				4567A9CC2C33E26800860A6F /* SettingCell.swift in Sources */,
 				458A0BA52B84AAB200C889D5 /* SearchViewModel.swift in Sources */,
 				45535DB12B4D152000549DAF /* HomeCoordinator.swift in Sources */,
 				45C184DF2BDB7BC700C6A668 /* SearchCollectionDetailViewController.swift in Sources */,
