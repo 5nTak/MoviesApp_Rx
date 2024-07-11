@@ -267,6 +267,10 @@
 		45535DAA2B4D013D00549DAF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				457A6AC42B1DDAF0003FF1AE /* UIImageView+extension.swift */,
+				45EB9BB22B73591C00CBFCA1 /* LoginTextField.swift */,
+				45E1DAB02BD106A50039DFD7 /* UIColor+extension.swift */,
+				4567A9C22C33CE4600860A6F /* UIViewController+extension.swift */,
 				45535DAB2B4D014800549DAF /* Coordination */,
 			);
 			path = Common;
@@ -524,10 +528,6 @@
 		457A6AC32B1DDADC003FF1AE /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				457A6AC42B1DDAF0003FF1AE /* UIImageView+extension.swift */,
-				45EB9BB22B73591C00CBFCA1 /* LoginTextField.swift */,
-				45E1DAB02BD106A50039DFD7 /* UIColor+extension.swift */,
-				4567A9C22C33CE4600860A6F /* UIViewController+extension.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
