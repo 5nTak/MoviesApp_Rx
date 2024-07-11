@@ -58,6 +58,7 @@ final class MyInfoViewController: UIViewController {
         }
     }
     
+    // 나중에 ViewModel로 분리
     @objc private func executeLogout() {
         do {
             try Auth.auth().signOut()
@@ -99,7 +100,7 @@ extension MyInfoViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
         
@@ -109,16 +110,16 @@ extension MyInfoViewController {
     private func createStarSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1)
-        )
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1/2)
         )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1/2),
+            heightDimension: .fractionalHeight(0.7)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 2)
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -163,35 +164,36 @@ extension MyInfoViewController {
     private func configureDataSource() {
         rxDataSources = RxCollectionViewSectionedReloadDataSource<AccountSectionModel>(
             configureCell: { rxDataSources, collectionView, indexPath, item in
-                switch indexPath.section {
-                case 0:
+                switch item {
+                case .profile(let email):
                     guard let profileCell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: ProfileCell.identifier,
                         for: indexPath
                     ) as? ProfileCell else { return UICollectionViewCell() }
-                    profileCell.setup(email: self.viewModel?.email ?? "Email")
-                    
+                    profileCell.setup(email: email)
                     return profileCell
-                case 1:
+                case .star(let movie):
                     guard let starCell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: StarCell.identifier,
                         for: indexPath
                     ) as? StarCell else { return UICollectionViewCell() }
-                    starCell.setFailedLoadImage()
+                    starCell.setup(title: movie.title)
+                    if movie.posterPath == nil {
+                        starCell.setFailedLoadImage()
+                    } else {
+                        starCell.loadImage(url: movie.posterPath ?? "")
+                    }
                     return starCell
-                case 2:
+                case .setting(let option):
                     guard let settingCell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: SettingCell.identifier,
                         for: indexPath
                     ) as? SettingCell else { return UICollectionViewCell() }
-                    
                     settingCell.setLogoutButton()
                     settingCell.logoutButton.addTarget(self, action: #selector(self.executeLogout), for: .touchUpInside)
                     return settingCell
-                default:
-                    return UICollectionViewCell()
                 }
-        },
+            },
             configureSupplementaryView: { rxDataSources, collectionView, kind, indexPath in
                 let sectionModel = rxDataSources.sectionModels[indexPath.section]
                 guard let section = collectionView.dequeueReusableSupplementaryView(

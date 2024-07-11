@@ -45,7 +45,12 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func showMyInfo(email: String) {
         let myInfoViewController = MyInfoViewController()
-        let myInfoViewModel = MyInfoViewModel(email: email)
+        let myInfoViewModel = MyInfoViewModel(
+            email: email,
+            searchUseCase: SearchUseCase(
+                searchRepository: DefaultSearchRepository()
+            )
+        )
         myInfoViewModel.coordinator = self
         myInfoViewController.viewModel = myInfoViewModel
         self.navigationController?.setViewControllers([myInfoViewController], animated: true)

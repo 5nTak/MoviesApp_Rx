@@ -15,6 +15,7 @@ final class DetailCoordinator: Coordinator {
     weak var navigationController: UINavigationController?
     
     private var contents: Contents
+
     private let title: String
     
     init(

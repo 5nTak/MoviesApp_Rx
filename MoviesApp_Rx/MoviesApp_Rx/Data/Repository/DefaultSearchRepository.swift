@@ -15,6 +15,15 @@ final class DefaultSearchRepository: SearchRepository {
         self.networkProvider = networkProvider
     }
     
+    func fetchSearchMovie(id: Int) -> Single<Movie> {
+        let request = MovieEndpoint(id: id)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movie = response.toMovie()
+                return movie
+            }
+    }
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList> {
         let request = SearchMovieEndpoint(searchText: searchText)
         return self.networkProvider.rx.request(request)

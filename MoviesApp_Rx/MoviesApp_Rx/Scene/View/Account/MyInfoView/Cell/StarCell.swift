@@ -15,7 +15,7 @@ final class StarCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .systemGray
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFit
         imageView.kf.indicatorType = .activity
         return imageView
     }()
@@ -56,18 +56,17 @@ final class StarCell: UICollectionViewCell {
         ].forEach { contentView.addSubview($0) }
         
         imageView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.95)
+            $0.top.leading.trailing.equalToSuperview().inset(5)
+            $0.height.equalToSuperview().multipliedBy(0.8)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(imageView.snp.bottom).offset(5)
-            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview().inset(5)
         }
         
-        imageView.layer.cornerRadius = 20
+//        imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
     }
     

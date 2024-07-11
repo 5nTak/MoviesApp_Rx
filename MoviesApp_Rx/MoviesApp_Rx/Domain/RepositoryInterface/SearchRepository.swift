@@ -9,6 +9,8 @@ import Foundation
 import RxSwift
 
 protocol SearchRepository {
+    func fetchSearchMovie(id: Int) -> Single<Movie>
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList>
     
     func fetchSearchCollection(searchText: String) -> Single<CollectionList>

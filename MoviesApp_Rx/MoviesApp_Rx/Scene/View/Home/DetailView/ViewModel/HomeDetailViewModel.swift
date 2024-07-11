@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import UIKit
+import RxSwift
+import RxCocoa
 import Kingfisher
 
 final class DetailViewModel {
@@ -21,15 +22,22 @@ final class DetailViewModel {
     var voteAverage: Double = 0.0
     var voteCount: Int = 0
     
+    private let favoritesManager = FavoritesManager()
+    private let disposeBag = DisposeBag()
+    
+    let isFavorite = BehaviorRelay<Bool>(value: false)
+    
     init(movie: Movie, title: String) {
         self.item = movie
         self.title = title
         self.fetchMovie(for: movie)
+        checkIfFavorite()
     }
     
     init(collection: Collection) {
         self.item = collection
         self.fetchCollection(for: collection)
+        checkIfFavorite()
     }
     
     private func fetchMovie(for movie: Movie) {
@@ -54,5 +62,34 @@ final class DetailViewModel {
         let voteAveraged = round(primeNumber * digit) / digit
         
         return voteAveraged
+    }
+    
+    private func checkIfFavorite() {
+        guard let movie = item as? Movie else { return }
+        
+        favoritesManager.isFavoriteMovie(movieId: movie.id)
+            .subscribe(onSuccess: { [weak self] isFavorite in
+                self?.isFavorite.accept(isFavorite)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func toggleFavorite() {
+        guard let movie = item as? Movie else { return }
+        
+        let isCurrentlyFavorite = isFavorite.value
+        let action: Completable
+        
+        if isCurrentlyFavorite {
+            action = favoritesManager.removeFavoriteMovie(movieId: movie.id)
+        } else {
+            action = favoritesManager.addFavoriteMovie(movieId: movie.id)
+        }
+        
+        action.subscribe(onCompleted: { [weak self] in
+            self?.isFavorite.accept(!isCurrentlyFavorite)
+        }, onError: { error in
+            print("Failed to toggle favorite: \(error)")
+        }).disposed(by: disposeBag)
     }
 }

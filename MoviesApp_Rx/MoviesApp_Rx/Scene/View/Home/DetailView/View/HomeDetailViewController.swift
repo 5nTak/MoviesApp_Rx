@@ -7,9 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class DetailViewController: UIViewController {
     private let viewModel: DetailViewModel
+    private let disposeBag = DisposeBag()
    
     private let posterView: UIImageView = {
         let imageView = UIImageView()
@@ -56,6 +59,13 @@ final class DetailViewController: UIViewController {
         return contentView
     }()
     
+    private let starButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .gray
+        return button
+    }()
+    
     init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -87,6 +97,21 @@ final class DetailViewController: UIViewController {
         releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
         voteAverageLabel.text = "Vote : \(viewModel.voteAverage)"
         voteCountLabel.text = "Vote Count : \(viewModel.voteCount)"
+        
+        viewModel.isFavorite
+            .asDriver()
+            .drive { [weak self] isFavorite in
+                let imageName = isFavorite ? "star.fill" : "star"
+                self?.starButton.setImage(UIImage(systemName: imageName), for: .normal)
+                self?.starButton.tintColor = isFavorite ? .yellow : .gray
+            }
+            .disposed(by: disposeBag)
+        
+        starButton.rx.tap
+            .bind { [weak self] in
+                self?.viewModel.toggleFavorite()
+            }
+            .disposed(by: disposeBag)
     }
     
     func loadImage(url: String) -> String {
@@ -102,6 +127,8 @@ final class DetailViewController: UIViewController {
     
     private func setupLayout() {
         self.title = viewModel.title
+        let barButtonItem = UIBarButtonItem(customView: starButton)
+        self.navigationItem.rightBarButtonItem = barButtonItem
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(posterView)

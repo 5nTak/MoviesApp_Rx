@@ -91,7 +91,7 @@ final class SignUpViewController: UIViewController {
         
         viewModel?.signUp(email: email, password: password) { [weak self] result in
             switch result {
-            case .success:
+            case .success(let userId):
                 self?.showAlert(message: "회원 가입 성공!") {
                     self?.navigationController?.popViewController(animated: true)
                 }
