@@ -58,7 +58,7 @@ final class SearchViewController: UIViewController {
             .subscribe(onNext: { indexPath in
                 guard let item = self.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
                 if let movie = item as? Movie {
-                    self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title)
+                    self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title, movieId: movie.id)
                 } else if let collection = item as? Collection {
                     self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
                 }

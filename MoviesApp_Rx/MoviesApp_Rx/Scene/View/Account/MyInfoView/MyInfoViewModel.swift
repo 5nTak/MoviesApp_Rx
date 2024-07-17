@@ -39,7 +39,7 @@ final class MyInfoViewModel {
     private let profileSection = BehaviorRelay<[AccountSection]>(value: [])
     private let starSection = BehaviorRelay<[AccountSectionItem]>(value: [])
     private let settingSection = BehaviorRelay<[AccountSection]>(value: [])
-    private let favoritesManager = FavoritesManager()
+    private let favoritesManager = FavoritesManager.shared()
     private let searchUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
     
@@ -48,6 +48,8 @@ final class MyInfoViewModel {
     init(email: String, searchUseCase: SearchUseCase) {
         self.email = email
         self.searchUseCase = searchUseCase
+        self.bindFavorites()
+        self.setSections()
     }
     
     func showLogin() {
@@ -55,11 +57,11 @@ final class MyInfoViewModel {
     }
     
     func setSections() {
-        setProfile()
-        setStar()
-        showSetting()
+        self.setProfile()
+        self.showSetting()
         
         Observable.combineLatest(profileSection, starSection, settingSection)
+            .observe(on: MainScheduler.instance)
             .map { profile, star, setting in
                 return [
                     AccountSectionModel(title: MyInfoSection.profile.description, items: profile.flatMap { $0.items }),
@@ -71,35 +73,42 @@ final class MyInfoViewModel {
             .disposed(by: disposeBag)
     }
     
+    private func bindFavorites() {
+        favoritesManager.favoriteMoviesSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] movieIds in
+                self?.fetchStarSection(movieIds: movieIds)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func fetchStarSection(movieIds: [Int]) {
+        var starItems = [AccountSectionItem]()
+        let fetchGroup = DispatchGroup()
+        
+        movieIds.forEach { id in
+            fetchGroup.enter()
+            searchUseCase.fetchSearchMovie(id: id)
+                .asObservable()
+                .subscribe(onNext: { movie in
+                    starItems.append(.star(movie: movie))
+                    fetchGroup.leave()
+                }, onError: { _ in
+                    fetchGroup.leave()
+                })
+                .disposed(by: disposeBag)
+        }
+        
+        fetchGroup.notify(queue: .main) { [weak self] in
+            self?.starSection.accept(starItems)
+            self?.setSections()
+        }
+    }
+    
     private func setProfile() {
         let profileItems: [AccountSectionItem] = [.profile(email: self.email)]
         let section = AccountSection(model: MyInfoSection.profile.description, items: profileItems)
         profileSection.accept([section])
-    }
-    
-    private func setStar() {
-        favoritesManager.getFavoriteMovies()
-            .subscribe(onSuccess: { [weak self] movieIds in
-                guard let self = self else { return }
-                movieIds.forEach { id in
-                    self.loadStar(id: id)
-                }
-            }, onFailure: { error in
-                print("Error fetching favorite movies: \(error)")
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    private func loadStar(id: Int) {
-        searchUseCase.fetchSearchMovie(id: id)
-            .asObservable()
-            .subscribe(onNext: { [weak self] movie in
-                guard let self = self else { return }
-                var currentItems = self.starSection.value
-                currentItems.append(.star(movie: movie))
-                self.starSection.accept(currentItems)
-            })
-            .disposed(by: disposeBag)
     }
     
     private func showSetting() {

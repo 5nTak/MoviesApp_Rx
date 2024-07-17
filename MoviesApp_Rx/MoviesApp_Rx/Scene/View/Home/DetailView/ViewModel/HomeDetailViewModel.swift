@@ -13,7 +13,7 @@ import Kingfisher
 final class DetailViewModel {
     weak var coordinator: DetailCoordinator?
     
-    private var item: ItemData
+    private var movie: Movie
     
     var title: String?
     var posterPath: String?
@@ -22,22 +22,22 @@ final class DetailViewModel {
     var voteAverage: Double = 0.0
     var voteCount: Int = 0
     
-    private let favoritesManager = FavoritesManager()
+    private let movieId: Int
+    private let favoritesManager = FavoritesManager.shared()
     private let disposeBag = DisposeBag()
     
     let isFavorite = BehaviorRelay<Bool>(value: false)
     
-    init(movie: Movie, title: String) {
-        self.item = movie
+    init(movie: Movie, title: String, movieId: Int) {
+        self.movie = movie
         self.title = title
+        self.movieId = movieId
         self.fetchMovie(for: movie)
-        checkIfFavorite()
-    }
-    
-    init(collection: Collection) {
-        self.item = collection
-        self.fetchCollection(for: collection)
-        checkIfFavorite()
+        favoritesManager.isFavoriteMovie(movieId: movieId)
+            .subscribe(onSuccess: { [weak self] isFavorite in
+                self?.isFavorite.accept(isFavorite)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func fetchMovie(for movie: Movie) {
@@ -48,15 +48,6 @@ final class DetailViewModel {
         self.voteCount = movie.voteCount
     }
     
-    private func fetchCollection(for collection: Collection) {
-        self.title = collection.name
-        self.posterPath = collection.posterPath
-        self.overView = collection.overview
-        self.releaseDate = "알 수 없음"
-        self.voteAverage = 0.0
-        self.voteCount = 0
-    }
-    
     private func roundVoteAveragePoint(primeNumber: Double) -> Double {
         let digit: Double = pow(10, 2)
         let voteAveraged = round(primeNumber * digit) / digit
@@ -64,26 +55,34 @@ final class DetailViewModel {
         return voteAveraged
     }
     
-    private func checkIfFavorite() {
-        guard let movie = item as? Movie else { return }
-        
-        favoritesManager.isFavoriteMovie(movieId: movie.id)
-            .subscribe(onSuccess: { [weak self] isFavorite in
-                self?.isFavorite.accept(isFavorite)
-            })
-            .disposed(by: disposeBag)
-    }
+//    func toggleFavorite() {
+//        if isFavorite.value {
+//            favoritesManager.removeFavoriteMovie(movieId: movieId)
+//            isFavorite.accept(false)
+//        } else {
+//            favoritesManager.addFavoriteMovie(movieId: movieId)
+//            isFavorite.accept(true)
+//        }
+//    }
+    
+//    private func checkIfFavorite() {
+//        guard let movie = item as? Movie else { return }
+//        
+//        favoritesManager.isFavoriteMovie(movieId: movie.id)
+//            .subscribe(onSuccess: { [weak self] isFavorite in
+//                self?.isFavorite.accept(isFavorite)
+//            })
+//            .disposed(by: disposeBag)
+//    }
     
     func toggleFavorite() {
-        guard let movie = item as? Movie else { return }
-        
         let isCurrentlyFavorite = isFavorite.value
         let action: Completable
         
         if isCurrentlyFavorite {
-            action = favoritesManager.removeFavoriteMovie(movieId: movie.id)
+            action = favoritesManager.removeFavoriteMovie(movieId: movieId)
         } else {
-            action = favoritesManager.addFavoriteMovie(movieId: movie.id)
+            action = favoritesManager.addFavoriteMovie(movieId: movieId)
         }
         
         action.subscribe(onCompleted: { [weak self] in

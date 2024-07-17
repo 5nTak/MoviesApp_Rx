@@ -59,7 +59,7 @@ final class SearchCollectionDetailViewController: UIViewController {
             .subscribe(onNext: { [weak self] indexPath in
                 guard let content = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
                 let movie = content.toMovie()
-                self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title)
+                self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
             })
             .disposed(by: disposeBag)
     }

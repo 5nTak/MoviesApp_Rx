@@ -59,7 +59,7 @@ final class HomeViewController: UIViewController {
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] indexPath in
                 guard let movie = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
-                self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title)
+                self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
             })
             .disposed(by: disposeBag)
     }

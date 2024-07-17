@@ -48,10 +48,11 @@ final class SearchCollectionDetailCoordinator: Coordinator, CoordinationFinishDe
         self.navigationController?.pushViewController(collectionDetailViewController, animated: true)
     }
     
-    func detailFlow(with contents: Contents, title: String) {
+    func detailFlow(with movie: Movie, title: String, movieId: Int) {
         let detailCoordinator = DetailCoordinator(
-            contents: contents,
+            movie: movie,
             title: title,
+            movieId: movieId,
             navigationController: self.navigationController,
             finishDelegate: self)
         self.childCoordinator.append(detailCoordinator)
