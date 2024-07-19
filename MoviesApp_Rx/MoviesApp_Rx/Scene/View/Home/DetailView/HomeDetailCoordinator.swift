@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DetailCoordinator: Coordinator {
+final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     weak var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()

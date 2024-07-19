@@ -29,18 +29,20 @@ final class FavoritesManager {
     }
     
     private func observeFavorites() {
-        db.collection("users").document(self.userId).collection("favorites").rx.observeSnapshot()
-            .map { snapshot in
-                return snapshot.documents
-                    .compactMap { $0.documentID }
-                    .compactMap { Int($0) }
-            }
-            .subscribe(onNext: { [weak self] movieIds in
-                self?.favoriteMoviesSubject.onNext(movieIds)
-            }, onError: { error in
-                print("Error observing favorites: \(error)")
-            })
-            .disposed(by: disposeBag)
+        if Auth.auth().currentUser != nil {
+            db.collection("users").document(self.userId).collection("favorites").rx.observeSnapshot()
+                .map { snapshot in
+                    return snapshot.documents
+                        .compactMap { $0.documentID }
+                        .compactMap { Int($0) }
+                }
+                .subscribe(onNext: { [weak self] movieIds in
+                    self?.favoriteMoviesSubject.onNext(movieIds)
+                }, onError: { error in
+                    print("Error observing favorites: \(error)")
+                })
+                .disposed(by: disposeBag)
+        }
     }
     
     func addFavoriteMovie(movieId: Int) -> Completable {

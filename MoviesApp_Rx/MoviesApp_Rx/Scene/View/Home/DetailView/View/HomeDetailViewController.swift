@@ -9,11 +9,12 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import FirebaseAuth
 
 final class DetailViewController: UIViewController {
     private let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
-   
+    
     private let posterView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "xmark.icloud")
@@ -81,6 +82,7 @@ final class DetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupLayout()
         bindViewModel()
+        starButtonTapped()
         spaceBetweenLines()
     }
     
@@ -92,24 +94,36 @@ final class DetailViewController: UIViewController {
             let posterImageUrl = self.loadImage(url: viewModel.posterPath ?? "")
             posterView.setImageCache(with: posterImageUrl)
         }
-
+        
         overViewLabel.text = "  Introduce : \n \(viewModel.overView)"
         releaseDateLabel.text = "Release Date : \(viewModel.releaseDate.isEmpty ? "Unknowned" : viewModel.releaseDate)"
         voteAverageLabel.text = "Vote : \(viewModel.voteAverage)"
         voteCountLabel.text = "Vote Count : \(viewModel.voteCount)"
-        
-        viewModel.isFavorite
+    }
+    
+    private func starButtonTapped() {
+        starButton.rx.tap
+            .bind { [weak self] in
+                guard let self = self else { 
+                    return
+                }
+                if Auth.auth().currentUser != nil {
+                    setupStarButton()
+                    viewModel.toggleFavorite()
+                } else {
+                    self.showAlert(message: "로그인이 필요한 기능입니다.")
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupStarButton() {
+        self.viewModel.isFavorite
             .asDriver()
             .drive { [weak self] isFavorite in
                 let imageName = isFavorite ? "star.fill" : "star"
                 self?.starButton.setImage(UIImage(systemName: imageName), for: .normal)
                 self?.starButton.tintColor = isFavorite ? .yellow : .gray
-            }
-            .disposed(by: disposeBag)
-        
-        starButton.rx.tap
-            .bind { [weak self] in
-                self?.viewModel.toggleFavorite()
             }
             .disposed(by: disposeBag)
     }
@@ -147,27 +161,27 @@ final class DetailViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.width.equalToSuperview().inset(10)
         }
-
+        
         posterView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(10)
             $0.height.equalTo((UIScreen.main.bounds.height * 3) / 5)
         }
-
+        
         overViewLabel.snp.makeConstraints {
             $0.top.equalTo(posterView.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-
+        
         releaseDateLabel.snp.makeConstraints {
             $0.top.equalTo(overViewLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-
+        
         voteAverageLabel.snp.makeConstraints {
             $0.top.equalTo(releaseDateLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(15)
         }
-
+        
         voteCountLabel.snp.makeConstraints {
             $0.top.equalTo(voteAverageLabel.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalToSuperview().inset(15)

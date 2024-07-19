@@ -9,6 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import Kingfisher
+import FirebaseAuth
 
 final class DetailViewModel {
     weak var coordinator: DetailCoordinator?
@@ -33,11 +34,15 @@ final class DetailViewModel {
         self.title = title
         self.movieId = movieId
         self.fetchMovie(for: movie)
-        favoritesManager.isFavoriteMovie(movieId: movieId)
-            .subscribe(onSuccess: { [weak self] isFavorite in
-                self?.isFavorite.accept(isFavorite)
-            })
-            .disposed(by: disposeBag)
+        if Auth.auth().currentUser != nil {
+            favoritesManager.isFavoriteMovie(movieId: movieId)
+                .subscribe(onSuccess: { [weak self] isFavorite in
+                    self?.isFavorite.accept(isFavorite)
+                }, onFailure: { error in
+                    print(error)
+                })
+                .disposed(by: disposeBag)
+        }
     }
     
     private func fetchMovie(for movie: Movie) {
@@ -54,26 +59,6 @@ final class DetailViewModel {
         
         return voteAveraged
     }
-    
-//    func toggleFavorite() {
-//        if isFavorite.value {
-//            favoritesManager.removeFavoriteMovie(movieId: movieId)
-//            isFavorite.accept(false)
-//        } else {
-//            favoritesManager.addFavoriteMovie(movieId: movieId)
-//            isFavorite.accept(true)
-//        }
-//    }
-    
-//    private func checkIfFavorite() {
-//        guard let movie = item as? Movie else { return }
-//        
-//        favoritesManager.isFavoriteMovie(movieId: movie.id)
-//            .subscribe(onSuccess: { [weak self] isFavorite in
-//                self?.isFavorite.accept(isFavorite)
-//            })
-//            .disposed(by: disposeBag)
-//    }
     
     func toggleFavorite() {
         let isCurrentlyFavorite = isFavorite.value

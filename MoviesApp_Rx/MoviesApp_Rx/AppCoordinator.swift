@@ -7,8 +7,6 @@
 
 import Foundation
 import UIKit
-import Firebase
-import FirebaseAuth
 
 final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController?
@@ -34,10 +32,6 @@ final class AppCoordinator: Coordinator {
         accountCoordinator.start()
         
         tabBar.setupTabs(with: [homeCoordinator, searchCoordinator, accountCoordinator])
-        
-//        if isLoggedIn() {
-//            accountCoordinator.showMyInfo(email: <#T##String#>, nickname: <#T##String#>)
-//        }
     }
     
     func start() {
@@ -47,10 +41,6 @@ final class AppCoordinator: Coordinator {
         
         self.setupTabs(for: rootViewController)
     }
-    
-//    private func isLoggedIn() -> Bool {
-//        return Auth.auth().currentUser != nil
-//    }
 }
 
 extension AppCoordinator: CoordinationFinishDelegate { }

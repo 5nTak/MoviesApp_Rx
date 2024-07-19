@@ -10,8 +10,6 @@ import FirebaseAuth
 
 final class AccountViewModel {
     var coordinator: AccountCoordinator?
-//    var email: String = ""
-//    var nickname: String = ""
     
     func join() {
         coordinator?.showSignUp()
@@ -30,8 +28,4 @@ final class AccountViewModel {
             }
         }
     }
-//    
-//    func showMyInfo() {
-//        coordinator?.showMyInfo(email: email, nickname: nickname)
-//    }
 }
