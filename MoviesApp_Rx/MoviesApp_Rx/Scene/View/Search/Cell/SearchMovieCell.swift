@@ -15,7 +15,7 @@ final class SearchMovieCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .systemGray
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFit
         imageView.kf.indicatorType = .activity
         return imageView
     }()

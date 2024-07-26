@@ -32,9 +32,8 @@ final class MyInfoCollectionHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         
         headerLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(30)
+            $0.top.leading.equalToSuperview().inset(30)
             $0.bottom.equalToSuperview()
-            $0.top.equalToSuperview().inset(30)
         }
     }
     

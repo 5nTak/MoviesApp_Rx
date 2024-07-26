@@ -129,10 +129,10 @@ extension SearchViewController {
             heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 30, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 10, bottom: 30, trailing: 10)
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.8),
-            heightDimension: .fractionalHeight(0.8)
+            widthDimension: .fractionalWidth(0.6),
+            heightDimension: .fractionalHeight(0.6)
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
@@ -174,7 +174,7 @@ extension SearchViewController {
         }
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(60)
+            heightDimension: .estimated(70)
         )
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
