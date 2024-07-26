@@ -45,36 +45,31 @@ final class ProfileCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
+        contentView.backgroundColor = .white
+        contentView.layer.borderColor = UIColor.systemGray5.cgColor
+        contentView.layer.borderWidth = 1
+        
         [
             profileImage,
-            emailLabel,
-            editButton
+            emailLabel
         ].forEach { contentView.addSubview($0) }
         
         profileImage.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20)
-            $0.top.bottom.equalToSuperview()
-            $0.height.equalToSuperview()
-            $0.width.equalTo(profileImage.snp.height)
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(10)
+            $0.width.equalToSuperview().dividedBy(5)
+            $0.height.equalTo(profileImage.snp.width)
         }
         
         emailLabel.snp.makeConstraints {
-            $0.leading.equalTo(profileImage.snp.trailing).offset(20)
-            $0.centerY.equalToSuperview()
-        }
-        
-        editButton.snp.makeConstraints {
-            $0.leading.equalTo(emailLabel.snp.trailing).offset(10)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.centerY.equalToSuperview()
-            $0.height.equalToSuperview().dividedBy(2)
-            $0.width.equalTo(editButton.snp.height)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(profileImage.snp.bottom).offset(10)
         }
         
         profileImage.layer.cornerRadius = 40
         profileImage.layer.masksToBounds = true
         profileImage.layer.borderWidth = 1
-        profileImage.layer.borderColor = UIColor.white.cgColor
+        profileImage.layer.borderColor = UIColor.systemGray5.cgColor
     }
     
     func setup(email: String) {

@@ -13,14 +13,14 @@ final class MyInfoCollectionHeaderView: UICollectionReusableView {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 25, weight: .bold)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.textColor = .reversedBackgroundColorAsset
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        backgroundColor = .secondarySystemBackground
         addSubview(headerLabel)
     }
     
@@ -32,7 +32,9 @@ final class MyInfoCollectionHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         
         headerLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(5)
+            $0.leading.equalToSuperview().inset(30)
+            $0.bottom.equalToSuperview()
+            $0.top.equalToSuperview().inset(30)
         }
     }
     

@@ -13,7 +13,8 @@ final class SettingCell: UICollectionViewCell {
     
     let logoutButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = .white
+        button.setTitleColor(.red, for: .normal)
         return button
     }()
     
@@ -27,18 +28,20 @@ final class SettingCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
+        contentView.backgroundColor = .white
+        contentView.layer.borderColor = UIColor.systemGray5.cgColor
+        contentView.layer.borderWidth = 1
+        
         [
             logoutButton
         ].forEach { contentView.addSubview($0) }
         
         logoutButton.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview().inset(10)
+            $0.top.leading.trailing.bottom.equalToSuperview()
         }
-        
-        logoutButton.layer.cornerRadius = 10
     }
     
     func setLogoutButton() {
-        logoutButton.setTitle("로그아웃", for: .normal)
+        logoutButton.setTitle("Sign out", for: .normal)
     }
 }

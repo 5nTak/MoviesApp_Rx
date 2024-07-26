@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class AccountViewController: UIViewController {
     var viewModel: AccountViewModel?
@@ -99,13 +100,11 @@ final class AccountViewController: UIViewController {
     }
     
     private func setupNavigatonBar() {
-        navigationItem.title = AccountViewString.login.rawValue
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.reversedBackgroundColorAsset]
+        navigationItem.title = AccountViewString.account.rawValue
     }
     
     private func setupLayout() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGray6
         
         [
             idTextField,

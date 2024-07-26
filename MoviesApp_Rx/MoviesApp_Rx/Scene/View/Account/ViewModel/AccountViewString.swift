@@ -14,6 +14,7 @@ enum AccountViewString: String {
     case login = "Login"
     case logout = "Logout"
     case loginResult = "Result"
+    case account = "Account"
     case inputError = "Check input value"
     case successLogin = "Success !!"
     case join = "Join"

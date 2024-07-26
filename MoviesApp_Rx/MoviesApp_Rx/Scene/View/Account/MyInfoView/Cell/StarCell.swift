@@ -47,9 +47,10 @@ final class StarCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
-        contentView.backgroundColor = .secondarySystemBackground
-        contentView.layer.cornerRadius = 20
-        contentView.layer.masksToBounds = true
+        contentView.backgroundColor = .white
+        contentView.layer.borderColor = UIColor.systemGray5.cgColor
+        contentView.layer.borderWidth = 1
+        
         [
             imageView,
             titleLabel
@@ -66,7 +67,6 @@ final class StarCell: UICollectionViewCell {
             $0.bottom.equalToSuperview().inset(5)
         }
         
-//        imageView.layer.cornerRadius = 20
         imageView.layer.masksToBounds = true
     }
     

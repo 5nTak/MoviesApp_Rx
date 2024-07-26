@@ -26,25 +26,20 @@ final class MyInfoViewController: UIViewController {
     private var rxDataSources: RxCollectionViewSectionedReloadDataSource<AccountSectionModel>?
     private let disposeBag = DisposeBag()
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = false
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        setupNavigatonBar()
         setupLayout()
         configureDataSource()
         viewModel?.setSections()
         bind()
     }
     
+    private func setupNavigatonBar() {
+        navigationItem.title = AccountViewString.account.rawValue
+    }
+    
     private func setupLayout() {
-        view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
         
         collectionView.backgroundColor = .secondarySystemBackground
@@ -95,14 +90,12 @@ extension MyInfoViewController {
         )
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1/10)
+            heightDimension: .fractionalHeight(1/6)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
-        let sectionHeader = self.createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 30, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
@@ -110,16 +103,18 @@ extension MyInfoViewController {
     private func createStarSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1/2)
+            heightDimension: .fractionalHeight(1)
         )
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1/2),
-            heightDimension: .fractionalHeight(0.7)
+            heightDimension: .fractionalHeight(0.35)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 2)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         let sectionHeader = self.createSectionHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -134,14 +129,12 @@ extension MyInfoViewController {
         )
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(1/6)
+            heightDimension: .fractionalHeight(1/18)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
-        let sectionHeader = self.createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 30, leading: 0, bottom: 20, trailing: 0)
         
         return section
     }
@@ -149,7 +142,7 @@ extension MyInfoViewController {
     private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(100)
+            heightDimension: .estimated(70)
         )
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
