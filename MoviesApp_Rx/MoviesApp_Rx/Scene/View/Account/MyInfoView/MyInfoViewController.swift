@@ -50,10 +50,23 @@ final class MyInfoViewController: UIViewController {
             viewModel?.sections
                 .bind(to: collectionView.rx.items(dataSource: dataSource))
                 .disposed(by: disposeBag)
+            
+            collectionView.rx.itemSelected
+                .compactMap { [weak self] indexPath -> Movie? in
+                    guard let self = self else { return nil }
+                    let item = dataSource[indexPath]
+                    if case let .star(movie) = item {
+                        return movie
+                    }
+                    return nil
+                }
+                .subscribe(onNext: { [weak self] movie in
+                    self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
+                })
+                .disposed(by: disposeBag)
         }
     }
     
-    // 나중에 ViewModel로 분리
     @objc private func executeLogout() {
         do {
             try Auth.auth().signOut()
@@ -66,7 +79,7 @@ final class MyInfoViewController: UIViewController {
     }
 }
 
-
+// MARK: - Compositional Layout
 extension MyInfoViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -153,6 +166,7 @@ extension MyInfoViewController {
     }
 }
 
+// MARK: - DataSource
 extension MyInfoViewController {
     private func configureDataSource() {
         rxDataSources = RxCollectionViewSectionedReloadDataSource<AccountSectionModel>(
@@ -202,6 +216,7 @@ extension MyInfoViewController {
     }
 }
 
+// MARK: - Section case
 enum MyInfoSection: Int, CaseIterable {
     case profile, star, setting
     

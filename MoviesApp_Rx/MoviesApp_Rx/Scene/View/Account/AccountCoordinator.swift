@@ -63,4 +63,15 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
         accountViewController.viewModel = accountViewModel
         self.navigationController?.setViewControllers([accountViewController], animated: true)
     }
+    
+    func detailFlow(with movie: Movie, title: String, movieId: Int) {
+        let detailCoordinator = DetailCoordinator(
+            movie: movie,
+            title: title,
+            movieId: movieId,
+            navigationController: self.navigationController,
+            finishDelegate: self)
+        self.childCoordinator.append(detailCoordinator)
+        detailCoordinator.start()
+    }
 }

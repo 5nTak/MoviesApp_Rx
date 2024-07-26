@@ -11,11 +11,11 @@ import FirebaseAuth
 final class AccountViewModel {
     var coordinator: AccountCoordinator?
     
-    func join() {
+    func signUp() {
         coordinator?.showSignUp()
     }
     
-    func login(
+    func signIn(
         email: String,
         password: String,
         completion: @escaping (Result<Void, Error>) -> Void

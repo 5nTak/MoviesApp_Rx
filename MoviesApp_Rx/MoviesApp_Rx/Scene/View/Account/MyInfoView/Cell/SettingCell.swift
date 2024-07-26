@@ -14,7 +14,7 @@ final class SettingCell: UICollectionViewCell {
     let logoutButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.systemRed, for: .normal)
         return button
     }()
     

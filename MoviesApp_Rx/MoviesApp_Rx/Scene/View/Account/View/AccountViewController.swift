@@ -11,6 +11,12 @@ import SnapKit
 final class AccountViewController: UIViewController {
     var viewModel: AccountViewModel?
     
+    private let tmdbImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "tmdb_icon")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     private let idTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
@@ -18,7 +24,6 @@ final class AccountViewController: UIViewController {
         textField.keyboardType = .emailAddress
         return textField
     }()
-    
     private let passwordTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
@@ -26,37 +31,19 @@ final class AccountViewController: UIViewController {
         textField.isSecureTextEntry = true
         return textField
     }()
-    
-    private lazy var loginButton: UIButton = {
+    private lazy var signInButton: UIButton = {
         let button = UIButton()
-        button.setTitle(AccountViewString.login.rawValue, for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 8
+        button.setTitle(AccountViewString.signIn.rawValue, for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.backgroundColor = .white
         button.addTarget(self, action: #selector(executeLogin), for: .touchUpInside)
         return button
     }()
-    
-    private lazy var forgetPasswordButton: UIButton = {
+    private lazy var signUpButton: UIButton = {
         let button = UIButton()
-        button.setTitle(AccountViewString.findPassword.rawValue, for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 10
-//        button.addTarget(self, action: #selector(showResetPasswordVC), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var joinButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(AccountViewString.join.rawValue, for: .normal)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15)
-        button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.titleLabel?.textAlignment = .center
-        button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 10
+        button.setTitle(AccountViewString.signUp.rawValue, for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.backgroundColor = .white
         button.addTarget(self, action: #selector(joinButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
@@ -76,18 +63,22 @@ final class AccountViewController: UIViewController {
         
         guard let email = idTextField.text, !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty else {
+            idTextField.setError()
+            passwordTextField.setError()
             showAlert(message: AccountViewString.inputError.rawValue)
             return
         }
         
-        viewModel?.login(email: email, password: password) { [weak self] result in
+        viewModel?.signIn(email: email, password: password) { [weak self] result in
             switch result {
             case .success:
                 self?.showAlert(message: AccountViewString.successLogin.rawValue) {
                     self?.viewModel?.coordinator?.showMyInfo(email: email)
                 }
             case .failure(let error):
-                self?.showAlert(message: "로그인 실패: \(error.localizedDescription)")
+                self?.idTextField.setError()
+                self?.passwordTextField.setError()
+                self?.showAlert(message: "Login failed: \(error.localizedDescription)")
             }
         }
     }
@@ -107,44 +98,44 @@ final class AccountViewController: UIViewController {
         view.backgroundColor = .systemGray6
         
         [
+            tmdbImageView,
             idTextField,
             passwordTextField,
-            loginButton,
-            forgetPasswordButton,
-            joinButton
+            signInButton,
+            signUpButton
         ].forEach {
             view.addSubview($0)
         }
         
-        let spacing: CGFloat = 20
+        let buttonHeight: CGFloat = 45
+        
+        tmdbImageView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+            $0.centerX.equalToSuperview()
+        }
         idTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(spacing)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
+            $0.top.equalTo(tmdbImageView.snp.bottom).offset(50)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.height.equalTo(40)
         }
         passwordTextField.snp.makeConstraints {
-            $0.top.equalTo(idTextField.snp.bottom).offset(spacing)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
+            $0.top.equalTo(idTextField.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.height.equalTo(40)
         }
-        loginButton.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom).offset(spacing * 2)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
-            $0.height.equalTo(50)
+        signInButton.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(buttonHeight)
         }
-        forgetPasswordButton.snp.makeConstraints {
-            $0.top.equalTo(loginButton.snp.bottom).offset(spacing * 2)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
-            $0.height.equalTo(40)
-        }
-        joinButton.snp.makeConstraints {
-            $0.top.equalTo(forgetPasswordButton.snp.bottom).offset(spacing)
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
-            $0.height.equalTo(40)
+        signUpButton.snp.makeConstraints {
+            $0.top.equalTo(signInButton.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(buttonHeight)
         }
     }
     
     @objc private func joinButtonTapped(_ sender: UIButton) {
-        viewModel?.join()
+        viewModel?.signUp()
     }
 }

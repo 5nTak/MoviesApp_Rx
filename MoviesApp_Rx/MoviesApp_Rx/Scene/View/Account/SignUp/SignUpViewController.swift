@@ -30,7 +30,7 @@ final class SignUpViewController: UIViewController {
     
     private lazy var signUpButton: UIButton = {
         let button = UIButton()
-        button.setTitle(AccountViewString.join.rawValue, for: .normal)
+        button.setTitle(AccountViewString.signUp.rawValue, for: .normal)
         button.setTitleColor(.systemBackground, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 8
@@ -92,7 +92,7 @@ final class SignUpViewController: UIViewController {
         viewModel?.signUp(email: email, password: password) { [weak self] result in
             switch result {
             case .success(let userId):
-                self?.showAlert(message: "회원 가입 성공!") {
+                self?.showAlert(message: "Successfully signed up!") {
                     self?.navigationController?.popViewController(animated: true)
                 }
             case .failure(let error):
@@ -101,7 +101,7 @@ final class SignUpViewController: UIViewController {
                 } else if error.localizedDescription == "The password must be 6 characters long or more." {
                     self?.passwordTextField.setError()
                 }
-                self?.showAlert(message: "회원 가입 실패: \(error.localizedDescription)")
+                self?.showAlert(message: "Failed to sign up: \(error.localizedDescription)")
             }
         }
     }

@@ -81,6 +81,7 @@ final class DetailViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         setupLayout()
+        setupStarButton()
         bindViewModel()
         starButtonTapped()
         spaceBetweenLines()
