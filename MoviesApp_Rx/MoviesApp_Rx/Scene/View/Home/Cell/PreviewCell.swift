@@ -23,7 +23,7 @@ final class PreviewCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 20, weight: .bold)
         label.layer.borderWidth = 0
         label.sizeToFit()
         label.textAlignment = .center
@@ -49,9 +49,9 @@ final class PreviewCell: UICollectionViewCell {
     
     private func setupBorderText() -> NSAttributedString {
         let strokeTextAttributes: [NSAttributedString.Key: Any] = [
-            .strokeColor: UIColor.darkGray,
+            .strokeColor: UIColor.black,
             .foregroundColor: UIColor.white,
-            .strokeWidth: -5.0
+            .strokeWidth: -2.0
         ]
         let attributedText = NSAttributedString(string: titleLabel.text ?? "", attributes: strokeTextAttributes)
         

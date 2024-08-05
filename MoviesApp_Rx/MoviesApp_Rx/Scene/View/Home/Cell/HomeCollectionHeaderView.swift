@@ -13,8 +13,8 @@ final class HomeCollectionHeaderView: UICollectionReusableView {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 25, weight: .bold)
-        label.textColor = .reversedBackgroundColorAsset
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.textColor = .systemGray
         return label
     }()
     
@@ -32,7 +32,9 @@ final class HomeCollectionHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         
         headerLabel.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(5)
+            $0.top.equalToSuperview().inset(15)
+            $0.leading.equalToSuperview().inset(30)
+            $0.bottom.equalToSuperview()
         }
     }
     

@@ -16,7 +16,7 @@ final class TrendingCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .systemGray
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFill
         imageView.kf.indicatorType = .activity
         return imageView
     }()
@@ -90,10 +90,10 @@ final class TrendingCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
-        contentView.backgroundColor = .tertiarySystemFill
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 15
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = UIColor.systemGray5.cgColor
         contentView.clipsToBounds = true
         
         [

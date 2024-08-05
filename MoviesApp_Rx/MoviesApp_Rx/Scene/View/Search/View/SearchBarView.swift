@@ -51,8 +51,8 @@ final class SearchBarView: UIView {
     
     private func configureContainerView() {
         containerView.layer.masksToBounds = true
-        containerView.layer.cornerRadius = 2
-        containerView.backgroundColor = .systemBackground
+        containerView.layer.cornerRadius = 10
+        containerView.backgroundColor = .systemGray6
     }
     
     private func configureSearchStackView() {

@@ -86,13 +86,29 @@ final class AccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigatonBar()
         setupLayout()
     }
     
-    private func setupNavigatonBar() {
-        navigationItem.title = AccountViewString.account.rawValue
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setupNavigationBar()
     }
+    
+    private func setupNavigationBar() {
+        self.title = AccountViewString.account.rawValue
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .lightGray
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
+//    private func setupNavigatonBar() {
+//        navigationItem.title = AccountViewString.account.rawValue
+//    }
     
     private func setupLayout() {
         view.backgroundColor = .systemGray6

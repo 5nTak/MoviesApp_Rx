@@ -27,6 +27,7 @@ final class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         configureDataSource()
         configureLayout()
         viewModel?.showSearchResult()
@@ -37,7 +38,7 @@ final class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.setupNavigationBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -79,6 +80,17 @@ final class SearchViewController: UIViewController {
             .map { _ in () }
             .subscribe(onNext: { _ in })
             .disposed(by: disposeBag)
+    }
+    
+    private func setupNavigationBar() {
+        self.title = "Search Movies"
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .white
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     
     private func configureLayout() {

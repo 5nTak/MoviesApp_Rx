@@ -16,7 +16,7 @@ final class PosterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.tintColor = .systemGray
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFill
         imageView.kf.indicatorType = .activity
         return imageView
     }()
@@ -84,6 +84,6 @@ final class PosterCell: UICollectionViewCell {
     
     func setFailedLoadImage() {
         imageView.image = UIImage(named: "noImageProvided")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
     }
 }
