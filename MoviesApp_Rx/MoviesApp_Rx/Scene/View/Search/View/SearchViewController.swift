@@ -22,6 +22,7 @@ final class SearchViewController: UIViewController {
         collectionView.register(SearchMovieCell.self, forCellWithReuseIdentifier: SearchMovieCell.identifier)
         collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
         collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchHeaderView.identifier)
+        collectionView.register(ListCell.self, forCellWithReuseIdentifier: ListCell.identifier)
         return collectionView
     }()
     
@@ -122,9 +123,18 @@ final class SearchViewController: UIViewController {
 extension SearchViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
-            guard let section = SearchSectionKind(rawValue: sectionIndex) else { return nil }
+            guard let sectionTitle = self.rxDataSource?.sectionModels[sectionIndex].title,
+                  let section = SearchSectionKind(rawValue: sectionTitle) else { 
+                return nil
+            }
             
             switch section {
+            case .recentlyMovies:
+                return self.createMovieSection()
+            case .discover:
+                return self.createListSection()
+            case .genres:
+                return self.createListSection()
             case .movie:
                 return self.createMovieSection()
             case .collection:
@@ -133,6 +143,27 @@ extension SearchViewController {
         }
         
         return layout
+    }
+    
+    private func createListSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(50)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 50, trailing: 0)
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        return section
     }
     
     private func createMovieSection() -> NSCollectionLayoutSection {
@@ -152,9 +183,8 @@ extension SearchViewController {
         )
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        if let sectionHeader = self.createSectionHeader() {
-            section.boundarySupplementaryItems = [sectionHeader]
-        }
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
     }
     
@@ -174,16 +204,12 @@ extension SearchViewController {
             subitems: [item]
         )
         let section = NSCollectionLayoutSection(group: group)
-        if let sectionHeader = self.createSectionHeader() {
-            section.boundarySupplementaryItems = [sectionHeader]
-        }
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
         return section
     }
     
-    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem? {
-        guard let searchText = searchBarView.searchTextField.text, !searchText.isEmpty else {
-            return nil
-        }
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(70)
@@ -202,34 +228,54 @@ extension SearchViewController {
     private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<SearchSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
-                switch indexPath.section {
-                case 0:
-                    guard let movie = item as? Movie,
-                          let movieSectionCell = collectionView.dequeueReusableCell(
-                            withReuseIdentifier: SearchMovieCell.identifier,
-                            for: indexPath
-                          ) as? SearchMovieCell else { return UICollectionViewCell() }
-                    movieSectionCell.configure(title: movie.title)
+                switch item {
+                case .recentlyItem(let movie):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ListCell.identifier,
+                        for: indexPath
+                    ) as? ListCell else { return UICollectionViewCell() }
+                    // dummy
+                    cell.setup(title: "Dummy: \(movie)")
+                    return cell
+                case .discover(let movies):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ListCell.identifier,
+                        for: indexPath
+                    ) as? ListCell else { return UICollectionViewCell() }
+                    cell.setup(title: movies)
+                    return cell
+                case .genres(let kind):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ListCell.identifier,
+                        for: indexPath
+                    ) as? ListCell else { return UICollectionViewCell() }
+                    cell.setup(title: kind)
+                    return cell
+                case .searchMovies(let movie):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: SearchMovieCell.identifier,
+                        for: indexPath
+                    ) as? SearchMovieCell else { return UICollectionViewCell() }
+                    cell.configure(title: movie.title)
                     if movie.posterPath == nil {
-                        movieSectionCell.setFailedLoadImage()
+                        cell.setFailedLoadImage()
                     } else {
-                        movieSectionCell.loadImage(url: movie.posterPath ?? "")
+                        cell.loadImage(url: movie.posterPath ?? "")
                     }
-                    return movieSectionCell
-                case 1:
-                    guard let collection = item as? Collection,
-                          let collectionSectionCell = collectionView.dequeueReusableCell(
-                            withReuseIdentifier: SearchCollectionCell.identifier,
-                            for: indexPath
-                          ) as? SearchCollectionCell else { return UICollectionViewCell() }
-                    collectionSectionCell.configure(name: collection.name, overview: collection.overview)
+                    return cell
+                case .searchCollections(let collection):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: SearchCollectionCell.identifier,
+                        for: indexPath
+                    ) as? SearchCollectionCell else { return UICollectionViewCell() }
+                    cell.configure(name: collection.name, overview: collection.overview)
                     if collection.posterPath == nil {
-                        collectionSectionCell.setFailedLoadImage()
+                        cell.setFailedLoadImage()
                     } else {
-                        collectionSectionCell.loadImage(url: collection.posterPath ?? "")
+                        cell.loadImage(url: collection.posterPath ?? "")
                     }
-                    return collectionSectionCell
-                default :
+                    return cell
+                default:
                     return UICollectionViewCell()
                 }
             },
@@ -239,7 +285,9 @@ extension SearchViewController {
                     ofKind: kind,
                     withReuseIdentifier: SearchHeaderView.identifier,
                     for: indexPath
-                ) as? SearchHeaderView else { return UICollectionReusableView() }
+                ) as? SearchHeaderView else {
+                    return UICollectionReusableView()
+                }
                 section.configure(title: sectionModel.title)
                 return section
             }
@@ -253,15 +301,14 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
-enum SearchSectionKind: Int, CaseIterable {
-    case movie, collection
+enum SearchSectionKind: String, CaseIterable {
+    case recentlyMovies = "Recently Movies"
+    case discover = "Discover"
+    case genres = "Genres"
+    case movie = "Movie"
+    case collection = "Collection"
     
     var description: String {
-        switch self {
-        case .movie:
-            return "Movie"
-        case .collection:
-            return "Collection"
-        }
+        return self.rawValue
     }
 }

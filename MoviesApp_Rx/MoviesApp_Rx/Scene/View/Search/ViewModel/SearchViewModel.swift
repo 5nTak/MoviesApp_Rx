@@ -10,18 +10,21 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol ItemData { }
-
-extension Movie: ItemData { }
-extension Collection: ItemData { }
+enum SearchSectionItem {
+    case recentlyItem(movie: String)
+    case discover(movies: String)
+    case genres(kind: String)
+    case searchMovies(movie: Movie)
+    case searchCollections(collection: Collection)
+}
 
 struct SearchSectionModel {
     var title: String
-    var items: [Item]
+    var items: [SearchSectionItem]
 }
 
 extension SearchSectionModel: SectionModelType {
-    typealias Item = ItemData
+    typealias Item = SearchSectionItem
     
     init(original: SearchSectionModel, items: [Item]) {
         self = original
@@ -30,9 +33,10 @@ extension SearchSectionModel: SectionModelType {
 }
 
 final class SearchViewModel {
-    typealias SearchSection = SectionModel<String, ItemData>
+    typealias SearchSection = SectionModel<String, SearchSectionItem>
     
     let sections = BehaviorRelay<[SearchSectionModel]>(value: [])
+    let isSearchActive = BehaviorRelay<Bool>(value: false)
     var searchText = BehaviorRelay<String>(value: "")
     var coordinator: SearchCoordinator?
     
@@ -47,32 +51,54 @@ final class SearchViewModel {
         searchText
             .distinctUntilChanged()
             .subscribe { [weak self] text in
+                self?.isSearchActive.accept(!text.isEmpty)
                 self?.showSearchResult()
             }
             .disposed(by: disposeBag)
     }
     
     func showSearchResult() {
-        DispatchQueue.main.async { [weak self] in
-            self?.searchMovies(searchText: self?.searchText.value ?? "")
-            self?.searchCollections(searchText: self?.searchText.value ?? "")
-        }
-        
-        Observable.combineLatest(searchMovies, searchCollections)
-            .map { movies, collections in
-                return [
-                    SearchSectionModel(title: SearchSectionKind.movie.description, items: movies.first?.items ?? []),
-                    SearchSectionModel(title: SearchSectionKind.collection.description, items: collections.first?.items ?? [])
-                ]
+        if searchText.value.isEmpty {
+            let recentlyItems = (1...10).map {
+                SearchSectionItem.recentlyItem(movie: "Dummy \($0)") }
+            let movieItems: [SearchSectionItem] = [
+                .discover(movies: "Popular Movies"),
+                .discover(movies: "Top Rated Movies")
+            ]
+            let genreItems = (1...10).map { SearchSectionItem.genres(kind: "Genre \($0)") }
+            
+            sections.accept([
+                SearchSectionModel(title: SearchSectionKind.recentlyMovies.description, items: recentlyItems),
+                SearchSectionModel(title: SearchSectionKind.discover.description, items: movieItems),
+                SearchSectionModel(title: SearchSectionKind.genres.description, items: genreItems)
+            ])
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.searchMovies(searchText: self?.searchText.value ?? "")
+                self?.searchCollections(searchText: self?.searchText.value ?? "")
             }
-            .bind(to: sections)
-            .disposed(by: disposeBag)
+            
+            Observable.combineLatest(searchMovies, searchCollections)
+                .map { movies, collections in
+                    return [
+                        SearchSectionModel(title: SearchSectionKind.movie.description, items: movies.first?.items ?? []),
+                        SearchSectionModel(title: SearchSectionKind.collection.description, items: collections.first?.items ?? [])
+                    ]
+                }
+                .bind(to: sections)
+                .disposed(by: disposeBag)
+        }
     }
     
     private func searchMovies(searchText: String) {
         searchMovieUseCase.fetchSearchMovie(searchText: searchText)
             .asObservable()
-            .map { [SearchSection(model: SearchSectionKind.movie.description, items: $0)] }
+            .map { movies in
+                return movies.map { SearchSectionItem.searchMovies(movie: $0) }
+            }
+            .map { items in
+                return [SearchSection(model: SearchSectionKind.movie.description, items: items)]
+            }
             .bind(to: searchMovies)
             .disposed(by: disposeBag)
     }
@@ -80,7 +106,12 @@ final class SearchViewModel {
     private func searchCollections(searchText: String) {
         searchMovieUseCase.fetchSearchCollection(searchText: searchText)
             .asObservable()
-            .map { [SearchSection(model: SearchSectionKind.collection.description, items: $0)] }
+            .map { collections in
+                return collections.map { SearchSectionItem.searchCollections(collection: $0) }
+            }
+            .map { items in
+                return [SearchSection(model: SearchSectionKind.collection.description, items: items)]
+            }
             .bind(to: searchCollections)
             .disposed(by: disposeBag)
     }
