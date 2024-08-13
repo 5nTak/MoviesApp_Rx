@@ -12,7 +12,8 @@ import RxDataSources
 
 enum SearchSectionItem {
     case recentlyItem(movie: String)
-    case discover(movies: String)
+    case discoverPopular(movies: String)
+    case discoverTopRated(movies: String)
     case genres(kind: String)
     case searchMovies(movie: Movie)
     case searchCollections(collection: Collection)
@@ -62,8 +63,8 @@ final class SearchViewModel {
             let recentlyItems = (1...10).map {
                 SearchSectionItem.recentlyItem(movie: "Dummy \($0)") }
             let movieItems: [SearchSectionItem] = [
-                .discover(movies: "Popular Movies"),
-                .discover(movies: "Top Rated Movies")
+                .discoverPopular(movies: "Popular Movies"),
+                .discoverTopRated(movies: "Top Rated Movies")
             ]
             let genreItems = (1...10).map { SearchSectionItem.genres(kind: "Genre \($0)") }
             

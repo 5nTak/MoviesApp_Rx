@@ -67,4 +67,13 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         self.childCoordinator.append(searchCollectionDetailCoordinator)
         searchCollectionDetailCoordinator.start()
     }
+    
+    func popularMoviesFlow(page: Int) {
+        let popularMoviesCoordinator = PopularCoordinator(
+            navigationController: self.navigationController,
+            finishDelegate: self
+        )
+        self.childCoordinator.append(popularMoviesCoordinator)
+        popularMoviesCoordinator.start()
+    }
 }

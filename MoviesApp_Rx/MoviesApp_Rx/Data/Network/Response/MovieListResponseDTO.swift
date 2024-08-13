@@ -32,7 +32,7 @@ extension MovieListResponse {
             overview: movieResponse.overview,
             posterPath: movieResponse.posterPath,
             backdropPath: movieResponse.backdropPath,
-            releaseData: movieResponse.releaseDate,
+            releaseDate: movieResponse.releaseDate,
             video: movieResponse.video,
             voteAverage: movieResponse.voteAverage,
             voteCount: movieResponse.voteCount,

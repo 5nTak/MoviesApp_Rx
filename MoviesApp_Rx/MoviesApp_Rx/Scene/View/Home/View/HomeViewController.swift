@@ -205,7 +205,7 @@ extension HomeViewController {
                         withReuseIdentifier: TrendingCell.identifier,
                         for: indexPath
                     ) as? TrendingCell else { return UICollectionViewCell() }
-                    trendingCell.setup(title: item.title, popularity: item.popularity, date: item.releaseData)
+                    trendingCell.setup(title: item.title, popularity: item.popularity, date: item.releaseDate)
                     if item.posterPath == nil {
                         trendingCell.setFailedLoadImage()
                     } else {

@@ -48,7 +48,7 @@ extension MovieResponse {
             overview: self.overview,
             posterPath: self.posterPath,
             backdropPath: self.backdropPath,
-            releaseData: self.releaseDate,
+            releaseDate: self.releaseDate,
             video: self.video,
             voteAverage: self.voteAverage,
             voteCount: self.voteCount,

@@ -33,7 +33,7 @@ final class SearchViewController: UIViewController {
         configureLayout()
         viewModel?.showSearchResult()
         bind()
-        didSelectMovies()
+        didSelectItems()
         handleSearchText()
     }
     
@@ -55,16 +55,32 @@ final class SearchViewController: UIViewController {
         }
     }
     
-    private func didSelectMovies() {
+    private func didSelectItems() {
         collectionView.rx.itemSelected
             .subscribe(onNext: { indexPath in
-                guard let item = self.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
-                if let movie = item as? Movie {
-                    self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title, movieId: movie.id)
-                } else if let collection = item as? Collection {
-                    self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
+                guard let sectionModel = self.rxDataSource?.sectionModels[indexPath.section] else { return }
+                let item = sectionModel.items[indexPath.item]
+                
+                if self.viewModel?.isSearchActive.value == true {
+                    if let movie = item as? Movie {
+                        self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title, movieId: movie.id)
+                    } else if let collection = item as? Collection {
+                        self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
+                    }
+                } else {
+                    switch item {
+                    case .recentlyItem(let movieTitle):
+                        print("Selected Recently Viewed Movie: \(movieTitle)")
+                    case .discoverPopular(let movies):
+                        self.viewModel?.coordinator?.popularMoviesFlow(page: 1)
+                    case .discoverTopRated(let movies):
+                        print("Selected Top Rated: \(movies)")
+                    case .genres(let genre):
+                        print("Selected Genre: \(genre)")
+                    default:
+                        break
+                    }
                 }
-                self.navigationController?.setNavigationBarHidden(false, animated: false)
             })
             .disposed(by: disposeBag)
     }
@@ -237,7 +253,14 @@ extension SearchViewController {
                     // dummy
                     cell.setup(title: "Dummy: \(movie)")
                     return cell
-                case .discover(let movies):
+                case .discoverPopular(let movies):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: ListCell.identifier,
+                        for: indexPath
+                    ) as? ListCell else { return UICollectionViewCell() }
+                    cell.setup(title: movies)
+                    return cell
+                case .discoverTopRated(let movies):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: ListCell.identifier,
                         for: indexPath
@@ -275,8 +298,6 @@ extension SearchViewController {
                         cell.loadImage(url: collection.posterPath ?? "")
                     }
                     return cell
-                default:
-                    return UICollectionViewCell()
                 }
             },
             configureSupplementaryView: { rxDataSource, collectionView, kind, indexPath in

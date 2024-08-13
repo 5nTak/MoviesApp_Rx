@@ -48,7 +48,7 @@ final class DetailViewModel {
     private func fetchMovie(for movie: Movie) {
         self.posterPath = movie.posterPath
         self.overView = movie.overview
-        self.releaseDate = movie.releaseData
+        self.releaseDate = movie.releaseDate
         self.voteAverage = self.roundVoteAveragePoint(primeNumber: movie.voteAverage)
         self.voteCount = movie.voteCount
     }

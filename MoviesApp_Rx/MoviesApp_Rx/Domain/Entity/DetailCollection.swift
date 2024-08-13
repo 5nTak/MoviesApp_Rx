@@ -31,7 +31,7 @@ struct DetailCollection: Hashable, Contents {
             overview: self.overview,
             posterPath: self.posterPath,
             backdropPath: self.backdropPath,
-            releaseData: self.releaseDate,
+            releaseDate: self.releaseDate,
             video: nil,
             voteAverage: self.voteAverage,
             voteCount: self.voteCount,

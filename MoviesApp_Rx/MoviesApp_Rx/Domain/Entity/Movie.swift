@@ -18,7 +18,7 @@ struct Movie: Hashable, Contents {
     let overview: String
     let posterPath: String?
     let backdropPath: String?
-    let releaseData: String
+    let releaseDate: String
     let video: Bool?
     let voteAverage: Double
     let voteCount: Int
