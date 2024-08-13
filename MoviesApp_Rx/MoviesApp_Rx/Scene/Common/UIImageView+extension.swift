@@ -33,6 +33,8 @@ extension UIImageView {
                 case .success(let value):
                     if let image = value.image {
                         self.image = image
+                        self.setNeedsLayout()
+                        self.layoutIfNeeded()
                     } else {
                         guard let url = URL(string: urlString) else { return }
                         self.kf.setImage(with: url, placeholder: UIImage(systemName: "ellipsis"))
