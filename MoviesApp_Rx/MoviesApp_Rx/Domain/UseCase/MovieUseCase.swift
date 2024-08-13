@@ -31,6 +31,14 @@ final class MovieUseCase {
             }
     }
     
+    func fetchTopRatedMovie(page: Int) -> Single<[Movie]> {
+        return movieRepository.fetchTopRatedMovies(page: page)
+            .map { movieList in
+                let movies = movieList.results
+                return movies
+            }
+    }
+    
     func fetchLatestMovie() -> Single<[Movie]> {
         return movieRepository.fetchLatestMovie()
             .map { movie in

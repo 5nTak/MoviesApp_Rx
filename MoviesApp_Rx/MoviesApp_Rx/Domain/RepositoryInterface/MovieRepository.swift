@@ -13,6 +13,8 @@ protocol MovieRepository {
     
     func fetchPopularMovies(page: Int) -> Single<MovieList>
     
+    func fetchTopRatedMovies(page: Int) -> Single<MovieList>
+    
     func fetchLatestMovie() -> Single<Movie>
     
     func fetchTrendingMovies() -> Single<MovieList>
