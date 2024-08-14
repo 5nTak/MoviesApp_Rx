@@ -18,4 +18,11 @@ struct MovieDiscoveryEndpoint: TmdbAPIEndpoint {
             "page": "\(page)"
         ]
     }
+    
+    init(page: Int, id: Int) {
+        self.queries = [
+            "page": "\(page)",
+            "with_genres": "\(id)"
+        ]
+    }
 }

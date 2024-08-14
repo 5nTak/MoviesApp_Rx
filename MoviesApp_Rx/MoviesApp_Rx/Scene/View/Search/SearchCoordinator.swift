@@ -88,4 +88,15 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         self.childCoordinator.append(topRatedMoviesCoordinator)
         topRatedMoviesCoordinator.start()
     }
+    
+    func genreDetailFlow(id: Int, name: String) {
+        let genreCoordinator = GenreCoordinator(
+            id: id,
+            name: name,
+            navigationController: self.navigationController,
+            finishDelegate: self
+        )
+        self.childCoordinator.append(genreCoordinator)
+        genreCoordinator.start()
+    }
 }

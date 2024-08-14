@@ -76,7 +76,7 @@ final class SearchViewController: UIViewController {
                     case .discoverTopRated(let movies):
                         self.viewModel?.coordinator?.topRatedMoviesFlow(page: 1)
                     case .genres(let genre):
-                        print("Selected Genre: \(genre)")
+                        self.viewModel?.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
                     default:
                         break
                     }
@@ -259,6 +259,7 @@ extension SearchViewController {
                         for: indexPath
                     ) as? ListCell else { return UICollectionViewCell() }
                     cell.setup(title: movies)
+                    cell.changeTextColor(color: .systemBlue)
                     return cell
                 case .discoverTopRated(let movies):
                     guard let cell = collectionView.dequeueReusableCell(
@@ -266,6 +267,7 @@ extension SearchViewController {
                         for: indexPath
                     ) as? ListCell else { return UICollectionViewCell() }
                     cell.setup(title: movies)
+                    cell.changeTextColor(color: .systemBlue)
                     return cell
                 case .genres(let genre):
                     guard let cell = collectionView.dequeueReusableCell(
@@ -273,6 +275,7 @@ extension SearchViewController {
                         for: indexPath
                     ) as? ListCell else { return UICollectionViewCell() }
                     cell.setup(title: genre.name)
+                    cell.changeTextColor(color: .black)
                     return cell
                 case .searchMovies(let movie):
                     guard let cell = collectionView.dequeueReusableCell(

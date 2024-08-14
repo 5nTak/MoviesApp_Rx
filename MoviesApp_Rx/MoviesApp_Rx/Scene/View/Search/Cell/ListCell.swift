@@ -33,6 +33,11 @@ final class ListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+    }
+    
     private func configureLayout() {
         [
             titleLabel,
@@ -57,5 +62,9 @@ final class ListCell: UICollectionViewCell {
     
     func setup(title: String) {
         self.titleLabel.text = title
+    }
+    
+    func changeTextColor(color: UIColor) {
+        titleLabel.textColor = color
     }
 }

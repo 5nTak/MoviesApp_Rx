@@ -24,6 +24,15 @@ final class DefaultMovieRepository: MovieRepository {
             }
     }
     
+    func fetchDiscoveredMovies(page: Int, id: Int) -> Single<MovieList> {
+        let request = MovieDiscoveryEndpoint(page: page, id: id)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let movieList = response.toMovieList()
+                return movieList
+            }
+    }
+    
     func fetchGenres() -> Single<[Genre]> {
         let request = GenreEndpoint()
         return self.networkProvider.rx.request(request)
