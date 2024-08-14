@@ -36,6 +36,9 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         let searchViewController = SearchViewController()
         self.navigationController = UINavigationController(rootViewController: searchViewController)
         let searchViewModel = SearchViewModel(
+            movieUseCase: MovieUseCase(
+                movieRepository: DefaultMovieRepository()
+            ),
             searchMovieUseCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )

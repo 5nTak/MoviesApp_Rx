@@ -74,7 +74,7 @@ final class SearchViewController: UIViewController {
                     case .discoverPopular(let movies):
                         self.viewModel?.coordinator?.popularMoviesFlow(page: 1)
                     case .discoverTopRated(let movies):
-                        print("Selected Top Rated: \(movies)")
+                        self.viewModel?.coordinator?.topRatedMoviesFlow(page: 1)
                     case .genres(let genre):
                         print("Selected Genre: \(genre)")
                     default:
@@ -267,12 +267,12 @@ extension SearchViewController {
                     ) as? ListCell else { return UICollectionViewCell() }
                     cell.setup(title: movies)
                     return cell
-                case .genres(let kind):
+                case .genres(let genre):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: ListCell.identifier,
                         for: indexPath
                     ) as? ListCell else { return UICollectionViewCell() }
-                    cell.setup(title: kind)
+                    cell.setup(title: genre.name)
                     return cell
                 case .searchMovies(let movie):
                     guard let cell = collectionView.dequeueReusableCell(

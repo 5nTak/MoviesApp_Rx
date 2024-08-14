@@ -14,7 +14,7 @@ enum SearchSectionItem {
     case recentlyItem(movie: String)
     case discoverPopular(movies: String)
     case discoverTopRated(movies: String)
-    case genres(kind: String)
+    case genres(kind: Genre)
     case searchMovies(movie: Movie)
     case searchCollections(collection: Collection)
 }
@@ -37,17 +37,20 @@ final class SearchViewModel {
     typealias SearchSection = SectionModel<String, SearchSectionItem>
     
     let sections = BehaviorRelay<[SearchSectionModel]>(value: [])
+    let genres = BehaviorRelay<[Genre]>(value: [])
     let isSearchActive = BehaviorRelay<Bool>(value: false)
     var searchText = BehaviorRelay<String>(value: "")
     var coordinator: SearchCoordinator?
     
+    private let movieUseCase: MovieUseCase
     private let searchMovieUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
     
     private let searchMovies = BehaviorRelay<[SearchSection]>(value: [])
     private let searchCollections = BehaviorRelay<[SearchSection]>(value: [])
     
-    init(searchMovieUseCase: SearchUseCase) {
+    init(movieUseCase: MovieUseCase, searchMovieUseCase: SearchUseCase) {
+        self.movieUseCase = movieUseCase
         self.searchMovieUseCase = searchMovieUseCase
         searchText
             .distinctUntilChanged()
@@ -55,6 +58,15 @@ final class SearchViewModel {
                 self?.isSearchActive.accept(!text.isEmpty)
                 self?.showSearchResult()
             }
+            .disposed(by: disposeBag)
+        
+        fetchGenre()
+    }
+    
+    private func fetchGenre() {
+        movieUseCase.fetchGenres()
+            .asObservable()
+            .bind(to: genres)
             .disposed(by: disposeBag)
     }
     
@@ -66,7 +78,9 @@ final class SearchViewModel {
                 .discoverPopular(movies: "Popular Movies"),
                 .discoverTopRated(movies: "Top Rated Movies")
             ]
-            let genreItems = (1...10).map { SearchSectionItem.genres(kind: "Genre \($0)") }
+            let genreItems = genres.value.map { genre in
+                SearchSectionItem.genres(kind: genre)
+            }
             
             sections.accept([
                 SearchSectionModel(title: SearchSectionKind.recentlyMovies.description, items: recentlyItems),

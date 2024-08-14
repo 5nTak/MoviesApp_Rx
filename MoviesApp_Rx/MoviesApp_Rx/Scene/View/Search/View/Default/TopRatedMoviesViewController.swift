@@ -61,7 +61,13 @@ final class TopRatedMoviesViewController: UIViewController {
             .asObservable()
             .bind(to: tableView.rx.items(cellIdentifier: TopRatedMoviesCell.identifier, cellType: TopRatedMoviesCell.self)) { index, movie, cell in
                 self.tableView.rowHeight = 147.6
-                cell.setup(title: movie.title, genres: movie.genres ?? [], releasedDate: movie.releaseDate, voteAverage: movie.voteAverage)
+                let genres = self.viewModel.matchGenreIds(ids: movie.genreIds ?? [])
+                cell.setup(
+                    title: movie.title,
+                    genres: genres,
+                    releasedDate: movie.releaseDate,
+                    voteAverage: movie.voteAverage
+                )
                 if movie.posterPath == nil {
                     cell.setFailedLoadImage()
                 } else {

@@ -14,12 +14,29 @@ final class TopRatedMoviesViewModel {
     var page: Int = 1
     private let useCase: MovieUseCase
     let topRatedMovies = BehaviorRelay<[Movie]>(value: [])
+    private var genres = BehaviorRelay<[Genre]>(value: [])
     private let disposeBag = DisposeBag()
     private var isFetching: Bool = false
     
     init(useCase: MovieUseCase) {
         self.useCase = useCase
         self.fetchTopRatedMovies(page: page)
+        fetchGenres()
+    }
+    
+    private func fetchGenres() {
+        useCase.fetchGenres()
+            .asObservable()
+            .observe(on: MainScheduler.instance)
+            .bind(to: genres)
+            .disposed(by: disposeBag)
+    }
+    
+    func matchGenreIds(ids: [Int]) -> [String] {
+        let genreNames = ids.compactMap { id in
+            return genres.value.first { $0.id == id }?.name
+        }
+        return genreNames
     }
     
     func fetchTopRatedMovies(page: Int) {

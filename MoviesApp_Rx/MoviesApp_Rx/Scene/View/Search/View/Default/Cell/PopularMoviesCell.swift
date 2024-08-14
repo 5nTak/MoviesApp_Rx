@@ -27,14 +27,15 @@ final class PopularMoviesCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.numberOfLines = 0
+        label.font = UIFont.preferredFont(forTextStyle: .title3)
+        label.numberOfLines = 2
         return label
     }()
     
     private let genreLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .title3)
+        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.numberOfLines = 2
         return label
     }()
     
@@ -100,12 +101,12 @@ final class PopularMoviesCell: UITableViewCell {
         }
     }
     
-    func setup(title: String, genres: [Int], releasedDate: String, voteAverage: Double) {
+    func setup(title: String, genres: [String], releasedDate: String, voteAverage: Double) {
         titleLabel.text = title
         if genres.isEmpty {
             genreLabel.text = "Genres: Unknown"
         } else {
-            genreLabel.text = "Genres: \(genres)"
+            genreLabel.text = "Genre: \(genres.joined(separator: " "))"
         }
         releasedDateLabel.text = releasedDate
         voteIconView.voteValue = voteAverage
