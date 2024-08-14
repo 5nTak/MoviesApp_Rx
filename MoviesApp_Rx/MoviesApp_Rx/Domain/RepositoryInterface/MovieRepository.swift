@@ -11,6 +11,8 @@ import RxSwift
 protocol MovieRepository {
     func fetchDiscoveredMovies(page: Int) -> Single<MovieList>
     
+    func fetchGenres() -> Single<[Genre]>
+    
     func fetchPopularMovies(page: Int) -> Single<MovieList>
     
     func fetchTopRatedMovies(page: Int) -> Single<MovieList>

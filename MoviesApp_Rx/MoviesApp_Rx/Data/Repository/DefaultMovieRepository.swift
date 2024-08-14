@@ -24,6 +24,15 @@ final class DefaultMovieRepository: MovieRepository {
             }
     }
     
+    func fetchGenres() -> Single<[Genre]> {
+        let request = GenreEndpoint()
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let genres = response.toGenres()
+                return genres
+            }
+    }
+    
     func fetchPopularMovies(page: Int) -> Single<MovieList> {
         let request = PopularMovieEndpoint(page: page)
         return self.networkProvider.rx.request(request)

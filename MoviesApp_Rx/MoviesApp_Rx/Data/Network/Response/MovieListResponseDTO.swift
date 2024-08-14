@@ -27,7 +27,7 @@ extension MovieListResponse {
             title: movieResponse.title,
             originalTitle: movieResponse.originalTitle,
             originalLanguage: movieResponse.originalLanguage,
-            genres: movieResponse.genres,
+            genreIds: movieResponse.genreIds,
             adult: movieResponse.adult,
             overview: movieResponse.overview,
             posterPath: movieResponse.posterPath,

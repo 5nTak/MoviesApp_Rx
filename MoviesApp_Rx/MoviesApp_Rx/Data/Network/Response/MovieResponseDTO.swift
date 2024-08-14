@@ -12,7 +12,7 @@ struct MovieResponse: Decodable {
     let title: String
     let originalTitle: String?
     let originalLanguage: String?
-    let genres: [Int]?
+    let genreIds: [Int]?
     let adult: Bool?
     let overview: String
     let posterPath: String?
@@ -25,7 +25,7 @@ struct MovieResponse: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id, title, overview, video, adult, popularity
-        case genres = "genre_ids"
+        case genreIds = "genre_ids"
         case originalTitle = "original_title"
         case originalLanguage = "original_language"
         case posterPath = "poster_path"
@@ -43,7 +43,7 @@ extension MovieResponse {
             title: self.title,
             originalTitle: self.originalTitle,
             originalLanguage: self.originalLanguage,
-            genres: self.genres,
+            genreIds: self.genreIds,
             adult: self.adult,
             overview: self.overview,
             posterPath: self.posterPath,

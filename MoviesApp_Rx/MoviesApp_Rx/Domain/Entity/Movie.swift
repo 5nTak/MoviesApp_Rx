@@ -13,7 +13,7 @@ struct Movie: Hashable, Contents {
     let title: String
     let originalTitle: String?
     let originalLanguage: String?
-    let genres: [Int]?
+    let genreIds: [Int]?
     let adult: Bool?
     let overview: String
     let posterPath: String?

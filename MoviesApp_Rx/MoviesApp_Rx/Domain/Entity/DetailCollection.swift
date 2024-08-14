@@ -26,7 +26,7 @@ struct DetailCollection: Hashable, Contents {
             title: self.title,
             originalTitle: nil,
             originalLanguage: nil,
-            genres: nil,
+            genreIds: nil,
             adult: nil,
             overview: self.overview,
             posterPath: self.posterPath,

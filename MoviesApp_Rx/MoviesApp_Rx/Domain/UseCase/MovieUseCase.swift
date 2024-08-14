@@ -23,6 +23,10 @@ final class MovieUseCase {
             }
     }
     
+    func fetchGenres() -> Single<[Genre]> {
+        return movieRepository.fetchGenres()
+    }
+    
     func fetchPopularMovie(page: Int) -> Single<[Movie]> {
         return movieRepository.fetchPopularMovies(page: page)
             .map { movieList in
