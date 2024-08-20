@@ -68,22 +68,4 @@ final class DefaultMovieRepository: MovieRepository {
                 return movieList
             }
     }
-    
-    func fetchLatestMovie() -> Single<Movie> {
-        let request = LatestMovieEndpoint()
-        return self.networkProvider.rx.request(request)
-            .map { response in
-                let movie = response.toMovie()
-                return movie
-            }
-    }
-    
-    func fetchTrendingMovies() -> Single<MovieList> {
-        let request = TrendingMovieEndpoint()
-        return self.networkProvider.rx.request(request)
-            .map { response in
-                let movieList = response.toMovieList()
-                return movieList
-            }
-    }
 }

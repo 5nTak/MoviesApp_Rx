@@ -58,21 +58,4 @@ final class MovieUseCase {
                 return movies
             }
     }
-    
-    func fetchLatestMovie() -> Single<[Movie]> {
-        return movieRepository.fetchLatestMovie()
-            .map { movie in
-                var movies: [Movie] = []
-                movies.append(movie)
-                return movies
-            }
-    }
-    
-    func fetchTrendingMovie() -> Single<[Movie]> {
-        return movieRepository.fetchTrendingMovies()
-            .map { movieList in
-                let movies = movieList.results
-                return movies
-            }
-    }
 }

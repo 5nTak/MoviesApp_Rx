@@ -29,14 +29,14 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     }
     
     func start() {
-        let homeViewController = HomeViewController()
-        self.navigationController = UINavigationController(rootViewController: homeViewController)
         let homeViewModel = HomeViewModel(
             movieUseCase: MovieUseCase(
                 movieRepository: DefaultMovieRepository()
             )
         )
         homeViewModel.coordinator = self
+        let homeViewController = HomeViewController(viewModel: homeViewModel)
+        self.navigationController = UINavigationController(rootViewController: homeViewController)
         homeViewController.viewModel = homeViewModel
         self.navigationController?.tabBarItem = tabBarItem
     }

@@ -14,24 +14,30 @@ import RxDataSources
 final class HomeViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.register(PreviewCell.self, forCellWithReuseIdentifier: PreviewCell.identifier)
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
-        collectionView.register(TrendingCell.self, forCellWithReuseIdentifier: TrendingCell.identifier)
-        collectionView.register(HomeCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeCollectionHeaderView.identifier)
         return collectionView
     }()
     
-    var viewModel: HomeViewModel?
+    var viewModel: HomeViewModel
     private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
     private let disposeBag = DisposeBag()
+    
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
         configureDataSource()
-        viewModel?.showMoviesRx()
         bind()
         didSelectMovies()
+        setupPrefetching()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +46,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.title = "Home"
+        self.title = "Upcoming Movies"
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -52,116 +58,55 @@ final class HomeViewController: UIViewController {
     }
     
     private func bind() {
+        viewModel.fetchUpcomingMovies()
+        
         if let dataSource = rxDataSource {
-            viewModel?.sections
+            viewModel.upcomingMovies
                 .bind(to: collectionView.rx.items(dataSource: dataSource))
                 .disposed(by: disposeBag)
         }
+    }
+    
+    private func setupPrefetching() {
+        collectionView.rx.prefetchItems
+            .subscribe(onNext: { [weak self] indexPaths in
+                guard let self = self else { return }
+                let itemCount = self.collectionView.numberOfItems(inSection: 0)
+                
+                if indexPaths.contains(where: { $0.item >= itemCount - 5 }) { // 끝에서 5개 전부터 prefetch
+                    self.viewModel.loadMoreUpcomingMovies()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     private func didSelectMovies() {
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] indexPath in
                 guard let movie = self?.rxDataSource?.sectionModels[indexPath.section].items[indexPath.item] else { return }
-                self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
+                self?.viewModel.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
             })
             .disposed(by: disposeBag)
     }
 }
 
-// MARK: - CompositionalLayout
+// MARK: - Layout
 extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-            guard let section = MovieListSection(rawValue: sectionIndex) else { return nil }
-            switch section {
-            case .discover:
-                return self.createDiscoverSection()
-            case .popular:
-                return self.createPopularSection()
-            case .trending:
-                return self.createTrendingSection()
-            case .latest:
-                return self.createPopularSection()
-            }
-        }
-        return layout
-    }
-    
-    private func createDiscoverSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1)
-        )
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.6),
-            heightDimension: .fractionalWidth(1/3)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-        section.orthogonalScrollingBehavior = .continuous
-        let sectionHeader = self.createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-        
-        return section
-    }
-    
-    private func createPopularSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .fractionalWidth(1/3),
             heightDimension: .fractionalHeight(1)
         )
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(1.5)
+            heightDimension: .fractionalWidth(1/2)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 3)
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-        section.orthogonalScrollingBehavior = .paging
-        let sectionHeader = self.createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-        
-        return section
-    }
-    
-    private func createTrendingSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1/3)
-        )
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.85),
-            heightDimension: .fractionalWidth(0.8)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 3)
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-        section.orthogonalScrollingBehavior = .groupPaging
-        let sectionHeader = self.createSectionHeader()
-        section.boundarySupplementaryItems = [sectionHeader]
-        return section
-    }
-    
-    // MARK: - SectionHeader
-    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-        let layoutSectionHeaderSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(70)
-        )
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: layoutSectionHeaderSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        return sectionHeader
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }
 
@@ -175,86 +120,14 @@ extension HomeViewController {
     private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<MovieSectionModel>(
             configureCell: { rxDataSource, collectionView, indexPath, item in
-                switch indexPath.section {
-                case 0:
-                    guard let discoverCell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PreviewCell.identifier,
-                        for: indexPath
-                    ) as? PreviewCell else { return UICollectionViewCell() }
-                    discoverCell.setup(title: item.title)
-                    if item.backdropPath == nil {
-                        discoverCell.setFailedLoadImage()
-                    } else {
-                        discoverCell.loadImage(url: item.backdropPath ?? "")
-                    }
-                    return discoverCell
-                case 1:
-                    guard let popularCell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PosterCell.identifier,
-                        for: indexPath
-                    ) as? PosterCell else { return UICollectionViewCell() }
-                    popularCell.setup(title: item.title)
-                    if item.posterPath == nil {
-                        popularCell.setFailedLoadImage()
-                    } else {
-                        popularCell.loadImage(url: item.posterPath ?? "")
-                    }
-                    return popularCell
-                case 2:
-                    guard let trendingCell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: TrendingCell.identifier,
-                        for: indexPath
-                    ) as? TrendingCell else { return UICollectionViewCell() }
-                    trendingCell.setup(title: item.title, popularity: item.popularity, date: item.releaseDate)
-                    if item.posterPath == nil {
-                        trendingCell.setFailedLoadImage()
-                    } else {
-                        trendingCell.loadImage(url: item.posterPath ?? "")
-                    }
-                    return trendingCell
-                case 3:
-                    guard let latestCell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PosterCell.identifier,
-                        for: indexPath
-                    ) as? PosterCell else { return UICollectionViewCell() }
-                    latestCell.setup(title: item.title)
-                    if item.posterPath == nil {
-                        latestCell.setFailedLoadImage()
-                    } else {
-                        latestCell.loadImage(url: item.posterPath ?? "")
-                    }
-                    return latestCell
-                default:
-                    return UICollectionViewCell()
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else { return UICollectionViewCell() }
+                if item.posterPath == nil {
+                    cell.setFailedLoadImage()
+                } else {
+                    cell.loadImage(url: item.posterPath ?? "")
                 }
-            },
-            configureSupplementaryView: { rxDataSource, collectionView, kind, indexPath in
-                let sectionModel = rxDataSource.sectionModels[indexPath.section]
-                guard let section = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: HomeCollectionHeaderView.identifier,
-                    for: indexPath) as? HomeCollectionHeaderView else { return UICollectionReusableView() }
-                section.setTitle(title: sectionModel.title)
-                return section
+                return cell
             }
         )
-    }
-}
-
-// MARK: - Section
-enum MovieListSection: Int, CaseIterable {
-    case discover, popular, trending, latest
-
-    var description: String {
-        switch self {
-        case .discover:
-            return "Discover"
-        case .popular:
-            return "Popular"
-        case .trending:
-            return "Trending"
-        case .latest:
-            return "Latest"
-        }
     }
 }
