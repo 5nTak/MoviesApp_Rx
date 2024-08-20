@@ -9,6 +9,8 @@ import Foundation
 import RxSwift
 
 protocol MovieRepository {
+    func fetchUpcomingMovies(page: Int) -> Single<MovieList>
+    
     func fetchDiscoveredMovies(page: Int) -> Single<MovieList>
     
     func fetchDiscoveredMovies(page: Int, id: Int) -> Single<MovieList>

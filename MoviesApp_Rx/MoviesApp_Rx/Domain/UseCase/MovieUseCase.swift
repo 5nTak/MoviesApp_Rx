@@ -15,6 +15,14 @@ final class MovieUseCase {
         self.movieRepository = movieRepository
     }
     
+    func fetchUpcomingMovies(page: Int) -> Single<[Movie]> {
+        return movieRepository.fetchUpcomingMovies(page: page)
+            .map { movieList in
+                let movies = movieList.results
+                return movies
+            }
+    }
+    
     func fetchDiscoveryMovie(page: Int) -> Single<[Movie]> {
         return movieRepository.fetchDiscoveredMovies(page: page)
             .map { movieList in
