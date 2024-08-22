@@ -12,13 +12,21 @@ import RxCocoa
 import RxDataSources
 
 final class HomeViewController: UIViewController {
+    private let convertCellButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "list.and.film"), for: .normal)
+        return button
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
+        collectionView.register(ExpandedCell.self, forCellWithReuseIdentifier: ExpandedCell.identifier)
         return collectionView
     }()
     
     var viewModel: HomeViewModel
+    private let isExpandedLayout = BehaviorRelay<Bool>(value: false)
     private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
     private let disposeBag = DisposeBag()
     
@@ -38,6 +46,7 @@ final class HomeViewController: UIViewController {
         bind()
         didSelectMovies()
         setupPrefetching()
+        setupButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +64,17 @@ final class HomeViewController: UIViewController {
         
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: convertCellButton)
+    }
+    
+    private func setupButtonAction() {
+        convertCellButton.addTarget(self, action: #selector(toggleLayout), for: .touchUpInside)
+    }
+    
+    @objc private func toggleLayout() {
+        isExpandedLayout.accept(!isExpandedLayout.value)
+        collectionView.setCollectionViewLayout(createLayout(), animated: true)
     }
     
     private func bind() {
@@ -93,20 +113,36 @@ final class HomeViewController: UIViewController {
 // MARK: - Layout
 extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1/3),
-            heightDimension: .fractionalHeight(1)
-        )
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(1/2)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 3)
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        return UICollectionViewCompositionalLayout(section: section)
+        if isExpandedLayout.value {
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1/4)
+            )
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+            return UICollectionViewCompositionalLayout(section: section)
+        } else {
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1/3),
+                heightDimension: .fractionalHeight(1)
+            )
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalWidth(1/2)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 3)
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            return UICollectionViewCompositionalLayout(section: section)
+        }
     }
 }
 
@@ -119,15 +155,36 @@ extension HomeViewController {
     
     private func configureDataSource() {
         rxDataSource = RxCollectionViewSectionedReloadDataSource<MovieSectionModel>(
-            configureCell: { rxDataSource, collectionView, indexPath, item in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else { return UICollectionViewCell() }
-                if item.posterPath == nil {
-                    cell.setFailedLoadImage()
+            configureCell: { [weak self] rxDataSource, collectionView, indexPath, item in
+                guard let self = self else { return UICollectionViewCell() }
+                
+                let isExpanded = self.isExpandedLayout.value
+                
+                if isExpanded {
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExpandedCell.identifier, for: indexPath) as? ExpandedCell else { return UICollectionViewCell() }
+                    cell.setup(title: item.title, releasedDate: item.releaseDate)
+                    if item.posterPath == nil || item.backdropPath == nil {
+                        cell.setFailedLoadImage()
+                    } else {
+                        cell.loadImage(backdropUrl: item.backdropPath ?? "", posterUrl: item.posterPath ?? "")
+                    }
+                    return cell
                 } else {
-                    cell.loadImage(url: item.posterPath ?? "")
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCell.identifier, for: indexPath) as? PosterCell else { return UICollectionViewCell() }
+                    if item.posterPath == nil {
+                        cell.setFailedLoadImage()
+                    } else {
+                        cell.loadImage(url: item.posterPath ?? "")
+                    }
+                    return cell
                 }
-                return cell
             }
         )
+        
+        isExpandedLayout
+            .subscribe { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .disposed(by: disposeBag)
     }
 }
