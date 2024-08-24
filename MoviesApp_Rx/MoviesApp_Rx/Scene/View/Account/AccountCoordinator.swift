@@ -66,8 +66,6 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func detailFlow(with movie: Movie, title: String, movieId: Int) {
         let detailCoordinator = DetailCoordinator(
-            movie: movie,
-            title: title,
             movieId: movieId,
             navigationController: self.navigationController,
             finishDelegate: self)

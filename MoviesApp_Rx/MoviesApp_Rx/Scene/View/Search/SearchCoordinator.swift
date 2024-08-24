@@ -50,8 +50,6 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func detailMovieFlow(with movie: Movie, title: String, movieId: Int) {
         let detailCoordinator = DetailCoordinator(
-            movie: movie,
-            title: title,
             movieId: movieId,
             navigationController: self.navigationController,
             finishDelegate: self
