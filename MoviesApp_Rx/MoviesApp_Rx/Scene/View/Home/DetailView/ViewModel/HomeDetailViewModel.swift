@@ -15,7 +15,7 @@ import FirebaseAuth
 enum DetailSectionItem {
     case topPoster(movie: Movie)
     case title(movie: Movie)
-    case explore(kind: ExploreItem)
+    case explore(exploreItem: ExploreItem)
     case movieInfo(movie: Movie)
     case movieOverview(movie: Movie)
 }
@@ -46,7 +46,7 @@ final class DetailViewModel {
     
     weak var coordinator: DetailCoordinator?
     let sections = BehaviorRelay<[DetailSectionModel]>(value: [])
-    let exploreItems = BehaviorRelay<[ExploreItem]>(value: [])
+    let exploreItems = BehaviorRelay<[ExploreItem]>(value: [.reviews, .trailers, .credits, .similarMovies])
     
     private let movieId: Int
     private let favoritesManager = FavoritesManager.shared()
@@ -78,7 +78,7 @@ final class DetailViewModel {
         let titleItem = DetailSectionItem.title(movie: movie)
         let titleSection = DetailSectionModel(title: "Title", items: [titleItem])
         
-        let exploreItems = exploreItems.value.map { DetailSectionItem.explore(kind: $0) }
+        let exploreItems = exploreItems.value.map { DetailSectionItem.explore(exploreItem: $0) }
         let exploreSection = DetailSectionModel(title: "Explore", items: exploreItems)
         
         let movieInfoItem = DetailSectionItem.movieInfo(movie: movie)

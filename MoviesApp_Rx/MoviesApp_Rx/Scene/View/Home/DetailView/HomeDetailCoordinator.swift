@@ -36,4 +36,15 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
         let detailViewController = DetailViewController(viewModel: detailViewModel)
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
+    
+    func reviewsFlow() {
+        let exploreViewModel = ExploreViewModel(
+            movieId: movieId,
+            useCase: SearchUseCase(
+                searchRepository: DefaultSearchRepository()
+            )
+        )
+        let reviewsViewController = ReviewsViewController(viewModel: exploreViewModel)
+        self.navigationController?.pushViewController(reviewsViewController, animated: true)
+    }
 }

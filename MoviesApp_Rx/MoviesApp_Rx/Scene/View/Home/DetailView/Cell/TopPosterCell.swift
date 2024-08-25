@@ -73,6 +73,8 @@ final class TopPosterCell: UICollectionViewCell {
             $0.width.equalToSuperview().multipliedBy(0.3)
             $0.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
+        
+        posterImageView.layer.shadowRadius = 20
     }
     
     func configureMoviePoster(backdropUrl: String, posterUrl: String) {

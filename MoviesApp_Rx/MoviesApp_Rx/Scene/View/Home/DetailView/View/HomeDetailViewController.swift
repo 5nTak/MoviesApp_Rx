@@ -57,6 +57,11 @@ final class DetailViewController: UIViewController {
     }
     
     private func configureHierarchy() {
+        self.title = "Movie Detail"
+        let barButtonItem = UIBarButtonItem(customView: starButton)
+        self.navigationItem.rightBarButtonItem = barButtonItem
+        self.navigationItem.backButtonDisplayMode = .minimal
+        
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
@@ -71,18 +76,22 @@ final class DetailViewController: UIViewController {
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        collectionView.rx.modelSelected(ExploreItem.self)
+        collectionView.rx.modelSelected(DetailSectionItem.self)
             .bind { [weak self] item in
-                self?.handleExploreSection(item)
+                switch item {
+                case .explore(let exploreItem):
+                    self?.handleExploreSection(exploreItem)
+                default:
+                    break
+                }
             }
             .disposed(by: disposeBag)
     }
     
     private func handleExploreSection(_ item: ExploreItem) {
         switch item {
-            // viewModel.coordinator.~~flow
         case .reviews:
-            print("Navigate to Reviews")
+            viewModel.coordinator?.reviewsFlow()
         case .trailers:
             print("Navigate to Trailers")
         case .credits:
@@ -153,7 +162,7 @@ extension DetailViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 20, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)
         
         return section
     }
@@ -208,7 +217,7 @@ extension DetailViewController {
                 return cell
             case .explore(let exploreItem):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExploreMovieCell.identifier, for: indexPath) as? ExploreMovieCell else { return UICollectionViewCell() }
-                
+                cell.configure(with: exploreItem)
                 return cell
             case .movieInfo(let movie):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieInfoCell.identifier, for: indexPath) as? MovieInfoCell else { return UICollectionViewCell() }
