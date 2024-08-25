@@ -48,7 +48,7 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         self.navigationController?.tabBarItem = tabBarItem
     }
     
-    func detailMovieFlow(with movie: Movie, title: String, movieId: Int) {
+    func detailMovieFlow(movieId: Int) {
         let detailCoordinator = DetailCoordinator(
             movieId: movieId,
             navigationController: self.navigationController,

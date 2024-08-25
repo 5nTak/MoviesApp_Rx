@@ -19,6 +19,14 @@ final class SearchUseCase {
         return self.searchRepository.fetchSearchMovie(id: id)
     }
     
+    func fetchReviews(id: Int) -> Single<[Review]> {
+        return self.searchRepository.fetchReviews(id: id)
+            .map { reviews in
+                let reviewList = reviews.result
+                return reviewList
+            }
+    }
+    
     func fetchSearchMovie(searchText: String) -> Single<[Movie]> {
         return self.searchRepository.fetchSearchMovie(searchText: searchText)
             .map { movieList in

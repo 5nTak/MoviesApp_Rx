@@ -11,6 +11,8 @@ import RxSwift
 protocol SearchRepository {
     func fetchSearchMovie(id: Int) -> Single<Movie>
     
+    func fetchReviews(id: Int) -> Single<Reviews>
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList>
     
     func fetchSearchCollection(searchText: String) -> Single<CollectionList>

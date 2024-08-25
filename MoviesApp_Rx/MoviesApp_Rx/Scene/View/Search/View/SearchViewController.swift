@@ -61,25 +61,19 @@ final class SearchViewController: UIViewController {
                 guard let sectionModel = self.rxDataSource?.sectionModels[indexPath.section] else { return }
                 let item = sectionModel.items[indexPath.item]
                 
-                if self.viewModel?.isSearchActive.value == true {
-                    if let movie = item as? Movie {
-                        self.viewModel?.coordinator?.detailMovieFlow(with: movie, title: movie.title, movieId: movie.id)
-                    } else if let collection = item as? Collection {
-                        self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
-                    }
-                } else {
-                    switch item {
-                    case .recentlyItem(let movieTitle):
-                        print("Selected Recently Viewed Movie: \(movieTitle)")
-                    case .discoverPopular(let movies):
-                        self.viewModel?.coordinator?.popularMoviesFlow(page: 1)
-                    case .discoverTopRated(let movies):
-                        self.viewModel?.coordinator?.topRatedMoviesFlow(page: 1)
-                    case .genres(let genre):
-                        self.viewModel?.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
-                    default:
-                        break
-                    }
+                switch item {
+                case .recentlyItem(let movieTitle):
+                    print("Selected Recently Viewed Movie: \(movieTitle)")
+                case .discoverPopular(let movies):
+                    self.viewModel?.coordinator?.popularMoviesFlow(page: 1)
+                case .discoverTopRated(let movies):
+                    self.viewModel?.coordinator?.topRatedMoviesFlow(page: 1)
+                case .genres(let genre):
+                    self.viewModel?.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
+                case .searchMovies(let movie):
+                    self.viewModel?.coordinator?.detailMovieFlow(movieId: movie.id)
+                case .searchCollections(let collection):
+                    self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
                 }
             })
             .disposed(by: disposeBag)
