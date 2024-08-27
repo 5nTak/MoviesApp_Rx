@@ -33,6 +33,15 @@ final class DefaultSearchRepository: SearchRepository {
             }
     }
     
+    func fetchCredits(id: Int) -> Single<Credit> {
+        let request = CreditEndpoint(id: id)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let credits = response.toCredit()
+                return credits
+            }
+    }
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList> {
         let request = SearchMovieEndpoint(searchText: searchText)
         return self.networkProvider.rx.request(request)
