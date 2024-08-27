@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 final class ReviewsViewController: UIViewController {
-    private let viewModel: ExploreViewModel
+    private let viewModel: ReviewsViewModel
     private let disposeBag = DisposeBag()
     
     private lazy var tableView: UITableView = {
@@ -20,7 +20,7 @@ final class ReviewsViewController: UIViewController {
         return tableView
     }()
     
-    init(viewModel: ExploreViewModel) {
+    init(viewModel: ReviewsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

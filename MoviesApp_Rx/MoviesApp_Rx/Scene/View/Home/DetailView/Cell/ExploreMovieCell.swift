@@ -52,7 +52,7 @@ final class ExploreMovieCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         
         imageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(15)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(40)
         }

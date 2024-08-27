@@ -38,13 +38,24 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     }
     
     func reviewsFlow() {
-        let exploreViewModel = ExploreViewModel(
+        let reviewsViewModel = ReviewsViewModel(
             movieId: movieId,
             useCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )
         )
-        let reviewsViewController = ReviewsViewController(viewModel: exploreViewModel)
+        let reviewsViewController = ReviewsViewController(viewModel: reviewsViewModel)
         self.navigationController?.pushViewController(reviewsViewController, animated: true)
+    }
+    
+    func creditsFlow() {
+        let creditsViewModel = CreditsViewModel(
+            movieId: movieId,
+            useCase: SearchUseCase(
+                searchRepository: DefaultSearchRepository()
+            )
+        )
+        let creditsViewController = CreditsViewController(viewModel: creditsViewModel)
+        self.navigationController?.pushViewController(creditsViewController, animated: true)
     }
 }
