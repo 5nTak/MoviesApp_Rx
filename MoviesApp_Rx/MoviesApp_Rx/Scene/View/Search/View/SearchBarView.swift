@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 final class SearchBarView: UIView {
     var searchTextField = UITextField()
@@ -18,6 +19,7 @@ final class SearchBarView: UIView {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "magnifyingglass.circle")
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     

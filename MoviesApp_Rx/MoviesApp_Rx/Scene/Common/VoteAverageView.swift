@@ -20,14 +20,14 @@ final class VoteAverageView: UIView {
     // MARK: - Configurable properties
 
     private let backgroundLayer = CAShapeLayer()
-    @IBInspectable private var backgroundLayerColor: UIColor = .gray {
+    @IBInspectable private var backgroundLayerColor: UIColor = .lightGray {
         didSet {
             updateShapeLayerColors()
         }
     }
 
     private let loadedLayer = CAShapeLayer()
-    @IBInspectable private var loadedLayerColor: UIColor = .black {
+    @IBInspectable private var loadedLayerColor: UIColor = .systemBlue {
         didSet {
             updateShapeLayerColors()
         }

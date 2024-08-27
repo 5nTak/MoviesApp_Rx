@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class ProfileCell: UICollectionViewCell {
     static let identifier = "ProfileCell"
@@ -14,6 +15,7 @@ final class ProfileCell: UICollectionViewCell {
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.fill")
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     

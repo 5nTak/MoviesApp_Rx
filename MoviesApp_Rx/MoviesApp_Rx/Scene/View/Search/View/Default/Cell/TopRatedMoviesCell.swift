@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class TopRatedMoviesCell: UITableViewCell {
     static let identifier = "TopRatedMoviesCell"
@@ -15,6 +16,7 @@ final class TopRatedMoviesCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "ellipsis")
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     

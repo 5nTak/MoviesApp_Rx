@@ -35,6 +35,7 @@ final class ReviewsCell: UITableViewCell {
     private let avatarIconView: UIImageView = {
         let iconView = UIImageView()
         iconView.image = UIImage(systemName: "person.circle")
+        iconView.kf.indicatorType = .activity
         return iconView
     }()
     

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class AccountViewController: UIViewController {
     var viewModel: AccountViewModel?
@@ -15,6 +16,7 @@ final class AccountViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "tmdb_icon")
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     private let idTextField: LoginTextFiled = {

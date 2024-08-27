@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import Kingfisher
 
 final class CreditParentCell: UICollectionViewCell {
     static let identifier = "CreditParentCell"
@@ -24,6 +25,7 @@ final class CreditParentCell: UICollectionViewCell {
     private let toggleView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "chevron.right")
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     

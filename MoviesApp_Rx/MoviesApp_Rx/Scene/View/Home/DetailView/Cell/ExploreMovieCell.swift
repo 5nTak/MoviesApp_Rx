@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class ExploreMovieCell: UICollectionViewCell {
     static let identifier = "ExploreMovieCell"
@@ -15,6 +16,7 @@ final class ExploreMovieCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     

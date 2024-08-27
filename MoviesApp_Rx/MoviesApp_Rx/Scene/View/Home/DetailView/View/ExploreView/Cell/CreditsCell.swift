@@ -15,6 +15,7 @@ final class CreditsCell: UICollectionViewCell {
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.kf.indicatorType = .activity
         return imageView
     }()
     
@@ -74,11 +75,6 @@ final class CreditsCell: UICollectionViewCell {
             roleLabel
         ].forEach { labelStackView.addArrangedSubview($0) }
         
-//        [
-//            profileImageView,
-//            overlayView,
-//            labelStackView
-//        ].forEach { contentView.addSubview($0) }
         contentView.addSubview(profileImageView)
         
         profileImageView.snp.makeConstraints {
