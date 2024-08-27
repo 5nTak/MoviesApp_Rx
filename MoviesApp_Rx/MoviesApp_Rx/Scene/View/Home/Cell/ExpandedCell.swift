@@ -132,5 +132,6 @@ final class ExpandedCell: UICollectionViewCell {
         backgroundImageView.contentMode = .scaleAspectFill
         posterView.image = UIImage(named: "noImageProvided")
         posterView.contentMode = .scaleAspectFill
+        posterView.clipsToBounds = true
     }
 }

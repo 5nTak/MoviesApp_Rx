@@ -44,19 +44,13 @@ final class ReviewsViewController: UIViewController {
     }
     
     private func bind() {
-        if self.viewModel.reviews.value.isEmpty {
-            // Review가 없는 경우 표시할 UI Component 추가
-            view.backgroundColor = .red
-            tableView.backgroundColor = .blue
-        } else {
-            viewModel.reviews
-                .bind(to: tableView.rx.items(cellIdentifier: ReviewsCell.identifier, cellType: ReviewsCell.self)) { (row, review, cell) in
-                    cell.setup(username: review.authorDetails.userName, content: review.content)
-                    if review.authorDetails.avatarPath != nil {
-                        cell.loadImage(url: review.authorDetails.avatarPath ?? "")
-                    }
+        viewModel.reviews
+            .bind(to: tableView.rx.items(cellIdentifier: ReviewsCell.identifier, cellType: ReviewsCell.self)) { (row, review, cell) in
+                cell.setup(username: review.authorDetails.userName, content: review.content)
+                if review.authorDetails.avatarPath != nil {
+                    cell.loadImage(url: review.authorDetails.avatarPath ?? "")
                 }
-                .disposed(by: disposeBag)
-        }
+            }
+            .disposed(by: disposeBag)
     }
 }

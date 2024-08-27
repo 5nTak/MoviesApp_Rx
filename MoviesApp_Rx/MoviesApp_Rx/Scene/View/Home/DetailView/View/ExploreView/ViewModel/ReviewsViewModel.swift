@@ -27,7 +27,6 @@ final class ReviewsViewModel {
     private func fetchReviews() {
         useCase.fetchReviews(id: movieId)
             .asObservable()
-//            .bind(to: reviews)
             .subscribe(onNext: { [weak self] fetchReviews in
                 self?.reviews.accept(fetchReviews)
             }, onError: { error in
