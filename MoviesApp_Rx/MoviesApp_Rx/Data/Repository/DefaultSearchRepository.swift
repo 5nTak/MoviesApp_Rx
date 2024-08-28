@@ -42,6 +42,15 @@ final class DefaultSearchRepository: SearchRepository {
             }
     }
     
+    func fetchSimilarMovies(id: Int, page: Int) -> Single<MovieList> {
+        let request = SimilarEndpoint(id: id, page: page)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let similarMovies = response.toMovieList()
+                return similarMovies
+            }
+    }
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList> {
         let request = SearchMovieEndpoint(searchText: searchText)
         return self.networkProvider.rx.request(request)

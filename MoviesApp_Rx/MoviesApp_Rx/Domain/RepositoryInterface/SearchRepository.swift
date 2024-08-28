@@ -15,6 +15,8 @@ protocol SearchRepository {
     
     func fetchCredits(id: Int) -> Single<Credit>
     
+    func fetchSimilarMovies(id: Int, page: Int) -> Single<MovieList>
+    
     func fetchSearchMovie(searchText: String) -> Single<MovieList>
     
     func fetchSearchCollection(searchText: String) -> Single<CollectionList>

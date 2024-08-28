@@ -31,6 +31,14 @@ final class SearchUseCase {
         return self.searchRepository.fetchCredits(id: id)
     }
     
+    func fetchSimilarMovies(id: Int, page: Int) -> Single<[Movie]> {
+        return self.searchRepository.fetchSimilarMovies(id: id, page: page)
+            .map { movieList in
+                let movies = movieList.results
+                return movies
+            }
+    }
+    
     func fetchSearchMovie(searchText: String) -> Single<[Movie]> {
         return self.searchRepository.fetchSearchMovie(searchText: searchText)
             .map { movieList in
