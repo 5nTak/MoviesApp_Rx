@@ -97,7 +97,7 @@ final class DetailViewController: UIViewController {
         case .credits:
             viewModel.coordinator?.creditsFlow()
         case .similarMovies:
-            print("Navigate to Similar Movies")
+            viewModel.coordinator?.similarFlows()
         }
     }
 }

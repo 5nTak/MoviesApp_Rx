@@ -42,9 +42,10 @@ final class GenreCoordinator: Coordinator, CoordinationFinishDelegate {
         self.navigationController?.pushViewController(genreDetailViewController, animated: true)
     }
     
-    func detailFlow(with movie: Movie, title: String, movieId: Int) {
+    func detailFlow(title: String, movieId: Int) {
         let detailCoordinator = DetailCoordinator(
             movieId: movieId,
+            movieName: title,
             navigationController: self.navigationController,
             finishDelegate: self)
         self.childCoordinator.append(detailCoordinator)

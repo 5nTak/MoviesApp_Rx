@@ -98,7 +98,7 @@ final class PopularMoviesViewController: UIViewController {
             .subscribe(onNext: { [weak self] indexPath in
                 guard let self = self else { return }
                 let movie = viewModel.popularMovies.value[indexPath.row]
-                self.viewModel.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
+                self.viewModel.coordinator?.detailFlow(title: movie.title, movieId: movie.id)
             })
             .disposed(by: disposeBag)
     }

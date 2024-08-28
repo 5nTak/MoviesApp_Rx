@@ -61,7 +61,7 @@ final class MyInfoViewController: UIViewController {
                     return nil
                 }
                 .subscribe(onNext: { [weak self] movie in
-                    self?.viewModel?.coordinator?.detailFlow(with: movie, title: movie.title, movieId: movie.id)
+                    self?.viewModel?.coordinator?.detailFlow(title: movie.title, movieId: movie.id)
                 })
                 .disposed(by: disposeBag)
         }

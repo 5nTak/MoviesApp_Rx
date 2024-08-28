@@ -1,16 +1,16 @@
 //
-//  GenreDetailCell.swift
+//  SimilarMoviesCell.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 8/14/24.
+//  Created by Tak on 8/28/24.
 //
 
 import UIKit
 import SnapKit
 import Kingfisher
 
-final class GenreDetailCell: UITableViewCell {
-    static let identifier = "GenreDetailCell"
+final class SimilarMoviesCell: UITableViewCell {
+    static let identifier = "SimilarMoviesCell"
     
     private let moviesPosterView: UIImageView = {
         let imageView = UIImageView()
@@ -126,3 +126,4 @@ final class GenreDetailCell: UITableViewCell {
         moviesPosterView.clipsToBounds = true
     }
 }
+

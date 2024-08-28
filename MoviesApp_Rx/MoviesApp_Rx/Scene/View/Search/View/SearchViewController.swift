@@ -71,7 +71,7 @@ final class SearchViewController: UIViewController {
                 case .genres(let genre):
                     self.viewModel?.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
                 case .searchMovies(let movie):
-                    self.viewModel?.coordinator?.detailMovieFlow(movieId: movie.id)
+                    self.viewModel?.coordinator?.detailMovieFlow(title: movie.title, movieId: movie.id)
                 case .searchCollections(let collection):
                     self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
                 }

@@ -35,9 +35,21 @@ final class CreditsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         configureHierarchy()
         configureDataSource()
         bind()
+    }
+    
+    private func setupNavigationBar() {
+        self.title = viewModel.movieName
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .lightGray
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     
     private func configureHierarchy() {

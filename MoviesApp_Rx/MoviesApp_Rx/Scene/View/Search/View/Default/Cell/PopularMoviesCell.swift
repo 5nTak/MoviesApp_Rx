@@ -123,5 +123,6 @@ final class PopularMoviesCell: UITableViewCell {
     func setFailedLoadImage() {
         moviesPosterView.image = UIImage(named: "noImageProvided")
         moviesPosterView.contentMode = .scaleAspectFill
+        moviesPosterView.clipsToBounds = true
     }
 }

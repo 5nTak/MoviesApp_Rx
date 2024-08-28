@@ -14,11 +14,13 @@ final class ReviewsViewModel {
     private let useCase: SearchUseCase
     
     let movieId: Int
+    let movieName: String
     
     let reviews = BehaviorRelay<[Review]>(value: [])
     
-    init(movieId: Int, useCase: SearchUseCase) {
+    init(movieId: Int, movieName: String, useCase: SearchUseCase) {
         self.movieId = movieId
+        self.movieName = movieName
         self.useCase = useCase
         
         fetchReviews()

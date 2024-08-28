@@ -53,5 +53,6 @@ final class PosterCell: UICollectionViewCell {
     func setFailedLoadImage() {
         imageView.image = UIImage(named: "noImageProvided")
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
     }
 }

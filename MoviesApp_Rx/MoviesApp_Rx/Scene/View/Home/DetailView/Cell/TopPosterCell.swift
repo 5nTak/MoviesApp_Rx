@@ -87,7 +87,9 @@ final class TopPosterCell: UICollectionViewCell {
     func setFailedLoadImage() {
         backdropImageView.image = UIImage(named: "noImageProvided")
         backdropImageView.contentMode = .scaleAspectFill
+        backdropImageView.clipsToBounds = true
         posterImageView.image = UIImage(named: "noImageProvided")
         posterImageView.contentMode = .scaleAspectFill
+        posterImageView.clipsToBounds = true
     }
 }

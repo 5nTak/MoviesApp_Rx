@@ -47,14 +47,16 @@ final class CreditsViewModel {
     private let useCase: SearchUseCase
     
     let movieId: Int
+    let movieName: String
     
     let credits = BehaviorRelay<[CreditsSectionModel]>(value: [])
     
     private var isCastSectionVisible = true
     private var isCrewSectionVisible = true
     
-    init(movieId: Int, useCase: SearchUseCase) {
+    init(movieId: Int, movieName: String, useCase: SearchUseCase) {
         self.movieId = movieId
+        self.movieName = movieName
         self.useCase = useCase
         
         fetchCredits()

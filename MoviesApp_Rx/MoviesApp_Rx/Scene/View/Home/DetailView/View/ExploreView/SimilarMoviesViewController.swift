@@ -1,8 +1,8 @@
 //
-//  TopRatedMoviesViewController.swift
+//  SimilarMoviesViewController.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 8/6/24.
+//  Created by Tak on 8/28/24.
 //
 
 import UIKit
@@ -10,17 +10,17 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class TopRatedMoviesViewController: UIViewController {
-    let viewModel: TopRatedMoviesViewModel
-    
+final class SimilarMoviesViewController: UIViewController {
+    private var viewModel: SimilarMoviesViewModel
     private let disposeBag = DisposeBag()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds)
-        tableView.register(TopRatedMoviesCell.self, forCellReuseIdentifier: TopRatedMoviesCell.identifier)
+        tableView.register(SimilarMoviesCell.self, forCellReuseIdentifier: SimilarMoviesCell.identifier)
         return tableView
     }()
     
-    init(viewModel: TopRatedMoviesViewModel) {
+    init(viewModel: SimilarMoviesViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,12 +33,12 @@ final class TopRatedMoviesViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         configureHierarchy()
-        bindTableView()
+        bind()
         didSelectMoviesAt()
     }
     
     private func setupNavigationBar() {
-        self.title = "Top Rated Movies"
+        self.title = "Similar Movies"
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
@@ -56,10 +56,10 @@ final class TopRatedMoviesViewController: UIViewController {
         }
     }
     
-    private func bindTableView() {
-        viewModel.topRatedMovies
+    private func bind() {
+        viewModel.similarMovies
             .asObservable()
-            .bind(to: tableView.rx.items(cellIdentifier: TopRatedMoviesCell.identifier, cellType: TopRatedMoviesCell.self)) { index, movie, cell in
+            .bind(to: tableView.rx.items(cellIdentifier: SimilarMoviesCell.identifier, cellType: SimilarMoviesCell.self)) { index, movie, cell in
                 self.tableView.rowHeight = 147.6
                 let genres = self.viewModel.matchGenreIds(ids: movie.genreIds ?? [])
                 cell.setup(
@@ -68,6 +68,7 @@ final class TopRatedMoviesViewController: UIViewController {
                     releasedDate: movie.releaseDate,
                     voteAverage: movie.voteAverage
                 )
+                
                 if movie.posterPath == nil {
                     cell.setFailedLoadImage()
                 } else {
@@ -84,21 +85,21 @@ final class TopRatedMoviesViewController: UIViewController {
     }
     
     private func prefetchData(indexPaths: [IndexPath]) {
-        let totalRows = viewModel.topRatedMovies.value.count
+        let totalRows = viewModel.similarMovies.value.count
         let needsToFetchMore = indexPaths.contains { $0.row >= totalRows - 10 }
         
         if needsToFetchMore {
-            viewModel.fetchTopRatedMovies(page: viewModel.page + 1)
+            viewModel.fetchSimilarMovies(id: viewModel.movieId, page: viewModel.page + 1)
         }
     }
     
     private func didSelectMoviesAt() {
         tableView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
+            .subscribe { [weak self] indexPath in
                 guard let self = self else { return }
-                let movie = viewModel.topRatedMovies.value[indexPath.row]
-                self.viewModel.coordinator?.detailFlow(title: movie.title, movieId: movie.id)
-            })
+                let movie = viewModel.similarMovies.value[indexPath.row]
+                self.viewModel.coordinator?.detailFlow(movieId: movie.id, movieName: movie.title)
+            }
             .disposed(by: disposeBag)
     }
 }

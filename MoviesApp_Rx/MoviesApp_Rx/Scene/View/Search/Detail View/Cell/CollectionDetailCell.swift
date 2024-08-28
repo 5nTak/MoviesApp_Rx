@@ -134,5 +134,6 @@ final class CollectionDetailCell: UICollectionViewCell {
     func setFailedLoadImage() {
         imageView.image = UIImage(named: "noImageProvided")
         imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
     }
 }

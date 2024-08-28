@@ -15,12 +15,15 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     weak var navigationController: UINavigationController?
     
     private var movieId: Int
+    private var movieName: String
     
     init(
         movieId: Int,
+        movieName: String,
         navigationController: UINavigationController?,
         finishDelegate: CoordinationFinishDelegate) {
             self.movieId = movieId
+            self.movieName = movieName
             self.navigationController = navigationController
             self.finishDelegate = finishDelegate
         }
@@ -40,6 +43,7 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     func reviewsFlow() {
         let reviewsViewModel = ReviewsViewModel(
             movieId: movieId,
+            movieName: movieName,
             useCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )
@@ -51,11 +55,22 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     func creditsFlow() {
         let creditsViewModel = CreditsViewModel(
             movieId: movieId,
+            movieName: movieName,
             useCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )
         )
         let creditsViewController = CreditsViewController(viewModel: creditsViewModel)
         self.navigationController?.pushViewController(creditsViewController, animated: true)
+    }
+    
+    func similarFlows() {
+        let similarCoordinator = SimilarCoordinator(
+            movieId: movieId,
+            navigationController: navigationController,
+            finishDelegate: self
+        )
+        self.childCoordinator.append(similarCoordinator)
+        similarCoordinator.start()
     }
 }
