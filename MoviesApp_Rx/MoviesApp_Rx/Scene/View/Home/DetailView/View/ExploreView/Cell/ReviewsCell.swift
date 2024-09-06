@@ -28,7 +28,6 @@ final class ReviewsCell: UITableViewCell {
     private let profileStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-//        stackView
         return stackView
     }()
     

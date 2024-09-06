@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol SearchRepository {
-    func fetchSearchMovie(id: Int) -> Single<Movie>
+    func fetchSearchMovie(id: Int) -> Single<MovieDetail>
     
     func fetchReviews(id: Int) -> Single<Reviews>
     

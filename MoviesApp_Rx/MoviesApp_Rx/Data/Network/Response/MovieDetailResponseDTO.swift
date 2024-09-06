@@ -1,33 +1,28 @@
 //
-//  MovieResponseDTO.swift
+//  MovieDetailResponseDTO.swift
 //  MoviesApp_Rx
 //
-//  Created by Tak on 2023/11/25.
+//  Created by Tak on 8/31/24.
 //
 
 import Foundation
 
-struct MovieResponse: Decodable {
+struct MovieDetailResponse: Decodable {
     let id: Int
     let title: String
-    let originalTitle: String?
-    let originalLanguage: String?
-    let genreIds: [Int]?
+    let genres: [GenreResponse]?
     let adult: Bool?
     let overview: String
     let posterPath: String?
     let backdropPath: String?
     let releaseDate: String
     let video: Bool?
-    let voteAverage: Double
-    let voteCount: Int
-    let popularity: Double
+    let voteAverage: Double?
+    let voteCount: Int?
+    let popularity: Double?
     
     enum CodingKeys: String, CodingKey {
-        case id, title, overview, video, adult, popularity
-        case genreIds = "genre_ids"
-        case originalTitle = "original_title"
-        case originalLanguage = "original_language"
+        case id, title, overview, video, genres, adult, popularity
         case posterPath = "poster_path"
         case backdropPath = "backdrop_path"
         case releaseDate = "release_date"
@@ -36,14 +31,12 @@ struct MovieResponse: Decodable {
     }
 }
 
-extension MovieResponse {
-    func toMovie() -> Movie {
-        return Movie(
+extension MovieDetailResponse {
+    func toMovieDetail() -> MovieDetail {
+        return MovieDetail(
             id: self.id,
             title: self.title,
-            originalTitle: self.originalTitle,
-            originalLanguage: self.originalLanguage,
-            genreIds: self.genreIds,
+            genres: toGenres(),
             adult: self.adult,
             overview: self.overview,
             posterPath: self.posterPath,
@@ -54,5 +47,13 @@ extension MovieResponse {
             voteCount: self.voteCount,
             popularity: self.popularity
         )
+    }
+    
+    func toGenres() -> [Genre]? {
+        return self.genres?.compactMap { toGenre(genreResponse: $0) }
+    }
+
+    func toGenre(genreResponse: GenreResponse) -> Genre? {
+        return Genre(id: genreResponse.id, name: genreResponse.name)
     }
 }

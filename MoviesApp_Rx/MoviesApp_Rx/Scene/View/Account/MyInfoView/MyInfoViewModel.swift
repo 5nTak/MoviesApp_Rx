@@ -12,7 +12,7 @@ import RxDataSources
 
 enum AccountSectionItem {
     case profile(email: String)
-    case star(movie: Movie)
+    case star(movie: MovieDetail)
     case setting(option: String)
 }
 

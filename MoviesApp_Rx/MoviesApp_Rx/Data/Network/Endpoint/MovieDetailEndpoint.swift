@@ -1,5 +1,5 @@
 //
-//  MovieEndpoint.swift
+//  MovieDetailEndpoint.swift
 //  MoviesApp_Rx
 //
 //  Created by Tak on 7/10/24.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct MovieEndpoint: TmdbAPIEndpoint {
-    typealias APIResponse = MovieResponse
+struct MovieDetailEndpoint: TmdbAPIEndpoint {
+    typealias APIResponse = MovieDetailResponse
 
     var path: String = ""
     var queries: [String: String]

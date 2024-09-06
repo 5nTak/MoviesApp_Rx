@@ -108,10 +108,6 @@ final class AccountViewController: UIViewController {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     
-//    private func setupNavigatonBar() {
-//        navigationItem.title = AccountViewString.account.rawValue
-//    }
-    
     private func setupLayout() {
         view.backgroundColor = .systemGray6
         

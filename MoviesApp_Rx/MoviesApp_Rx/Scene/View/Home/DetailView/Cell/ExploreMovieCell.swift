@@ -68,16 +68,16 @@ final class ExploreMovieCell: UICollectionViewCell {
     func configure(with item: ExploreItem) {
         switch item {
         case .reviews:
-            imageView.image = UIImage(systemName: "star.bubble") // 임의의 시스템 이미지
+            imageView.image = UIImage(systemName: "star.bubble")
             titleLabel.text = "Reviews"
         case .trailers:
-            imageView.image = UIImage(systemName: "film") // 임의의 시스템 이미지
+            imageView.image = UIImage(systemName: "film")
             titleLabel.text = "Trailers"
         case .credits:
-            imageView.image = UIImage(systemName: "person.3") // 임의의 시스템 이미지
+            imageView.image = UIImage(systemName: "person.3")
             titleLabel.text = "Credits"
         case .similarMovies:
-            imageView.image = UIImage(systemName: "square.grid.2x2") // 임의의 시스템 이미지
+            imageView.image = UIImage(systemName: "square.grid.2x2")
             titleLabel.text = "Similar Movies"
         }
     }

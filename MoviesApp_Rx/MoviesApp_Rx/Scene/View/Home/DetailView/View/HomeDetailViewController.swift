@@ -131,7 +131,7 @@ extension DetailViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
@@ -142,11 +142,11 @@ extension DetailViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .absolute(60))
+                                               heightDimension: .absolute(50))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
@@ -162,29 +162,29 @@ extension DetailViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
     
     private func createMovieInfoSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
-                                              heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(70))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .absolute(50))
+                                               heightDimension: .estimated(70))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 20, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
     
     private func createMovieOverviewSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalHeight(1.0))
+                                              heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -192,7 +192,7 @@ extension DetailViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 20, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         return section
     }
@@ -213,7 +213,7 @@ extension DetailViewController {
                 return cell
             case .title(let movie):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieTitleCell.identifier, for: indexPath) as? MovieTitleCell else { return UICollectionViewCell() }
-                cell.setup(title: movie.title, voteAverage: movie.voteAverage)
+                cell.setup(title: movie.title, voteAverage: movie.voteAverage ?? 0)
                 return cell
             case .explore(let exploreItem):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExploreMovieCell.identifier, for: indexPath) as? ExploreMovieCell else { return UICollectionViewCell() }
@@ -221,11 +221,13 @@ extension DetailViewController {
                 return cell
             case .movieInfo(let movie):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieInfoCell.identifier, for: indexPath) as? MovieInfoCell else { return UICollectionViewCell() }
-                
+                let genreIds = movie.genres?.map { $0.id } ?? []
+                let genres = self.viewModel.matchGenreIds(ids: genreIds)
+                cell.configure(genres: genres, releaseDate: movie.releaseDate)
                 return cell
             case .movieOverview(let movie):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieOverviewCell.identifier, for: indexPath) as? MovieOverviewCell else { return UICollectionViewCell() }
-                
+                cell.configure(overview: movie.overview)
                 return cell
             }
         }

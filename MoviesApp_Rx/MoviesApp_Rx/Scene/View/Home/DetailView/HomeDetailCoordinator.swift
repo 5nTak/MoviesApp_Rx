@@ -31,7 +31,10 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     func start() {
         let detailViewModel = DetailViewModel(
             movieId: movieId,
-            useCase: SearchUseCase(
+            movieUseCase: MovieUseCase(
+                movieRepository: DefaultMovieRepository()
+            ),
+            searchUseCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )
         )

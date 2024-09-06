@@ -52,7 +52,7 @@ final class MyInfoViewController: UIViewController {
                 .disposed(by: disposeBag)
             
             collectionView.rx.itemSelected
-                .compactMap { [weak self] indexPath -> Movie? in
+                .compactMap { [weak self] indexPath -> MovieDetail? in
                     guard let self = self else { return nil }
                     let item = dataSource[indexPath]
                     if case let .star(movie) = item {

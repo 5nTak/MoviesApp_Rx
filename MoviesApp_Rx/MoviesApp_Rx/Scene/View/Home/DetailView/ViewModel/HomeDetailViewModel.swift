@@ -13,11 +13,11 @@ import Kingfisher
 import FirebaseAuth
 
 enum DetailSectionItem {
-    case topPoster(movie: Movie)
-    case title(movie: Movie)
+    case topPoster(movie: MovieDetail)
+    case title(movie: MovieDetail)
     case explore(exploreItem: ExploreItem)
-    case movieInfo(movie: Movie)
-    case movieOverview(movie: Movie)
+    case movieInfo(movie: MovieDetail)
+    case movieOverview(movie: MovieDetail)
 }
 
 enum ExploreItem {
@@ -47,18 +47,21 @@ final class DetailViewModel {
     weak var coordinator: DetailCoordinator?
     let sections = BehaviorRelay<[DetailSectionModel]>(value: [])
     let exploreItems = BehaviorRelay<[ExploreItem]>(value: [.reviews, .trailers, .credits, .similarMovies])
-    
+    var genres = BehaviorRelay<[Genre]>(value: [])
     private let movieId: Int
     private let favoritesManager = FavoritesManager.shared()
-    private let useCase: SearchUseCase
+    private let movieUseCase: MovieUseCase
+    private let searchUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
     
     let isFavorite = BehaviorRelay<Bool>(value: false)
     
-    init(movieId: Int, useCase: SearchUseCase) {
+    init(movieId: Int, movieUseCase: MovieUseCase, searchUseCase: SearchUseCase) {
         self.movieId = movieId
-        self.useCase = useCase
+        self.movieUseCase = movieUseCase
+        self.searchUseCase = searchUseCase
         self.fetchMovieDetail()
+        self.fetchGenres()
         
         if Auth.auth().currentUser != nil {
             favoritesManager.isFavoriteMovie(movieId: movieId)
@@ -71,7 +74,7 @@ final class DetailViewModel {
         }
     }
     
-    private func createSections(with movie: Movie) {
+    private func createSections(with movie: MovieDetail) {
         let topPosterItem = DetailSectionItem.topPoster(movie: movie)
         let topPosterSection = DetailSectionModel(title: "Top Poster", items: [topPosterItem])
         
@@ -91,12 +94,28 @@ final class DetailViewModel {
     }
     
     private func fetchMovieDetail() {
-        self.useCase.fetchSearchMovie(id: movieId)
+        self.searchUseCase.fetchSearchMovie(id: movieId)
             .asObservable()
             .subscribe(onNext: { movie in
                 self.createSections(with: movie)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func fetchGenres() {
+        movieUseCase.fetchGenres()
+            .asObservable()
+            .subscribe(onNext: { genres in
+                self.genres.accept(genres)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func matchGenreIds(ids: [Int]) -> [String] {
+        let genreNames = ids.compactMap { id in
+            return genres.value.first { $0.id == id }?.name
+        }
+        return genreNames
     }
     
     func toggleFavorite() {
