@@ -20,6 +20,12 @@ final class SimilarMoviesViewController: UIViewController {
         return tableView
     }()
     
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     init(viewModel: SimilarMoviesViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -57,6 +63,28 @@ final class SimilarMoviesViewController: UIViewController {
     }
     
     private func bind() {
+        viewModel.isLoading
+            .bind(to: loadingIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        viewModel.similarMovies
+            .subscribe(onNext: { [weak self] movies in
+                if movies.isEmpty {
+                    self?.setupEmptyReviewLabel()
+                } else {
+                    self?.bindMovies()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindMovies() {
+        for subview in view.subviews {
+            if let label = subview as? UILabel, label.text == "Not Found!" {
+                label.removeFromSuperview()
+            }
+        }
+        
         viewModel.similarMovies
             .asObservable()
             .bind(to: tableView.rx.items(cellIdentifier: SimilarMoviesCell.identifier, cellType: SimilarMoviesCell.self)) { index, movie, cell in
@@ -101,5 +129,18 @@ final class SimilarMoviesViewController: UIViewController {
                 self.viewModel.coordinator?.detailFlow(movieId: movie.id, movieName: movie.title)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func setupEmptyReviewLabel() {
+        let notFoundLabel = UILabel()
+        notFoundLabel.text = "Not Found!"
+        notFoundLabel.textAlignment = .center
+        notFoundLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        
+        view.addSubview(notFoundLabel)
+        
+        notFoundLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }

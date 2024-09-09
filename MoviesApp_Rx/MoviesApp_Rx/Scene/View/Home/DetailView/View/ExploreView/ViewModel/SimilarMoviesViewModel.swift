@@ -17,6 +17,7 @@ final class SimilarMoviesViewModel {
     
     var movieId: Int
     var page: Int = 1
+    let isLoading = BehaviorRelay<Bool>(value: false)
     weak var coordinator: SimilarCoordinator?
     
     let similarMovies = BehaviorRelay<[Movie]>(value: [])
@@ -50,6 +51,8 @@ final class SimilarMoviesViewModel {
         guard !isFetching else { return }
         isFetching = true
         
+        isLoading.accept(true)
+        
         self.searchUseCase.fetchSimilarMovies(id: id, page: page)
             .asObservable()
             .observe(on: MainScheduler.instance)
@@ -57,7 +60,7 @@ final class SimilarMoviesViewModel {
                 guard let self = self else {
                     return
                 }
-                
+                self.isLoading.accept(false)
                 if !newMovies.isEmpty {
                     let currentMovies = self.similarMovies.value
                     self.similarMovies.accept(currentMovies + newMovies)
@@ -67,6 +70,7 @@ final class SimilarMoviesViewModel {
                 self.isFetching = false
             }, onError: { [weak self] error in
                 self?.isFetching = false
+                self?.isLoading.accept(false)
                 print("Error fetching movies: \(error)")
             })
             .disposed(by: disposeBag)

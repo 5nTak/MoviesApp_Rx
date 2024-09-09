@@ -17,6 +17,7 @@ final class ReviewsViewModel {
     let movieName: String
     
     let reviews = BehaviorRelay<[Review]>(value: [])
+    let isLoading = BehaviorRelay<Bool>(value: false)
     
     init(movieId: Int, movieName: String, useCase: SearchUseCase) {
         self.movieId = movieId
@@ -27,12 +28,16 @@ final class ReviewsViewModel {
     }
     
     private func fetchReviews() {
+        isLoading.accept(true)
         useCase.fetchReviews(id: movieId)
+            .observe(on: MainScheduler.instance)
             .asObservable()
             .subscribe(onNext: { [weak self] fetchReviews in
+                self?.isLoading.accept(false)
                 self?.reviews.accept(fetchReviews)
-            }, onError: { error in
+            }, onError: { [weak self] error in
                 print(error.localizedDescription)
+                self?.isLoading.accept(false)
             })
             .disposed(by: disposeBag)
     }

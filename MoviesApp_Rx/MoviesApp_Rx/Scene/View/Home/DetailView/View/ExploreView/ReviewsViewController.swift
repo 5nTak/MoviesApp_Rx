@@ -20,6 +20,12 @@ final class ReviewsViewController: UIViewController {
         return tableView
     }()
     
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     init(viewModel: ReviewsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +62,36 @@ final class ReviewsViewController: UIViewController {
     }
     
     private func bind() {
+        viewModel.isLoading
+            .bind(to: loadingIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        viewModel.reviews
+            .skip(1)
+            .subscribe(onNext: { [weak self] reviews in
+                if reviews.isEmpty {
+                    self?.setupEmptyReviewLabel()
+                } else {
+                    self?.bindReviews()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupEmptyReviewLabel() {
+        let noReviewLabel = UILabel()
+        noReviewLabel.text = "Reviews don't exist"
+        noReviewLabel.textAlignment = .center
+        noReviewLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        
+        view.addSubview(noReviewLabel)
+        
+        noReviewLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
+    private func bindReviews() {
         viewModel.reviews
             .bind(to: tableView.rx.items(cellIdentifier: ReviewsCell.identifier, cellType: ReviewsCell.self)) { (row, review, cell) in
                 cell.setup(username: review.authorDetails.userName, content: review.content)
