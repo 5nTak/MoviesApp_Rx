@@ -28,6 +28,7 @@ final class ReviewsCell: UITableViewCell {
     private let profileStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.spacing = 5
         return stackView
     }()
     
@@ -38,9 +39,13 @@ final class ReviewsCell: UITableViewCell {
         return iconView
     }()
     
+    var didTapCell: (() -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
+        contentView.addGestureRecognizer(tapGesture)
     }
     
     required init?(coder: NSCoder) {
@@ -73,6 +78,10 @@ final class ReviewsCell: UITableViewCell {
         avatarIconView.snp.makeConstraints {
             $0.width.height.equalTo(30)
         }
+        
+        avatarIconView.layer.cornerRadius = 15
+        avatarIconView.clipsToBounds = true
+        
         contentLabel.snp.makeConstraints {
             $0.top.equalTo(profileStackView.snp.bottom).offset(5)
             $0.leading.trailing.bottom.equalToSuperview().inset(5)
@@ -88,5 +97,9 @@ final class ReviewsCell: UITableViewCell {
         let urlString = avatarIconView.imageBaseUrl + avatarIconView.imageSize + url
         
         avatarIconView.setImageCache(with: urlString)
+    }
+    
+    @objc private func cellTapped() {
+        didTapCell?()
     }
 }

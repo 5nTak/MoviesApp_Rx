@@ -95,10 +95,21 @@ final class ReviewsViewController: UIViewController {
         viewModel.reviews
             .bind(to: tableView.rx.items(cellIdentifier: ReviewsCell.identifier, cellType: ReviewsCell.self)) { (row, review, cell) in
                 cell.setup(username: review.authorDetails.userName, content: review.content)
-                if review.authorDetails.avatarPath != nil {
-                    cell.loadImage(url: review.authorDetails.avatarPath ?? "")
+                if let avatarPath = review.authorDetails.avatarPath {
+                    cell.loadImage(url: avatarPath)
+                }
+                cell.didTapCell = { [weak self] in
+                    self?.showReviewDetail(for: review)
                 }
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func showReviewDetail(for review: Review) {
+        let detailVC = ReviewDetailViewController(review: review)
+        detailVC.modalPresentationStyle = .fullScreen
+        let navigationController = UINavigationController(rootViewController: detailVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
     }
 }
