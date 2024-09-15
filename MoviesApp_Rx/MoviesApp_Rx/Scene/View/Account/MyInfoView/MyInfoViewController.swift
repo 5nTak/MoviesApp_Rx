@@ -17,6 +17,7 @@ final class MyInfoViewController: UIViewController {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: ProfileCell.identifier)
         collectionView.register(StarCell.self, forCellWithReuseIdentifier: StarCell.identifier)
+        collectionView.register(NoFavoritesCell.self, forCellWithReuseIdentifier: NoFavoritesCell.identifier)
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: SettingCell.identifier)
         collectionView.register(MyInfoCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MyInfoCollectionHeaderView.identifier)
         return collectionView
@@ -89,6 +90,8 @@ extension MyInfoViewController {
                 return self.createProfileSection()
             case .star:
                 return self.createStarSection()
+            case .emptyStar:
+                return self.createEmptyStarSection()
             case .setting:
                 return self.createSettingSection()
             }
@@ -120,6 +123,28 @@ extension MyInfoViewController {
         )
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1/2),
+            heightDimension: .fractionalHeight(0.35)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0)
+        section.orthogonalScrollingBehavior = .continuous
+        let sectionHeader = self.createSectionHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+    }
+    
+    private func createEmptyStarSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(0.35)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -199,6 +224,13 @@ extension MyInfoViewController {
                     settingCell.setLogoutButton()
                     settingCell.logoutButton.addTarget(self, action: #selector(self.executeLogout), for: .touchUpInside)
                     return settingCell
+                case .starEmptyMessage:
+                    guard let noFavoriteCell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: NoFavoritesCell.identifier,
+                        for: indexPath
+                    ) as? NoFavoritesCell else { return UICollectionViewCell() }
+                    
+                    return noFavoriteCell
                 }
             },
             configureSupplementaryView: { rxDataSources, collectionView, kind, indexPath in
@@ -218,7 +250,7 @@ extension MyInfoViewController {
 
 // MARK: - Section case
 enum MyInfoSection: Int, CaseIterable {
-    case profile, star, setting
+    case profile, star, setting, emptyStar
     
     var description: String {
         switch self {
@@ -228,6 +260,8 @@ enum MyInfoSection: Int, CaseIterable {
             return "Star"
         case .setting:
             return "Setting"
+        case .emptyStar:
+            return "No Favorites"
         }
     }
 }

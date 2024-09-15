@@ -14,6 +14,7 @@ enum AccountSectionItem {
     case profile(email: String)
     case star(movie: MovieDetail)
     case setting(option: String)
+    case starEmptyMessage
 }
 
 struct AccountSectionModel {
@@ -63,11 +64,17 @@ final class MyInfoViewModel {
         Observable.combineLatest(profileSection, starSection, settingSection)
             .observe(on: MainScheduler.instance)
             .map { profile, star, setting in
-                return [
+                var sections = [
                     AccountSectionModel(title: MyInfoSection.profile.description, items: profile.flatMap { $0.items }),
-                    AccountSectionModel(title: MyInfoSection.star.description, items: star),
                     AccountSectionModel(title: MyInfoSection.setting.description, items: setting.flatMap { $0.items })
                 ]
+                
+                if star.isEmpty {
+                    sections.insert(AccountSectionModel(title: MyInfoSection.emptyStar.description, items: [.starEmptyMessage]), at: 1)
+                } else {
+                    sections.insert(AccountSectionModel(title: MyInfoSection.star.description, items: star), at: 1)
+                }
+                return sections
             }
             .bind(to: sections)
             .disposed(by: disposeBag)
@@ -84,6 +91,14 @@ final class MyInfoViewModel {
     
     private func fetchStarSection(movieIds: [Int]) {
         var starItems = [AccountSectionItem]()
+        
+        if movieIds.isEmpty {
+            starItems.append(.starEmptyMessage)
+            self.starSection.accept(starItems)
+            self.setSections()
+            return
+        }
+        
         let fetchGroup = DispatchGroup()
         
         movieIds.forEach { id in
