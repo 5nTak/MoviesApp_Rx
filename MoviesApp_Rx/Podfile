@@ -10,6 +10,7 @@ target 'MoviesApp_Rx' do
 	pod 'SnapKit'
 	pod 'Kingfisher'
 	pod 'RxDataSources'
+	pod "youtube-ios-player-helper", "~> 1.0.4"
   # Pods for MoviesApp_Rx
 
 end

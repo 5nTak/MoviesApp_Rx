@@ -8,19 +8,28 @@
 import UIKit
 import SnapKit
 import Kingfisher
-import RxSwift
-import RxCocoa
+import youtube_ios_player_helper
 
 final class TrailerCell: UITableViewCell {
     static let identifier = "TrailerCell"
     
-//    private let videoPlayer
+    private let playerView: YTPlayerView = {
+        let playerView = YTPlayerView()
+        return playerView
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
+    }()
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -35,22 +44,45 @@ final class TrailerCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
+        playerView.pauseVideo()
     }
     
     private func setupLayout() {
         [
-//            videoPlayer,
-            titleLabel
+            playerView,
+            titleLabel,
+            loadingIndicator
         ].forEach { contentView.addSubview($0) }
         
-        titleLabel.snp.makeConstraints {
+        playerView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(10)
             $0.leading.trailing.equalToSuperview().inset(5)
-            $0.top.bottom.equalToSuperview().inset(20) // 임시
-            $0.height.equalTo(200) // 임시
+            $0.height.equalTo(250)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(playerView.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(5)
+            $0.bottom.equalToSuperview().inset(20)
+        }
+        
+        loadingIndicator.snp.makeConstraints {
+            $0.center.equalTo(playerView)
         }
     }
     
     func setup(title: String, videoUrl: String) {
         titleLabel.text = title
+        loadingIndicator.startAnimating()
+
+        playerView.delegate = self
+        playerView.load(withVideoId: videoUrl)
+    }
+}
+
+// MARK: - YTPlayerViewDelegate
+extension TrailerCell: YTPlayerViewDelegate {
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        loadingIndicator.stopAnimating()
     }
 }
