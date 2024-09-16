@@ -33,6 +33,15 @@ final class DefaultSearchRepository: SearchRepository {
             }
     }
     
+    func fetchTrailer(id: Int) -> Single<Trailer> {
+        let request = TrailersEndpoint(id: id)
+        return self.networkProvider.rx.request(request)
+            .map { response in
+                let trailers = response.toTrailer()
+                return trailers
+            }
+    }
+    
     func fetchCredits(id: Int) -> Single<Credit> {
         let request = CreditEndpoint(id: id)
         return self.networkProvider.rx.request(request)

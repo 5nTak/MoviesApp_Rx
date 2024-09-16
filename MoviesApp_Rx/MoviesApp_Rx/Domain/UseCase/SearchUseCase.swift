@@ -27,6 +27,14 @@ final class SearchUseCase {
             }
     }
     
+    func fetchTrailer(id: Int) -> Single<[Video]> {
+        return self.searchRepository.fetchTrailer(id: id)
+            .map { trailer in
+                let videos = trailer.results
+                return videos
+            }
+    }
+    
     func fetchCredits(id: Int) -> Single<Credit> {
         return self.searchRepository.fetchCredits(id: id)
     }

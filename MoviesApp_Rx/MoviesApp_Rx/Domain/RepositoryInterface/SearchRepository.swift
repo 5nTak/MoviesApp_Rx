@@ -13,6 +13,8 @@ protocol SearchRepository {
     
     func fetchReviews(id: Int) -> Single<Reviews>
     
+    func fetchTrailer(id: Int) -> Single<Trailer>
+    
     func fetchCredits(id: Int) -> Single<Credit>
     
     func fetchSimilarMovies(id: Int, page: Int) -> Single<MovieList>
