@@ -55,6 +55,18 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
         self.navigationController?.pushViewController(reviewsViewController, animated: true)
     }
     
+    func trailersFlow() {
+        let trailerViewModel = TrailersViewModel(
+            movieId: movieId,
+            movieName: movieName,
+            useCase: SearchUseCase(
+                searchRepository: DefaultSearchRepository()
+            )
+        )
+        let trailersController = TrailersController(viewModel: trailerViewModel)
+        self.navigationController?.pushViewController(trailersController, animated: true)
+    }
+    
     func creditsFlow() {
         let creditsViewModel = CreditsViewModel(
             movieId: movieId,

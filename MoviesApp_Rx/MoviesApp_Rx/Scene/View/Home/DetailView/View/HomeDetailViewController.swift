@@ -93,7 +93,7 @@ final class DetailViewController: UIViewController {
         case .reviews:
             viewModel.coordinator?.reviewsFlow()
         case .trailers:
-            print("Navigate to Trailers")
+            viewModel.coordinator?.trailersFlow()
         case .credits:
             viewModel.coordinator?.creditsFlow()
         case .similarMovies:
@@ -246,7 +246,7 @@ extension DetailViewController {
                     setupStarButton()
                     viewModel.toggleFavorite()
                 } else {
-                    self.showAlert(message: "로그인이 필요한 기능입니다.")
+                    self.showAlert(message: "Login required.")
                 }
             }
             .disposed(by: disposeBag)
