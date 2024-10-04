@@ -24,7 +24,7 @@ final class FavoritesManager {
         guard let userId = Auth.auth().currentUser?.uid else { return FavoritesManager(userId: "") }
         
         let instance = FavoritesManager(userId: userId)
-
+        
         return instance
     }
     
@@ -69,19 +69,6 @@ final class FavoritesManager {
             }
             return Disposables.create()
         }
-    }
-    
-    func getFavoriteMovies() -> Observable<[Int]> {
-        self.db.collection("users").document(userId).collection("favorites").getDocuments { querySnapshot, error in
-            if let error = error {
-                print(error)
-            } else {
-                let movieIds = querySnapshot?.documents.compactMap { Int($0.documentID) } ?? []
-                self.favoriteMoviesSubject.onNext(movieIds)
-            }
-        }
-        
-        return favoriteMoviesSubject
     }
     
     func isFavoriteMovie(movieId: Int) -> Single<Bool> {

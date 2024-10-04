@@ -41,17 +41,13 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         configureHierarchy()
         configureDataSource()
         bind()
         didSelectMovies()
         setupPrefetching()
         setupButtonAction()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.setupNavigationBar()
     }
     
     private func setupNavigationBar() {

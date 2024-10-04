@@ -169,6 +169,8 @@
 		45F1CC342C7B2E18009867E9 /* CreditsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F1CC332C7B2E18009867E9 /* CreditsViewModel.swift */; };
 		45F1CC362C7B31AB009867E9 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F1CC352C7B31AB009867E9 /* CreditsViewController.swift */; };
 		45F1CC382C7B4978009867E9 /* CreditParentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F1CC372C7B4978009867E9 /* CreditParentCell.swift */; };
+		45F662882CA68ADA00CD522D /* RecentlyViewedMoviesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F662872CA68ADA00CD522D /* RecentlyViewedMoviesManager.swift */; };
+		45F6628A2CA68B2300CD522D /* RecentlyMoviesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F662892CA68B2300CD522D /* RecentlyMoviesCell.swift */; };
 		BB6AA1CEFE638FC7DE354937 /* Pods_MoviesApp_Rx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB87F5A7209EE41FB99BAE84 /* Pods_MoviesApp_Rx.framework */; };
 /* End PBXBuildFile section */
 
@@ -305,6 +307,8 @@
 		45F1CC332C7B2E18009867E9 /* CreditsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewModel.swift; sourceTree = "<group>"; };
 		45F1CC352C7B31AB009867E9 /* CreditsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
 		45F1CC372C7B4978009867E9 /* CreditParentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditParentCell.swift; sourceTree = "<group>"; };
+		45F662872CA68ADA00CD522D /* RecentlyViewedMoviesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyViewedMoviesManager.swift; sourceTree = "<group>"; };
+		45F662892CA68B2300CD522D /* RecentlyMoviesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyMoviesCell.swift; sourceTree = "<group>"; };
 		BFBB55C55497685AD3808D01 /* Pods-MoviesApp_Rx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesApp_Rx.release.xcconfig"; path = "Target Support Files/Pods-MoviesApp_Rx/Pods-MoviesApp_Rx.release.xcconfig"; sourceTree = "<group>"; };
 		CB87F5A7209EE41FB99BAE84 /* Pods_MoviesApp_Rx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesApp_Rx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -656,6 +660,7 @@
 			isa = PBXGroup;
 			children = (
 				45DD6C0E2C3D66BC006D831F /* FavoritesManager.swift */,
+				45F662872CA68ADA00CD522D /* RecentlyViewedMoviesManager.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -715,7 +720,6 @@
 				45C184D32BDB7B3400C6A668 /* SearchMovieCell.swift */,
 				45C184D52BDB7B4200C6A668 /* SearchCollectionCell.swift */,
 				458A0BCA2B87667800C889D5 /* SearchHeaderView.swift */,
-				45C765C22C60F7D700CD498E /* ListCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -775,9 +779,11 @@
 		45C765CE2C6384CB00CD498E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				45F662892CA68B2300CD522D /* RecentlyMoviesCell.swift */,
 				45C765CF2C6384DB00CD498E /* PopularMoviesCell.swift */,
 				45C765D92C6800F300CD498E /* TopRatedMoviesCell.swift */,
 				450D8EB42C6C473B00F486EC /* GenreDetailCell.swift */,
+				45C765C22C60F7D700CD498E /* ListCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1055,6 +1061,7 @@
 				457A6A902B0B47B6003FF1AE /* DefaultNetworkProvider.swift in Sources */,
 				45BEA5422C98890B0079189F /* TrailersController.swift in Sources */,
 				45EB9BAE2B73407800CBFCA1 /* AccountCoordinator.swift in Sources */,
+				45F662882CA68ADA00CD522D /* RecentlyViewedMoviesManager.swift in Sources */,
 				4567A9C12C33C93F00860A6F /* MyInfoViewModel.swift in Sources */,
 				45C184E12BDB7BC700C6A668 /* SearchCollectionDetailCoordinator.swift in Sources */,
 				458AF9002C7EBB39007DBC30 /* SimilarEndpoint.swift in Sources */,
@@ -1082,6 +1089,7 @@
 				458A0BB02B84BFA400C889D5 /* SearchRepository.swift in Sources */,
 				458A0BCB2B87667800C889D5 /* SearchHeaderView.swift in Sources */,
 				458A0BCD2B89E61500C889D5 /* Collection.swift in Sources */,
+				45F6628A2CA68B2300CD522D /* RecentlyMoviesCell.swift in Sources */,
 				45535DA82B4D005900549DAF /* AppCoordinator.swift in Sources */,
 				45C184D62BDB7B4200C6A668 /* SearchCollectionCell.swift in Sources */,
 				458AF9022C7F06E2007DBC30 /* SimilarMoviesCell.swift in Sources */,

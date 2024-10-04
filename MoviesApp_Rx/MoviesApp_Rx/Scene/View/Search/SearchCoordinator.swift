@@ -33,8 +33,6 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
     }
     
     func start() {
-        let searchViewController = SearchViewController()
-        self.navigationController = UINavigationController(rootViewController: searchViewController)
         let searchViewModel = SearchViewModel(
             movieUseCase: MovieUseCase(
                 movieRepository: DefaultMovieRepository()
@@ -44,7 +42,8 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
             )
         )
         searchViewModel.coordinator = self
-        searchViewController.viewModel = searchViewModel
+        let searchViewController = SearchViewController(viewModel: searchViewModel)
+        self.navigationController = UINavigationController(rootViewController: searchViewController)
         self.navigationController?.tabBarItem = tabBarItem
     }
     

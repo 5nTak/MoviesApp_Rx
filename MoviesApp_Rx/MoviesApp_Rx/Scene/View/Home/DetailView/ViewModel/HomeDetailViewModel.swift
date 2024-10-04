@@ -50,6 +50,7 @@ final class DetailViewModel {
     var genres = BehaviorRelay<[Genre]>(value: [])
     private let movieId: Int
     private let favoritesManager = FavoritesManager.shared()
+    private let recentlyManager = RecentlyViewedMoviesManager.shared
     private let movieUseCase: MovieUseCase
     private let searchUseCase: SearchUseCase
     private let disposeBag = DisposeBag()
@@ -62,6 +63,8 @@ final class DetailViewModel {
         self.searchUseCase = searchUseCase
         self.fetchMovieDetail()
         self.fetchGenres()
+        
+        recentlyManager.addRecentlyViewed(movieId: movieId)
         
         if Auth.auth().currentUser != nil {
             favoritesManager.isFavoriteMovie(movieId: movieId)
@@ -89,7 +92,7 @@ final class DetailViewModel {
         
         let movieOverviewItem = DetailSectionItem.movieOverview(movie: movie)
         let movieOverviewSection = DetailSectionModel(title: "Overview", items: [movieOverviewItem])
-
+        
         sections.accept([topPosterSection, titleSection, exploreSection, movieInfoSection, movieOverviewSection])
     }
     

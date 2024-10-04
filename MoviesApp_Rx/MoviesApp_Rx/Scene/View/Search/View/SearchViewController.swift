@@ -12,13 +12,20 @@ import RxCocoa
 import RxDataSources
 
 final class SearchViewController: UIViewController {
-    var viewModel: SearchViewModel?
+    var viewModel: SearchViewModel
     private let searchBarView = SearchBarView()
     private let disposeBag = DisposeBag()
     private var rxDataSource: RxCollectionViewSectionedReloadDataSource<SearchSectionModel>?
     
+    private lazy var deleteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Delete", for: .normal)
+        button.addTarget(self, action: #selector(handleDeleteButton), for: .touchUpInside)
+        return button
+    }()
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.register(RecentlyMoviesCell.self, forCellWithReuseIdentifier: RecentlyMoviesCell.identifier)
         collectionView.register(SearchMovieCell.self, forCellWithReuseIdentifier: SearchMovieCell.identifier)
         collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
         collectionView.register(SearchHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchHeaderView.identifier)
@@ -26,20 +33,24 @@ final class SearchViewController: UIViewController {
         return collectionView
     }()
     
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         configureDataSource()
         configureLayout()
-        viewModel?.showSearchResult()
+        viewModel.configureSections()
         bind()
         didSelectItems()
         handleSearchText()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.setupNavigationBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -49,9 +60,30 @@ final class SearchViewController: UIViewController {
     
     private func bind() {
         if let dataSource = rxDataSource {
-            viewModel?.sections
+            viewModel.sections
                 .bind(to: collectionView.rx.items(dataSource: dataSource))
                 .disposed(by: disposeBag)
+        }
+        
+        viewModel.isDeleteMode
+            .subscribe(onNext: { [weak self] isDeleteMode in
+                self?.deleteButton.setTitle(isDeleteMode ? "Finish" : "Delete", for: .normal)
+                self?.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.selectedItems
+            .subscribe(onNext: { [weak self] _ in
+                self?.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    @objc private func handleDeleteButton() {
+        if viewModel.isDeleteMode.value {
+            viewModel.deleteSelectedMovies()
+        } else {
+            viewModel.toggleDeleteMode()
         }
     }
     
@@ -62,18 +94,18 @@ final class SearchViewController: UIViewController {
                 let item = sectionModel.items[indexPath.item]
                 
                 switch item {
-                case .recentlyItem(let movieTitle):
-                    print("Selected Recently Viewed Movie: \(movieTitle)")
+                case .recentlyItem(let movie):
+                    self.viewModel.coordinator?.detailMovieFlow(title: movie.title, movieId: movie.id)
                 case .discoverPopular(let movies):
-                    self.viewModel?.coordinator?.popularMoviesFlow(page: 1)
+                    self.viewModel.coordinator?.popularMoviesFlow(page: 1)
                 case .discoverTopRated(let movies):
-                    self.viewModel?.coordinator?.topRatedMoviesFlow(page: 1)
+                    self.viewModel.coordinator?.topRatedMoviesFlow(page: 1)
                 case .genres(let genre):
-                    self.viewModel?.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
+                    self.viewModel.coordinator?.genreDetailFlow(id: genre.id, name: genre.name)
                 case .searchMovies(let movie):
-                    self.viewModel?.coordinator?.detailMovieFlow(title: movie.title, movieId: movie.id)
+                    self.viewModel.coordinator?.detailMovieFlow(title: movie.title, movieId: movie.id)
                 case .searchCollections(let collection):
-                    self.viewModel?.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
+                    self.viewModel.coordinator?.detailCollectionFlow(with: collection.id, title: collection.name)
                 }
             })
             .disposed(by: disposeBag)
@@ -82,7 +114,7 @@ final class SearchViewController: UIViewController {
     private func handleSearchText() {
         searchBarView.rx.textDidChange
             .map { $0 }
-            .bind(to: viewModel?.searchText ?? BehaviorRelay(value: ""))
+            .bind(to: viewModel.searchText ?? BehaviorRelay(value: ""))
             .disposed(by: disposeBag)
         
         searchBarView.rx.textDidChange
@@ -134,7 +166,7 @@ extension SearchViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
             guard let sectionTitle = self.rxDataSource?.sectionModels[sectionIndex].title,
-                  let section = SearchSectionKind(rawValue: sectionTitle) else { 
+                  let section = SearchSectionKind(rawValue: sectionTitle) else {
                 return nil
             }
             
@@ -222,7 +254,7 @@ extension SearchViewController {
     private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(70)
+            heightDimension: .estimated(50)
         )
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: layoutSectionHeaderSize,
@@ -241,11 +273,22 @@ extension SearchViewController {
                 switch item {
                 case .recentlyItem(let movie):
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: ListCell.identifier,
+                        withReuseIdentifier: RecentlyMoviesCell.identifier,
                         for: indexPath
-                    ) as? ListCell else { return UICollectionViewCell() }
-                    // dummy
-                    cell.setup(title: "Dummy: \(movie)")
+                    ) as? RecentlyMoviesCell else { return UICollectionViewCell() }
+                    cell.configure(title: movie.title)
+                    if movie.posterPath == nil {
+                        cell.setFailedLoadImage()
+                    } else {
+                        cell.loadImage(url: movie.posterPath ?? "")
+                    }
+                    
+                    let isDeleteMode = self.viewModel.isDeleteMode.value
+                    cell.showCheckBox(isVisible: isDeleteMode)
+                    let isSelected = self.viewModel.selectedItems.value.contains(movie.id)
+                    cell.updateCheckBox(isSelected: isSelected)
+                    
+                    cell.bindCheckBoxTap(movieId: movie.id, viewModel: self.viewModel)
                     return cell
                 case .discoverPopular(let movies):
                     guard let cell = collectionView.dequeueReusableCell(
@@ -303,10 +346,20 @@ extension SearchViewController {
                     ofKind: kind,
                     withReuseIdentifier: SearchHeaderView.identifier,
                     for: indexPath
-                ) as? SearchHeaderView else {
-                    return UICollectionReusableView()
+                ) as? SearchHeaderView else { return UICollectionReusableView() }
+                if sectionModel.title == SearchSectionKind.recentlyMovies.description {
+                    section.configure(title: sectionModel.title)
+                    
+                    section.addSubview(self.deleteButton)
+                    
+                    self.deleteButton.snp.makeConstraints {
+                        $0.trailing.equalToSuperview().inset(10)
+                        $0.centerY.equalToSuperview()
+                    }
+                } else {
+                    section.configure(title: sectionModel.title)
                 }
-                section.configure(title: sectionModel.title)
+                
                 return section
             }
         )

@@ -36,6 +36,7 @@ final class ListCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
+        configureArrowButton()
     }
     
     private func configureLayout() {
@@ -49,15 +50,19 @@ final class ListCell: UICollectionViewCell {
             $0.leading.equalToSuperview().inset(30)
         }
         
+        configureArrowButton()
+        
+        contentView.backgroundColor = .white
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = UIColor.systemGray6.cgColor
+    }
+    
+    private func configureArrowButton() {
         arrowButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(titleLabel.snp.trailing).offset(10)
             $0.trailing.equalToSuperview().inset(15)
         }
-        
-        contentView.backgroundColor = .white
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.systemGray6.cgColor
     }
     
     func setup(title: String) {
