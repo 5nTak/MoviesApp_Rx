@@ -46,8 +46,9 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
         let reviewsViewModel = ReviewsViewModel(
             movieId: movieId,
             movieName: movieName,
-            useCase: SearchUseCase(
-                searchRepository: DefaultSearchRepository()
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             )
         )
         let reviewsViewController = ReviewsViewController(viewModel: reviewsViewModel)
@@ -58,8 +59,9 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
         let trailerViewModel = TrailersViewModel(
             movieId: movieId,
             movieName: movieName,
-            useCase: SearchUseCase(
-                searchRepository: DefaultSearchRepository()
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             )
         )
         let trailersController = TrailersController(viewModel: trailerViewModel)
@@ -70,8 +72,9 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
         let creditsViewModel = CreditsViewModel(
             movieId: movieId,
             movieName: movieName,
-            useCase: SearchUseCase(
-                searchRepository: DefaultSearchRepository()
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             )
         )
         let creditsViewController = CreditsViewController(viewModel: creditsViewModel)

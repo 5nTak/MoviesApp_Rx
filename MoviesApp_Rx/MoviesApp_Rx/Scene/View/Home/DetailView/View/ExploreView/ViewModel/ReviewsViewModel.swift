@@ -15,19 +15,19 @@ final class ReviewsViewModel {
     let reviews = BehaviorRelay<[Review]>(value: [])
     let isLoading = BehaviorRelay<Bool>(value: false)
     private let disposeBag = DisposeBag()
-    private let useCase: SearchUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
     
-    init(movieId: Int, movieName: String, useCase: SearchUseCase) {
+    init(movieId: Int, movieName: String, movieInfoUseCase: MovieInfoUseCase) {
         self.movieId = movieId
         self.movieName = movieName
-        self.useCase = useCase
+        self.movieInfoUseCase = movieInfoUseCase
         
         fetchReviews()
     }
     
     private func fetchReviews() {
         isLoading.accept(true)
-        useCase.fetchReviews(id: movieId)
+        movieInfoUseCase.fetchReviews(id: movieId)
             .observe(on: MainScheduler.instance)
             .asObservable()
             .subscribe(onNext: { [weak self] fetchReviews in

@@ -27,11 +27,12 @@ final class SimilarCoordinator: Coordinator, CoordinationFinishDelegate {
     func start() {
         let similarViewModel = SimilarMoviesViewModel(
             movieId: movieId,
-            movieUseCase: DiscoverUseCase(
-                movieRepository: DefaultHomeRepository()
-            ),
-            searchUseCase: SearchUseCase(
+            genreUseCase: GenreUseCase(
                 searchRepository: DefaultSearchRepository()
+            ),
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             )
         )
         similarViewModel.coordinator = self

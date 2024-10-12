@@ -28,8 +28,9 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let homeViewModel = HomeViewModel(
-            movieUseCase: DiscoverUseCase(
-                movieRepository: DefaultHomeRepository()
+            discoverUseCase: DiscoverUseCase(
+                homeRepository: DefaultHomeRepository(),
+                searchRepository: DefaultSearchRepository()
             )
         )
         homeViewModel.coordinator = self

@@ -15,23 +15,23 @@ final class SimilarMoviesViewModel {
     let isLoading = BehaviorRelay<Bool>(value: false)
     let similarMovies = BehaviorRelay<[Movie]>(value: [])
     weak var coordinator: SimilarCoordinator?
-    private let movieUseCase: DiscoverUseCase
-    private let searchUseCase: SearchUseCase
+    private let genreUseCase: GenreUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
     private let disposeBag = DisposeBag()
     private var isFetching: Bool = false
     private let genres = BehaviorRelay<[Genre]>(value: [])
     
-    init(movieId: Int, movieUseCase: DiscoverUseCase, searchUseCase: SearchUseCase) {
+    init(movieId: Int, genreUseCase: GenreUseCase, movieInfoUseCase: MovieInfoUseCase) {
         self.movieId = movieId
-        self.movieUseCase = movieUseCase
-        self.searchUseCase = searchUseCase
+        self.genreUseCase = genreUseCase
+        self.movieInfoUseCase = movieInfoUseCase
         
         fetchGenres()
         fetchSimilarMovies(id: movieId, page: page)
     }
     
     private func fetchGenres() {
-        self.movieUseCase.fetchGenres()
+        self.genreUseCase.fetchGenres()
             .asObservable()
             .observe(on: MainScheduler.instance)
             .bind(to: genres)
@@ -51,7 +51,7 @@ final class SimilarMoviesViewModel {
         
         isLoading.accept(true)
         
-        self.searchUseCase.fetchSimilarMovies(id: id, page: page)
+        self.movieInfoUseCase.fetchSimilarMovies(id: id, page: page)
             .asObservable()
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] newMovies in

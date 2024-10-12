@@ -47,19 +47,19 @@ final class CreditsViewModel {
     let movieName: String
     let credits = BehaviorRelay<[CreditsSectionModel]>(value: [])
     private let disposeBag = DisposeBag()
-    private let useCase: SearchUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
     private var isCastSectionVisible = true
     private var isCrewSectionVisible = true
     
-    init(movieId: Int, movieName: String, useCase: SearchUseCase) {
+    init(movieId: Int, movieName: String, movieInfoUseCase: MovieInfoUseCase) {
         self.movieId = movieId
         self.movieName = movieName
-        self.useCase = useCase
+        self.movieInfoUseCase = movieInfoUseCase
         
         fetchCredits()
     }
     private func fetchCredits() {
-            useCase.fetchCredits(id: movieId)
+            movieInfoUseCase.fetchCredits(id: movieId)
                 .asObservable()
                 .subscribe(onNext: { [weak self] credit in
                     self?.setupSectionModels(credit: credit)
