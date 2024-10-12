@@ -43,14 +43,11 @@ extension CreditsSectionModel: SectionModelType {
 final class CreditsViewModel {
     typealias CreditsSection = SectionModel<String, CreditsSectionItem>
     
-    private let disposeBag = DisposeBag()
-    private let useCase: SearchUseCase
-    
     let movieId: Int
     let movieName: String
-    
     let credits = BehaviorRelay<[CreditsSectionModel]>(value: [])
-    
+    private let disposeBag = DisposeBag()
+    private let useCase: SearchUseCase
     private var isCastSectionVisible = true
     private var isCrewSectionVisible = true
     

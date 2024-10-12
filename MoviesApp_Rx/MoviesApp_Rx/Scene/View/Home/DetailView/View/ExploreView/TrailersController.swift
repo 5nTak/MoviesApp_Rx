@@ -74,7 +74,7 @@ final class TrailersController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func bindVideos() { // 임시
+    private func bindVideos() {
         viewModel.videos
             .bind(to: tableView.rx.items(cellIdentifier: TrailerCell.identifier, cellType: TrailerCell.self)) { (row, video, cell) in
                 cell.setup(title: video.name, videoUrl: video.key) // 임시

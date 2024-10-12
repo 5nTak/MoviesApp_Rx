@@ -11,13 +11,13 @@ import RxSwift
 
 final class RecentlyMoviesCell: UICollectionViewCell {
     static let identifier = "RecentlyMoviesCell"
-    private var disposeBag = DisposeBag()
     
+    private var disposeBag = DisposeBag()
     private let checkBoxButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .white
-        button.setImage(UIImage(systemName: "square"), for: .normal)
-        button.setImage(UIImage(systemName: "checkmark.square"), for: .selected)
+        button.setImage(UIImage(systemName: "circle"), for: .normal)
+        button.setImage(UIImage(systemName: "checkmark.circle"), for: .selected)
         button.isHidden = true
         button.isUserInteractionEnabled = true
         return button

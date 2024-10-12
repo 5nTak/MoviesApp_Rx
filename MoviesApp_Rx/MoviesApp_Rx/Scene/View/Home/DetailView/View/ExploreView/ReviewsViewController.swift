@@ -13,13 +13,11 @@ import RxCocoa
 final class ReviewsViewController: UIViewController {
     private let viewModel: ReviewsViewModel
     private let disposeBag = DisposeBag()
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds)
         tableView.register(ReviewsCell.self, forCellReuseIdentifier: ReviewsCell.identifier)
         return tableView
     }()
-    
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true

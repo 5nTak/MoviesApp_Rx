@@ -12,23 +12,21 @@ import RxCocoa
 import RxDataSources
 
 final class HomeViewController: UIViewController {
+    private let isExpandedLayout = BehaviorRelay<Bool>(value: false)
+    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
+    private var viewModel: HomeViewModel
+    private let disposeBag = DisposeBag()
     private let convertCellButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "list.and.film"), for: .normal)
         return button
     }()
-    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(PosterCell.self, forCellWithReuseIdentifier: PosterCell.identifier)
         collectionView.register(ExpandedCell.self, forCellWithReuseIdentifier: ExpandedCell.identifier)
         return collectionView
     }()
-    
-    var viewModel: HomeViewModel
-    private let isExpandedLayout = BehaviorRelay<Bool>(value: false)
-    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<MovieSectionModel>?
-    private let disposeBag = DisposeBag()
     
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
@@ -50,6 +48,7 @@ final class HomeViewController: UIViewController {
         setupButtonAction()
     }
     
+    // MARK: - Navigation Bar
     private func setupNavigationBar() {
         self.title = "Upcoming Movies"
         

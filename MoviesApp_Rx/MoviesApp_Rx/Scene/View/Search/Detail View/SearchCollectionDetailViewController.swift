@@ -12,10 +12,9 @@ import RxDataSources
 import SnapKit
 
 final class SearchCollectionDetailViewController: UIViewController {
-    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<CollectionSectionModel>?
     var viewModel: SearchCollectionDetailViewModel?
+    private var rxDataSource: RxCollectionViewSectionedReloadDataSource<CollectionSectionModel>?
     private let disposeBag = DisposeBag()
-    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(CollectionDetailCell.self, forCellWithReuseIdentifier: CollectionDetailCell.identifier)

@@ -29,12 +29,11 @@ final class SearchCollectionDetailViewModel {
     
     typealias CollectionSection = SectionModel<String, DetailCollection>
     
-    let sections = BehaviorRelay<[CollectionSectionModel]>(value: [])
     var title: String
+    let sections = BehaviorRelay<[CollectionSectionModel]>(value: [])
     private var id: Int
     private let searchUseCase: SearchUseCase
     private let searchCollection = BehaviorRelay<[CollectionSection]>(value: [])
-    
     private let disposeBag = DisposeBag()
     
     init(id: Int, title: String, searchUseCase: SearchUseCase) {

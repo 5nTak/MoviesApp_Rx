@@ -36,27 +36,33 @@ extension SearchSectionModel: SectionModelType {
 final class SearchViewModel {
     typealias SearchSection = SectionModel<String, SearchSectionItem>
     
+    var searchText = BehaviorRelay<String>(value: "")
+    var coordinator: SearchCoordinator?
     let sections = BehaviorRelay<[SearchSectionModel]>(value: [])
-    
     let isDeleteMode = BehaviorRelay<Bool>(value: false)
     let selectedItems = BehaviorRelay<[Int]>(value: [])
     let genres = BehaviorRelay<[Genre]>(value: [])
     let isSearchActive = BehaviorRelay<Bool>(value: false)
-    var searchText = BehaviorRelay<String>(value: "")
-    var coordinator: SearchCoordinator?
-    
-    private let movieUseCase: MovieUseCase
-    private let searchMovieUseCase: SearchUseCase
+    private let discoverUseCase: DiscoverUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
+    private let genreUseCase: GenreUseCase
+    private let searchUseCase: SearchUseCase
     private let recentlyManager = RecentlyViewedMoviesManager.shared
     private let disposeBag = DisposeBag()
-    
     private let recentlyMovies = BehaviorRelay<[SearchSectionModel]>(value: [])
     private let searchMovies = BehaviorRelay<[SearchSection]>(value: [])
     private let searchCollections = BehaviorRelay<[SearchSection]>(value: [])
     
-    init(movieUseCase: MovieUseCase, searchMovieUseCase: SearchUseCase) {
-        self.movieUseCase = movieUseCase
-        self.searchMovieUseCase = searchMovieUseCase
+    init(
+        discoverUseCase: DiscoverUseCase,
+        movieInfoUseCase: MovieInfoUseCase,
+        genreUseCase: GenreUseCase,
+        searchUseCase: SearchUseCase
+    ) {
+        self.discoverUseCase = discoverUseCase
+        self.movieInfoUseCase = movieInfoUseCase
+        self.genreUseCase = genreUseCase
+        self.searchUseCase = searchUseCase
         searchText
             .distinctUntilChanged()
             .subscribe { [weak self] text in
@@ -73,7 +79,6 @@ final class SearchViewModel {
         recentlyManager.recentlyMovies
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] movieIds in
-                print("Received movie IDs: \(movieIds)")
                 self?.checkRecentlyMovies(movieIds: movieIds)
             })
             .disposed(by: disposeBag)
@@ -85,7 +90,7 @@ final class SearchViewModel {
         
         movieIds.forEach { id in
             fetchGroup.enter()
-            searchMovieUseCase.fetchSearchMovie(id: id)
+            searchUseCase.fetchDetailMovie(id: id)
                 .asObservable()
                 .subscribe(onNext: { movie in
                     recentlyItems.append(.recentlyItem(movie: movie))
@@ -130,7 +135,7 @@ final class SearchViewModel {
     }
     
     private func fetchGenre() {
-        movieUseCase.fetchGenres()
+        genreUseCase.fetchGenres()
             .asObservable()
             .bind(to: genres)
             .disposed(by: disposeBag)
@@ -179,7 +184,7 @@ final class SearchViewModel {
     }
     
     private func searchMovies(searchText: String) {
-        searchMovieUseCase.fetchSearchMovie(searchText: searchText)
+        searchUseCase.fetchSearchMovie(searchText: searchText)
             .asObservable()
             .map { movies in
                 return movies.map { SearchSectionItem.searchMovies(movie: $0) }
@@ -192,7 +197,7 @@ final class SearchViewModel {
     }
     
     private func searchCollections(searchText: String) {
-        searchMovieUseCase.fetchSearchCollection(searchText: searchText)
+        searchUseCase.fetchSearchCollection(searchText: searchText)
             .asObservable()
             .map { collections in
                 return collections.map { SearchSectionItem.searchCollections(collection: $0) }

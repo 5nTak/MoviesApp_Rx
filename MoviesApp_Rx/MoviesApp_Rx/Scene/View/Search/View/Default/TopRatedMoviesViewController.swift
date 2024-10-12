@@ -12,7 +12,6 @@ import RxCocoa
 
 final class TopRatedMoviesViewController: UIViewController {
     let viewModel: TopRatedMoviesViewModel
-    
     private let disposeBag = DisposeBag()
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds)

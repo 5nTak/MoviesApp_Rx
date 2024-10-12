@@ -82,8 +82,7 @@ final class RecentlyViewedMoviesManager {
         }
         
         userDefaults.set(recentlyViewed, forKey: "recentlyViewedMovies")
-        recentlyMovies.onNext(recentlyViewed) // BehaviorSubject에 값 갱신
-        print("Successfully added movieId to UserDefaults")
+        recentlyMovies.onNext(recentlyViewed)
     }
     
     // MARK: - 영화 삭제 함수
@@ -116,7 +115,6 @@ final class RecentlyViewedMoviesManager {
         recentlyViewed.removeAll { movieIds.contains($0) }
         userDefaults.set(recentlyViewed, forKey: "recentlyViewedMovies")
         recentlyMovies.onNext(recentlyViewed)
-        print("Movies successfully deleted from UserDefaults.")
     }
 }
 

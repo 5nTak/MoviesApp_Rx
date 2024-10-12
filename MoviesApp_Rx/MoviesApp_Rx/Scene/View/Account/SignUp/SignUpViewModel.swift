@@ -11,7 +11,6 @@ import FirebaseFirestore
 
 final class SignUpViewModel {
     weak var coordinator: SignUpCoordinator?
-    
     private let db = Firestore.firestore()
     
     func signUp(

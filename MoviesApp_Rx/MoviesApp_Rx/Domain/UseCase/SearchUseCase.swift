@@ -15,36 +15,8 @@ final class SearchUseCase {
         self.searchRepository = searchRepository
     }
     
-    func fetchSearchMovie(id: Int) -> Single<MovieDetail> {
-        return self.searchRepository.fetchSearchMovie(id: id)
-    }
-    
-    func fetchReviews(id: Int) -> Single<[Review]> {
-        return self.searchRepository.fetchReviews(id: id)
-            .map { reviews in
-                let reviewList = reviews.result
-                return reviewList
-            }
-    }
-    
-    func fetchTrailer(id: Int) -> Single<[Video]> {
-        return self.searchRepository.fetchTrailer(id: id)
-            .map { trailer in
-                let videos = trailer.results
-                return videos
-            }
-    }
-    
-    func fetchCredits(id: Int) -> Single<Credit> {
-        return self.searchRepository.fetchCredits(id: id)
-    }
-    
-    func fetchSimilarMovies(id: Int, page: Int) -> Single<[Movie]> {
-        return self.searchRepository.fetchSimilarMovies(id: id, page: page)
-            .map { movieList in
-                let movies = movieList.results
-                return movies
-            }
+    func fetchDetailMovie(id: Int) -> Single<MovieDetail> {
+        return self.searchRepository.fetchDetailMovie(id: id)
     }
     
     func fetchSearchMovie(searchText: String) -> Single<[Movie]> {

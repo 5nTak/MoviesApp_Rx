@@ -9,11 +9,9 @@ import UIKit
 
 final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
-    weak var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()
-    
+    weak var finishDelegate: CoordinationFinishDelegate?
     weak var navigationController: UINavigationController?
-    
     private var movieId: Int
     private var movieName: String
     
@@ -31,10 +29,11 @@ final class DetailCoordinator: Coordinator, CoordinationFinishDelegate {
     func start() {
         let detailViewModel = DetailViewModel(
             movieId: movieId,
-            movieUseCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository()
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             ),
-            searchUseCase: SearchUseCase(
+            genreUseCase: GenreUseCase(
                 searchRepository: DefaultSearchRepository()
             )
         )

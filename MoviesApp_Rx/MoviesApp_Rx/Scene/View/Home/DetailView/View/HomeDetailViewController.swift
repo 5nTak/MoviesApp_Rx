@@ -15,7 +15,6 @@ import FirebaseAuth
 final class DetailViewController: UIViewController {
     private let viewModel: DetailViewModel
     private let disposeBag = DisposeBag()
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
             return self.createLayout(for: sectionIndex)
@@ -29,7 +28,6 @@ final class DetailViewController: UIViewController {
         collectionView.register(MovieOverviewCell.self, forCellWithReuseIdentifier: MovieOverviewCell.identifier)
         return collectionView
     }()
-    
     private let starButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "star"), for: .normal)
@@ -48,7 +46,6 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .systemBackground
         configureHierarchy()
         bind()

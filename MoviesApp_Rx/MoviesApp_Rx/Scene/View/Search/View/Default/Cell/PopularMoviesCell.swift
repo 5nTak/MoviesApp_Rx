@@ -19,35 +19,30 @@ final class PopularMoviesCell: UITableViewCell {
         imageView.kf.indicatorType = .activity
         return imageView
     }()
-    
     private let labelStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.numberOfLines = 2
         return label
     }()
-    
     private let genreLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.numberOfLines = 2
         return label
     }()
-    
     private let releasedDateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .footnote)
         label.numberOfLines = 1
         return label
     }()
-    
     private let voteIconView: VoteAverageView = {
         let iconView = VoteAverageView()
         

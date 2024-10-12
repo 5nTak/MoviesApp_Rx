@@ -13,13 +13,11 @@ import RxCocoa
 final class SimilarMoviesViewController: UIViewController {
     private var viewModel: SimilarMoviesViewModel
     private let disposeBag = DisposeBag()
-    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds)
         tableView.register(SimilarMoviesCell.self, forCellReuseIdentifier: SimilarMoviesCell.identifier)
         return tableView
     }()
-    
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true

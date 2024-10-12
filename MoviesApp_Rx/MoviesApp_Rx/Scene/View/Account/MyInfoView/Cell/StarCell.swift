@@ -19,7 +19,6 @@ final class StarCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         return imageView
     }()
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .reversedBackgroundColorAsset

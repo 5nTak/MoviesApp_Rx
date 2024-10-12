@@ -11,9 +11,7 @@ final class SearchCollectionDetailCoordinator: Coordinator, CoordinationFinishDe
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
     var identifier = UUID()
-    
     var navigationController: UINavigationController?
-    
     private var id: Int
     private var title: String
     

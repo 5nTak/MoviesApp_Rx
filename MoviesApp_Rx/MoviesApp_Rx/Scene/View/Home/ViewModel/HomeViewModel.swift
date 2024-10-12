@@ -25,22 +25,20 @@ extension MovieSectionModel: SectionModelType {
 }
 
 final class HomeViewModel {
-    var coordinator: HomeCoordinator?
-    
     typealias MovieSection = SectionModel<String, Movie>
     
-    let upcomingMovies = BehaviorRelay<[MovieSectionModel]>(value: [])
-    
+    var coordinator: HomeCoordinator?
     var page: Int = 1
-    private let movieUseCase: MovieUseCase
+    let upcomingMovies = BehaviorRelay<[MovieSectionModel]>(value: [])
+    private let discoverUseCase: DiscoverUseCase
     private let disposebag = DisposeBag()
     
-    init(movieUseCase: MovieUseCase) {
-        self.movieUseCase = movieUseCase
+    init(discoverUseCase: DiscoverUseCase) {
+        self.discoverUseCase = discoverUseCase
     }
     
     func fetchUpcomingMovies() {
-            movieUseCase.fetchUpcomingMovies(page: page)
+            discoverUseCase.fetchUpcomingMovies(page: page)
                 .asObservable()
                 .map { [MovieSectionModel(title: "", items: $0)]}
                 .bind(to: upcomingMovies)
@@ -49,7 +47,7 @@ final class HomeViewModel {
     
     func loadMoreUpcomingMovies() {
         page += 1
-        movieUseCase.fetchUpcomingMovies(page: page)
+        discoverUseCase.fetchUpcomingMovies(page: page)
             .asObservable()
             .map { [MovieSectionModel(title: "", items: $0)]}
             .withLatestFrom(upcomingMovies) { newMovies, oldMovies in

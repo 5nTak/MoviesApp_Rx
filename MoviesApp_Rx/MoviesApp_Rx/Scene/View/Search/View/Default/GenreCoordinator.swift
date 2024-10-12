@@ -29,10 +29,8 @@ final class GenreCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let genreDetailViewModel = GenreDetailViewModel(
-            useCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository(
-                    networkProvider: DefaultNetworkProvider()
-                )
+            genreUseCase: GenreUseCase(
+                searchRepository: DefaultSearchRepository()
             ),
             id: id,
             name: name

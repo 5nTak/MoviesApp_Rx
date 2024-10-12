@@ -10,14 +10,12 @@ import RxSwift
 import RxCocoa
 
 final class ReviewsViewModel {
-    private let disposeBag = DisposeBag()
-    private let useCase: SearchUseCase
-    
     let movieId: Int
     let movieName: String
-    
     let reviews = BehaviorRelay<[Review]>(value: [])
     let isLoading = BehaviorRelay<Bool>(value: false)
+    private let disposeBag = DisposeBag()
+    private let useCase: SearchUseCase
     
     init(movieId: Int, movieName: String, useCase: SearchUseCase) {
         self.movieId = movieId

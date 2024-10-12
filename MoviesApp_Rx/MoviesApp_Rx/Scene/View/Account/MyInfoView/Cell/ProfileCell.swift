@@ -18,19 +18,16 @@ final class ProfileCell: UICollectionViewCell {
         imageView.kf.indicatorType = .activity
         return imageView
     }()
-    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
     }()
-    
     private let emailLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         return label
     }()
-    
     private let editButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "pencil"), for: .normal)

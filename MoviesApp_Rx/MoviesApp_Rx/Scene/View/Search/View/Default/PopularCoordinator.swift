@@ -23,10 +23,12 @@ final class PopularCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let popularMoviesViewModel = PopularMoviesViewModel(
-            useCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository(
-                    networkProvider: DefaultNetworkProvider()
-                )
+            discoverUseCase: DiscoverUseCase(
+                homeRepository: DefaultHomeRepository(),
+                searchRepository: DefaultSearchRepository()
+            ),
+            genreUseCase: GenreUseCase(
+                searchRepository: DefaultSearchRepository()
             )
         )
         popularMoviesViewModel.coordinator = self

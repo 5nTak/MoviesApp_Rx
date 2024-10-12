@@ -14,9 +14,7 @@ import RxDataSources
 final class CreditsViewController: UIViewController {
     private let viewModel: CreditsViewModel
     private let disposeBag = DisposeBag()
-    
     private var rxDataSource: RxCollectionViewSectionedReloadDataSource<CreditsSectionModel>?
-    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.createLayout())
         collectionView.register(CreditParentCell.self, forCellWithReuseIdentifier: CreditParentCell.identifier)

@@ -32,23 +32,21 @@ extension AccountSectionModel: SectionModelType {
 }
 
 final class MyInfoViewModel {
-    var coordinator: AccountCoordinator?
-    
     typealias AccountSection = SectionModel<String, AccountSectionItem>
     
+    var coordinator: AccountCoordinator?
+    var email: String
     let sections = BehaviorRelay<[AccountSectionModel]>(value: [])
     private let profileSection = BehaviorRelay<[AccountSection]>(value: [])
     private let starSection = BehaviorRelay<[AccountSectionItem]>(value: [])
     private let settingSection = BehaviorRelay<[AccountSection]>(value: [])
     private let favoritesManager = FavoritesManager.shared()
-    private let searchUseCase: SearchUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
     private let disposeBag = DisposeBag()
     
-    var email: String
-    
-    init(email: String, searchUseCase: SearchUseCase) {
+    init(email: String, movieInfoUseCase: MovieInfoUseCase) {
         self.email = email
-        self.searchUseCase = searchUseCase
+        self.movieInfoUseCase = movieInfoUseCase
         self.bindFavorites()
         self.setSections()
     }
@@ -103,7 +101,7 @@ final class MyInfoViewModel {
         
         movieIds.forEach { id in
             fetchGroup.enter()
-            searchUseCase.fetchSearchMovie(id: id)
+            movieInfoUseCase.fetchDetailMovie(id: id)
                 .asObservable()
                 .subscribe(onNext: { movie in
                     starItems.append(.star(movie: movie))

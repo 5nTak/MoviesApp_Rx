@@ -10,20 +10,18 @@ import RxSwift
 import RxCocoa
 
 final class SimilarMoviesViewModel {
-    private let movieUseCase: MovieUseCase
-    private let searchUseCase: SearchUseCase
-    private let disposeBag = DisposeBag()
-    private var isFetching: Bool = false
-    
     var movieId: Int
     var page: Int = 1
     let isLoading = BehaviorRelay<Bool>(value: false)
-    weak var coordinator: SimilarCoordinator?
-    
     let similarMovies = BehaviorRelay<[Movie]>(value: [])
+    weak var coordinator: SimilarCoordinator?
+    private let movieUseCase: DiscoverUseCase
+    private let searchUseCase: SearchUseCase
+    private let disposeBag = DisposeBag()
+    private var isFetching: Bool = false
     private let genres = BehaviorRelay<[Genre]>(value: [])
     
-    init(movieId: Int, movieUseCase: MovieUseCase, searchUseCase: SearchUseCase) {
+    init(movieId: Int, movieUseCase: DiscoverUseCase, searchUseCase: SearchUseCase) {
         self.movieId = movieId
         self.movieUseCase = movieUseCase
         self.searchUseCase = searchUseCase

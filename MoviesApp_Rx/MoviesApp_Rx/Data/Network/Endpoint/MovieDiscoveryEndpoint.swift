@@ -13,12 +13,6 @@ struct MovieDiscoveryEndpoint: TmdbAPIEndpoint {
     var path: String = "/discover/movie"
     var queries: [String: String]
     
-    init(page: Int) {
-        self.queries = [
-            "page": "\(page)"
-        ]
-    }
-    
     init(page: Int, id: Int) {
         self.queries = [
             "page": "\(page)",

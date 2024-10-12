@@ -16,7 +16,6 @@ final class SearchViewController: UIViewController {
     private let searchBarView = SearchBarView()
     private let disposeBag = DisposeBag()
     private var rxDataSource: RxCollectionViewSectionedReloadDataSource<SearchSectionModel>?
-    
     private lazy var deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Delete", for: .normal)

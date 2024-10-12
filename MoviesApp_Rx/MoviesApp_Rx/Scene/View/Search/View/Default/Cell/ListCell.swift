@@ -17,7 +17,6 @@ final class ListCell: UICollectionViewCell {
         label.textColor = .systemBlue
         return label
     }()
-    
     private let arrowButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)

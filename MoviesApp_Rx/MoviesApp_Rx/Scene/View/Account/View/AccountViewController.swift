@@ -11,7 +11,6 @@ import Kingfisher
 
 final class AccountViewController: UIViewController {
     var viewModel: AccountViewModel?
-    
     private let tmdbImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "tmdb_icon")
@@ -58,31 +57,6 @@ final class AccountViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc private func executeLogin() {
-        view.endEditing(true)
-        
-        guard let email = idTextField.text, !email.isEmpty,
-              let password = passwordTextField.text, !password.isEmpty else {
-            idTextField.setError()
-            passwordTextField.setError()
-            showAlert(message: AccountViewString.inputError.rawValue)
-            return
-        }
-        
-        viewModel?.signIn(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success:
-                self?.showAlert(message: AccountViewString.successLogin.rawValue) {
-                    self?.viewModel?.coordinator?.showMyInfo(email: email)
-                }
-            case .failure(let error):
-                self?.idTextField.setError()
-                self?.passwordTextField.setError()
-                self?.showAlert(message: "Login failed: \(error.localizedDescription)")
-            }
-        }
     }
     
     override func viewDidLoad() {
@@ -141,6 +115,31 @@ final class AccountViewController: UIViewController {
             $0.top.equalTo(signInButton.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(buttonHeight)
+        }
+    }
+    
+    @objc private func executeLogin() {
+        view.endEditing(true)
+        
+        guard let email = idTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
+            idTextField.setError()
+            passwordTextField.setError()
+            showAlert(message: AccountViewString.inputError.rawValue)
+            return
+        }
+        
+        viewModel?.signIn(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success:
+                self?.showAlert(message: AccountViewString.successLogin.rawValue) {
+                    self?.viewModel?.coordinator?.showMyInfo(email: email)
+                }
+            case .failure(let error):
+                self?.idTextField.setError()
+                self?.passwordTextField.setError()
+                self?.showAlert(message: "Login failed: \(error.localizedDescription)")
+            }
         }
     }
     

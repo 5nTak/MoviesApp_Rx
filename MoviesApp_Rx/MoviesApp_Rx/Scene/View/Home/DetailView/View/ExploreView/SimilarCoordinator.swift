@@ -10,9 +10,8 @@ import UIKit
 final class SimilarCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
-    weak var navigationController: UINavigationController?
     var identifier = UUID()
-    
+    weak var navigationController: UINavigationController?
     private var movieId: Int
 
     init(
@@ -28,8 +27,8 @@ final class SimilarCoordinator: Coordinator, CoordinationFinishDelegate {
     func start() {
         let similarViewModel = SimilarMoviesViewModel(
             movieId: movieId,
-            movieUseCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository()
+            movieUseCase: DiscoverUseCase(
+                movieRepository: DefaultHomeRepository()
             ),
             searchUseCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()

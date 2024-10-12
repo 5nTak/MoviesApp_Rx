@@ -11,9 +11,7 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
     var finishDelegate: CoordinationFinishDelegate?
     let identifier = UUID()
-    
     var navigationController: UINavigationController?
-    
     private let tabBarItem: UITabBarItem = {
         let tabBarItem = UITabBarItem(
             title: "Home",
@@ -30,14 +28,13 @@ final class HomeCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let homeViewModel = HomeViewModel(
-            movieUseCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository()
+            movieUseCase: DiscoverUseCase(
+                movieRepository: DefaultHomeRepository()
             )
         )
         homeViewModel.coordinator = self
         let homeViewController = HomeViewController(viewModel: homeViewModel)
         self.navigationController = UINavigationController(rootViewController: homeViewController)
-        homeViewController.viewModel = homeViewModel
         self.navigationController?.tabBarItem = tabBarItem
     }
     

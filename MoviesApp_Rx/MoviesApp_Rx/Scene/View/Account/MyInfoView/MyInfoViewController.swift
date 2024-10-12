@@ -13,6 +13,7 @@ import RxDataSources
 import FirebaseAuth
 
 final class MyInfoViewController: UIViewController {
+    var viewModel: MyInfoViewModel?
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: ProfileCell.identifier)
@@ -22,8 +23,6 @@ final class MyInfoViewController: UIViewController {
         collectionView.register(MyInfoCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MyInfoCollectionHeaderView.identifier)
         return collectionView
     }()
-    
-    var viewModel: MyInfoViewModel?
     private var rxDataSources: RxCollectionViewSectionedReloadDataSource<AccountSectionModel>?
     private let disposeBag = DisposeBag()
     

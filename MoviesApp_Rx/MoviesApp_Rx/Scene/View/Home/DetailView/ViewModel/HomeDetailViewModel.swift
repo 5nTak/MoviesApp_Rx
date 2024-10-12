@@ -44,23 +44,22 @@ extension DetailSectionModel: SectionModelType {
 final class DetailViewModel {
     typealias DetailSection = SectionModel<String, DetailSectionItem>
     
-    weak var coordinator: DetailCoordinator?
+    var genres = BehaviorRelay<[Genre]>(value: [])
     let sections = BehaviorRelay<[DetailSectionModel]>(value: [])
     let exploreItems = BehaviorRelay<[ExploreItem]>(value: [.reviews, .trailers, .credits, .similarMovies])
-    var genres = BehaviorRelay<[Genre]>(value: [])
+    let isFavorite = BehaviorRelay<Bool>(value: false)
+    weak var coordinator: DetailCoordinator?
     private let movieId: Int
     private let favoritesManager = FavoritesManager.shared()
     private let recentlyManager = RecentlyViewedMoviesManager.shared
-    private let movieUseCase: MovieUseCase
-    private let searchUseCase: SearchUseCase
+    private let movieInfoUseCase: MovieInfoUseCase
+    private let genreUseCase: GenreUseCase
     private let disposeBag = DisposeBag()
     
-    let isFavorite = BehaviorRelay<Bool>(value: false)
-    
-    init(movieId: Int, movieUseCase: MovieUseCase, searchUseCase: SearchUseCase) {
+    init(movieId: Int, movieInfoUseCase: MovieInfoUseCase, genreUseCase: GenreUseCase) {
         self.movieId = movieId
-        self.movieUseCase = movieUseCase
-        self.searchUseCase = searchUseCase
+        self.movieInfoUseCase = movieInfoUseCase
+        self.genreUseCase = genreUseCase
         self.fetchMovieDetail()
         self.fetchGenres()
         
@@ -97,7 +96,7 @@ final class DetailViewModel {
     }
     
     private func fetchMovieDetail() {
-        self.searchUseCase.fetchSearchMovie(id: movieId)
+        self.movieInfoUseCase.fetchDetailMovie(id: movieId)
             .asObservable()
             .subscribe(onNext: { movie in
                 self.createSections(with: movie)
@@ -106,7 +105,7 @@ final class DetailViewModel {
     }
     
     private func fetchGenres() {
-        movieUseCase.fetchGenres()
+        genreUseCase.fetchGenres()
             .asObservable()
             .subscribe(onNext: { genres in
                 self.genres.accept(genres)

@@ -47,8 +47,9 @@ final class AccountCoordinator: Coordinator, CoordinationFinishDelegate {
         let myInfoViewController = MyInfoViewController()
         let myInfoViewModel = MyInfoViewModel(
             email: email,
-            searchUseCase: SearchUseCase(
-                searchRepository: DefaultSearchRepository()
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
             )
         )
         myInfoViewModel.coordinator = self

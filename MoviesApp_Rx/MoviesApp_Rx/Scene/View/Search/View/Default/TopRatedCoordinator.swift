@@ -13,7 +13,6 @@ final class TopRatedCoordinator: Coordinator, CoordinationFinishDelegate {
     var navigationController: UINavigationController?
     var identifier = UUID()
     
-    
     init(
         navigationController: UINavigationController?,
         finishDelegate: CoordinationFinishDelegate
@@ -24,10 +23,12 @@ final class TopRatedCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let topRatedMoviesViewModel = TopRatedMoviesViewModel(
-            useCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository(
-                    networkProvider: DefaultNetworkProvider()
-                )
+            discoverUseCase: DiscoverUseCase(
+                homeRepository: DefaultHomeRepository(),
+                searchRepository: DefaultSearchRepository()
+            ),
+            genreUseCase: GenreUseCase(
+                searchRepository: DefaultSearchRepository()
             )
         )
         topRatedMoviesViewModel.coordinator = self

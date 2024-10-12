@@ -12,20 +12,22 @@ import RxCocoa
 final class TopRatedMoviesViewModel {
     var coordinator: TopRatedCoordinator?
     var page: Int = 1
-    private let useCase: MovieUseCase
     let topRatedMovies = BehaviorRelay<[Movie]>(value: [])
     private var genres = BehaviorRelay<[Genre]>(value: [])
-    private let disposeBag = DisposeBag()
     private var isFetching: Bool = false
+    private let disposeBag = DisposeBag()
+    private let discoverUseCase: DiscoverUseCase
+    private let genreUseCase: GenreUseCase
     
-    init(useCase: MovieUseCase) {
-        self.useCase = useCase
+    init(discoverUseCase: DiscoverUseCase, genreUseCase: GenreUseCase) {
+        self.discoverUseCase = discoverUseCase
+        self.genreUseCase = genreUseCase
         self.fetchTopRatedMovies(page: page)
         fetchGenres()
     }
     
     private func fetchGenres() {
-        useCase.fetchGenres()
+        genreUseCase.fetchGenres()
             .asObservable()
             .observe(on: MainScheduler.instance)
             .bind(to: genres)
@@ -43,7 +45,7 @@ final class TopRatedMoviesViewModel {
             guard !isFetching else { return }
             isFetching = true
             
-            self.useCase.fetchTopRatedMovie(page: page)
+            self.discoverUseCase.fetchTopRatedMovie(page: page)
             .asObservable()
                 .observe(on: MainScheduler.instance)
                 .subscribe(onNext: { [weak self] newMovies in

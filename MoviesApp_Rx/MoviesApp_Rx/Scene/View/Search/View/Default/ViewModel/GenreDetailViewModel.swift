@@ -12,16 +12,16 @@ import RxCocoa
 final class GenreDetailViewModel {
     var coordinator: GenreCoordinator?
     var page: Int = 1
-    private let useCase: MovieUseCase
     let movies = BehaviorRelay<[Movie]>(value: [])
-    private var genres = BehaviorRelay<[Genre]>(value: [])
-    private let disposeBag = DisposeBag()
-    private var isFetching: Bool = false
     let genreId: Int
     let genreName: String
+    private var genres = BehaviorRelay<[Genre]>(value: [])
+    private var isFetching: Bool = false
+    private let disposeBag = DisposeBag()
+    private let genreUseCase: GenreUseCase
     
-    init(useCase: MovieUseCase, id: Int, name: String) {
-        self.useCase = useCase
+    init(genreUseCase: GenreUseCase, id: Int, name: String) {
+        self.genreUseCase = genreUseCase
         self.genreId = id
         self.genreName = name
         self.fetchMovies(page: page, id: id)
@@ -29,7 +29,7 @@ final class GenreDetailViewModel {
     }
     
     private func fetchGenres() {
-        useCase.fetchGenres()
+        genreUseCase.fetchGenres()
             .asObservable()
             .observe(on: MainScheduler.instance)
             .bind(to: genres)
@@ -47,7 +47,7 @@ final class GenreDetailViewModel {
         guard !isFetching else { return }
         isFetching = true
         
-        self.useCase.fetchDiscoveryMovie(page: page, id: id)
+        self.genreUseCase.fetchMoviesOfGenre(page: page, id: id)
             .asObservable()
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] newMovies in

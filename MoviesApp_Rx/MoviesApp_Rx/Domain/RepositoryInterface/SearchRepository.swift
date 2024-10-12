@@ -9,15 +9,15 @@ import Foundation
 import RxSwift
 
 protocol SearchRepository {
-    func fetchSearchMovie(id: Int) -> Single<MovieDetail>
+    func fetchDetailMovie(id: Int) -> Single<MovieDetail>
     
-    func fetchReviews(id: Int) -> Single<Reviews>
+    func fetchGenres() -> Single<[Genre]>
     
-    func fetchTrailer(id: Int) -> Single<Trailer>
+    func fetchMoviesOfGenre(page: Int, id: Int) -> Single<MovieList>
     
-    func fetchCredits(id: Int) -> Single<Credit>
+    func fetchPopularMovies(page: Int) -> Single<MovieList>
     
-    func fetchSimilarMovies(id: Int, page: Int) -> Single<MovieList>
+    func fetchTopRatedMovies(page: Int) -> Single<MovieList>
     
     func fetchSearchMovie(searchText: String) -> Single<MovieList>
     

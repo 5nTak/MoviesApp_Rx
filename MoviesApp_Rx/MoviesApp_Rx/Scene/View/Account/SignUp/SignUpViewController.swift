@@ -10,7 +10,6 @@ import SnapKit
 
 final class SignUpViewController: UIViewController {
     var viewModel: SignUpViewModel?
-    
     private let emailTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
@@ -18,7 +17,6 @@ final class SignUpViewController: UIViewController {
         textField.keyboardType = .emailAddress
         return textField
     }()
-    
     private let passwordTextField: LoginTextFiled = {
         let textField = LoginTextFiled()
         textField.borderStyle = .none
@@ -27,7 +25,6 @@ final class SignUpViewController: UIViewController {
         textField.textContentType = .oneTimeCode
         return textField
     }()
-    
     private lazy var signUpButton: UIButton = {
         let button = UIButton()
         button.setTitle(AccountViewString.signUp.rawValue, for: .normal)

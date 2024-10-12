@@ -10,14 +10,12 @@ import RxSwift
 import RxCocoa
 
 final class TrailersViewModel {
-    private let disposeBag = DisposeBag()
-    private let useCase: SearchUseCase
-    
     let movieId: Int
     let movieName: String
-    
     let videos = BehaviorRelay<[Video]>(value: [])
     let isLoading = BehaviorRelay<Bool>(value: false)
+    private let disposeBag = DisposeBag()
+    private let useCase: SearchUseCase
     
     init(movieId: Int, movieName: String, useCase: SearchUseCase) {
         self.movieId = movieId

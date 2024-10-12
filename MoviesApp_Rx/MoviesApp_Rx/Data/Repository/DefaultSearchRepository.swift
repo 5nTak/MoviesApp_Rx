@@ -15,7 +15,7 @@ final class DefaultSearchRepository: SearchRepository {
         self.networkProvider = networkProvider
     }
     
-    func fetchSearchMovie(id: Int) -> Single<MovieDetail> {
+    func fetchDetailMovie(id: Int) -> Single<MovieDetail> {
         let request = MovieDetailEndpoint(id: id)
         return self.networkProvider.rx.request(request)
             .map { response in
@@ -24,39 +24,39 @@ final class DefaultSearchRepository: SearchRepository {
             }
     }
     
-    func fetchReviews(id: Int) -> Single<Reviews> {
-        let request = ReviewsEndpoint(id: id)
+    func fetchGenres() -> Single<[Genre]> {
+        let request = GenreEndpoint()
         return self.networkProvider.rx.request(request)
             .map { response in
-                let reviews = response.toReviews()
-                return reviews
+                let genres = response.toGenres()
+                return genres
             }
     }
     
-    func fetchTrailer(id: Int) -> Single<Trailer> {
-        let request = TrailersEndpoint(id: id)
+    func fetchMoviesOfGenre(page: Int, id: Int) -> Single<MovieList> {
+        let request = MovieDiscoveryEndpoint(page: page, id: id)
         return self.networkProvider.rx.request(request)
             .map { response in
-                let trailers = response.toTrailer()
-                return trailers
+                let movieList = response.toMovieList()
+                return movieList
             }
     }
     
-    func fetchCredits(id: Int) -> Single<Credit> {
-        let request = CreditEndpoint(id: id)
+    func fetchPopularMovies(page: Int) -> Single<MovieList> {
+        let request = PopularMovieEndpoint(page: page)
         return self.networkProvider.rx.request(request)
             .map { response in
-                let credits = response.toCredit()
-                return credits
+                let movieList = response.toMovieList()
+                return movieList
             }
     }
     
-    func fetchSimilarMovies(id: Int, page: Int) -> Single<MovieList> {
-        let request = SimilarEndpoint(id: id, page: page)
+    func fetchTopRatedMovies(page: Int) -> Single<MovieList> {
+        let request = TopRatedMovieEndpoint(page: page)
         return self.networkProvider.rx.request(request)
             .map { response in
-                let similarMovies = response.toMovieList()
-                return similarMovies
+                let movieList = response.toMovieList()
+                return movieList
             }
     }
     

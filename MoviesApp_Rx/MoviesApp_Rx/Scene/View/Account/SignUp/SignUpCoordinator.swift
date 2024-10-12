@@ -9,9 +9,9 @@ import UIKit
 
 final class SignUpCoordinator: Coordinator, CoordinationFinishDelegate {
     var childCoordinator: [Coordinator] = []
-    weak var finishDelegate: CoordinationFinishDelegate?
     var identifier = UUID()
     var navigationController: UINavigationController?
+    weak var finishDelegate: CoordinationFinishDelegate?
     
     init(
         navigationController: UINavigationController?,

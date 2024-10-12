@@ -12,9 +12,6 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
     var finishDelegate: CoordinationFinishDelegate?
     var identifier = UUID()
     var navigationController: UINavigationController?
-    
-    private var searchText: String?
-    
     let tabBarItem: UITabBarItem = {
         let tabBarItem = UITabBarItem(
             title: "Search",
@@ -23,6 +20,7 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
         )
         return tabBarItem
     }()
+    private var searchText: String?
     
     init(
         navigationController: UINavigationController?,
@@ -34,10 +32,18 @@ final class SearchCoordinator: Coordinator, CoordinationFinishDelegate {
     
     func start() {
         let searchViewModel = SearchViewModel(
-            movieUseCase: MovieUseCase(
-                movieRepository: DefaultMovieRepository()
+            discoverUseCase: DiscoverUseCase(
+                homeRepository: DefaultHomeRepository(),
+                searchRepository: DefaultSearchRepository()
             ),
-            searchMovieUseCase: SearchUseCase(
+            movieInfoUseCase: MovieInfoUseCase(
+                homeRepository: DefaultHomeRepository(),
+                accountRepository: DefaultAccountRepository()
+            ),
+            genreUseCase: GenreUseCase(
+                searchRepository: DefaultSearchRepository()
+            ),
+            searchUseCase: SearchUseCase(
                 searchRepository: DefaultSearchRepository()
             )
         )
