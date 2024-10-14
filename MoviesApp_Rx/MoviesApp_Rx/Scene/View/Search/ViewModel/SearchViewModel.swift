@@ -167,20 +167,24 @@ final class SearchViewModel {
     }
     
     func showSearchResult() {
-        DispatchQueue.main.async { [weak self] in
-            self?.searchMovies(searchText: self?.searchText.value ?? "")
-            self?.searchCollections(searchText: self?.searchText.value ?? "")
-        }
-        
-        Observable.combineLatest(searchMovies, searchCollections)
-            .map { movies, collections in
-                return [
-                    SearchSectionModel(title: SearchSectionKind.movie.description, items: movies.first?.items ?? []),
-                    SearchSectionModel(title: SearchSectionKind.collection.description, items: collections.first?.items ?? [])
-                ]
+        if searchText.value.isEmpty {
+            configureSections()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.searchMovies(searchText: self?.searchText.value ?? "")
+                self?.searchCollections(searchText: self?.searchText.value ?? "")
             }
-            .bind(to: sections)
-            .disposed(by: disposeBag)
+            
+            Observable.combineLatest(searchMovies, searchCollections)
+                .map { movies, collections in
+                    return [
+                        SearchSectionModel(title: SearchSectionKind.movie.description, items: movies.first?.items ?? []),
+                        SearchSectionModel(title: SearchSectionKind.collection.description, items: collections.first?.items ?? [])
+                    ]
+                }
+                .bind(to: sections)
+                .disposed(by: disposeBag)
+        }
     }
     
     private func searchMovies(searchText: String) {
